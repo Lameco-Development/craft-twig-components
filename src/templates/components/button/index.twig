@@ -1,0 +1,52 @@
+{#
+/**
+ * Button Component
+ *
+ * This component renders a button with different styles based on the provided props.
+ *
+ * Props:
+ * - `label` (string): The text to be displayed on the button. Default: 'Click me'
+ * - `variant` (string): The style variant of the button. Options: 'primary', 'secondary', 'danger'. Default: 'primary'
+ * - `size` (string): The size of the button. Options: 'small', 'medium', 'large'. Default: 'medium'
+ * - `disabled` (bool): Whether the button is disabled. Default: false
+ * - `onClick` (string): The JavaScript function to call on button click. Default: ''
+ *
+ * Example usage:
+ * ```
+ * {% include '@lameco/components/button.twig' with {
+ *     label: 'Submit',
+ *     variant: 'primary',
+ *     size: 'large',
+ *     disabled: false,
+ * } %}
+ * ```
+ */
+#}
+
+{% if text is defined and text is not empty %}
+    {% if url is defined and url is not empty %}
+        <a href="{{ url }}"
+        data-controller="button"
+        class="btn d-inline-flex align-items-center justify-content-between {{ class ?? '' }}{% if icon is defined and icon %} btn--has-icon{% endif %}"
+        {% if target is defined and target is not empty %} target="{{ target }}"{% endif %}
+        >
+    {% else %}
+        <button type="{{ type ?? 'submit' }}"
+        class="btn d-inline-flex align-items-center justify-content-between {{ class ?? '' }}{% if icon is defined and icon %} btn--has-icon{% endif %}"
+        >
+    {% endif %}
+
+    <span class="btn__overlay"></span>
+    <span class="btn__text position-relative z-1">{{ text }}</span>
+    {% if icon is defined and icon %}
+        <span class="btn__icon d-flex justify-content-center align-items-center ms-6 rounded-circle position-relative">
+                <i class="fa-regular {{ icon }} w-50 h-50"></i>
+            </span>
+    {% endif %}
+
+    {% if url is defined and url is not empty %}
+        </a>
+    {% else %}
+        </button>
+    {% endif %}
+{% endif %}
