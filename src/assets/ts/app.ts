@@ -1,8 +1,8 @@
 import { Application } from '@hotwired/stimulus';
-import Components from './components';
+import Button from "./components/button";
+import Tooltip from "./components/tooltip";
 
 const application = Application.start();
 
-Components.forEach(component =>{
-    application.register(component.handle, component.reference);
-})
+application.register('button', Button);
+application.register('tooltip', Tooltip);

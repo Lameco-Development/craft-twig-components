@@ -1,0 +1,55 @@
+{#
+/**
+ * Button Component
+ *
+ * This component renders a button with different styles based on the provided props.
+ *
+ * Props:
+ * - `label` (string): The text to be displayed on the button. Default: 'Click me'
+ * - `variant` (string): The style variant of the button. Options: 'primary', 'secondary', 'danger'. Default: 'primary'
+ * - `size` (string): The size of the button. Options: 'small', 'medium', 'large'. Default: 'medium'
+ * - `disabled` (bool): Whether the button is disabled. Default: false
+ * - `onClick` (string): The JavaScript function to call on button click. Default: ''
+ *
+ * Example usage:
+ * ```
+ {{ include(@lameco/components/button.twig, {
+ *     label: 'Submit',
+ *     variant: 'primary',
+ *     size: 'large',
+ *     disabled: false,
+ * }) }}
+ * ```
+ */
+#}
+
+{% set icon = icon ?? null %}
+{% set iconClass = iconClass ?? '' %}
+
+{% set children = children%}
+
+{% set buttonText = buttonText | default(null) %}
+{% set buttonUrl = buttonUrl | default(null) %}
+{% set buttonColor = buttonColor | default('btn-purple') %}
+{% set buttonNewWindow = buttonNewWindow | default(false) %}
+
+{#CLASSES WITH CVA#}
+
+{% set type = type is defined and type is not empty ? type : 'primary-green-400' %}
+{% set iconWrapperClass = iconWrapperClass is defined and iconWrapperClass is not empty ? iconWrapperClass : 'bg-white' %}
+
+{% if text is defined and text is not empty and url is defined and url is not empty %}
+    <a href="{{ url }}" class="btn btn--{{ type }} relative {{ 'primary' in type ? 'outline outline-1' }} font-bold overflow-hidden group {{ class ?? null }}">
+        {% if 'primary' in type %}
+            <span class="btn__overlay z-0 absolute top-0 end-0 bottom-0 start-0 transition-transform ease-in-out rounded-full translate-x-[-101%] group-hover:translate-x-0"></span>
+        {% endif %}
+        <span class="relative flex items-center gap-2 z-50">
+            <span>{{ text }}</span>
+            {% if icon is defined and icon is not empty %}
+                {% if 'secondary' in type %}<span class="w-6 h-6 rounded-full flex items-center justify-center text-sm group-hover:bg-green-400 transition-colors ease-in-out {{ iconWrapperClass }}">{% endif %}
+                {{ icon | raw }}
+                {% if 'secondary' in type %}</span>{% endif %}
+            {% endif %}
+        </span>
+    </a>
+{% endif %}

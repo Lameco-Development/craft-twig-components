@@ -3,7 +3,7 @@
     "type": "craft-plugin",
     "require": {
         "php": ">=8.3",
-        "craftcms/cms": "^4.9"
+        "craftcms/cms": "^5"
     },
     "require-dev": {
         "craftcms/ecs": "dev-main",
