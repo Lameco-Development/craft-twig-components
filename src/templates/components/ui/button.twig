@@ -1,0 +1,33 @@
+{% if hyper is defined and not hyper.isEmpty %}
+    {% set href = hyper.url %}
+    {% set text = hyper.text %}
+    {% set target = hyper.target %}
+{% else %}
+    {% set href = href ?? null %}
+    {% set text = text ?? '' %}
+    {% set target = target ?? null %}
+{% endif %}
+
+{% set icon = attributes.icon ?? null %}
+
+{% set classes = html_cva(
+    base='btn d-inline-flex align-items-center justify-content-between' ~ (icon is not empty ? ' btn--has-icon' : null),
+    variants={
+    color: {
+        green: 'btn-green-600',
+        orange: 'btn-orange-500',
+        white: 'btn-white',
+    },
+}) %}
+
+<a href="{{ href }}"
+        {{ attributes.class(classes.apply({color}, class ?? null)) }} target="{{ target }}" {{ attributes }}>
+    <span class="btn__overlay"></span>
+    <span class="btn__text position-relative z-1">{{ slot ?? text }}</span>
+
+    {% if icon is not empty %}
+        <span class="btn__icon d-flex justify-content-center align-items-center ms-6 rounded-circle position-relative">
+            <i class="fa-regular {{ icon }} w-50 h-50"></i>
+        </span>
+    {% endif %}
+</a>
