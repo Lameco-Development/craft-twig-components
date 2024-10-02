@@ -21,7 +21,7 @@
 }) %}
 
 <a href="{{ href }}"
-        {{ attributes.class(classes.apply({color}, class ?? null)) }} target="{{ target }}" {{ attributes }}>
+        {{ attributes.class(classes.apply({color}, class ?? null)) }} target="{{ target }}" {{ attributes.type ?? null }}>
     <span class="btn__overlay"></span>
     <span class="btn__text position-relative z-1">{{ slot ?? text }}</span>
 
