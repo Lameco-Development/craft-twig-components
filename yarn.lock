@@ -175,13 +175,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hotwired/stimulus@npm:^3.2.2":
-  version: 3.2.2
-  resolution: "@hotwired/stimulus@npm:3.2.2"
-  checksum: 10c0/3793919e353d28424f57d07e6b634bf6e8821c227acfa2a608aaa8bdfe7e80479acef12705168ca866f3c231399f4a939fb0cd089aaae04c406b3d885a3b35ea
-  languageName: node
-  linkType: hard
-
 "@isaacs/cliui@npm:^8.0.2":
   version: 8.0.2
   resolution: "@isaacs/cliui@npm:8.0.2"
@@ -1519,6 +1512,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"photoswipe@npm:^5.4.4":
+  version: 5.4.4
+  resolution: "photoswipe@npm:5.4.4"
+  checksum: 10c0/9a62a8ee4b87564f3d2067edfd7f168d07973e1e37b21cd4f548363b441d8192991a88d272a0f299de0e7c773e6c74367ebcf895f0e60ca919d52e1d2f3b0355
+  languageName: node
+  linkType: hard
+
 "picocolors@npm:^1.0.0, picocolors@npm:^1.0.1":
   version: 1.0.1
   resolution: "picocolors@npm:1.0.1"
@@ -1674,12 +1674,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@hotwired/stimulus": "npm:^3.2.2"
     "@types/node": "npm:^20.14.11"
     autoprefixer: "npm:^10.4.19"
     browserlist: "npm:^1.0.1"
     core-js: "npm:^3.37.1"
     file-loader: "npm:^6.2.0"
+    photoswipe: "npm:^5.4.4"
     postcss: "npm:^8.4.39"
     postcss-scss: "npm:^4.0.9"
     regenerator-runtime: "npm:^0.14.1"

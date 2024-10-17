@@ -6,7 +6,7 @@ use Craft;
 use craft\base\Plugin as BasePlugin;
 use craft\services\Plugins;
 use craft\web\View;
-use lameco\crafttwigcomponents\AssetsBundles\StimulusBundle;
+use lameco\crafttwigcomponents\AssetsBundles\AppBundle;
 use modules\lameco\web\twig\WebtesterExtension;
 use Performing\TwigComponents\Configuration;
 use TalesFromADev\Twig\Extra\Tailwind\TailwindExtension;
@@ -37,7 +37,7 @@ class Plugin extends BasePlugin
 
         if (Craft::$app->request->getIsSiteRequest()) {
             //Register AssetBundle for stimulus controller so that Craft auto-injects them on the website
-            Craft::$app->view->registerAssetBundle(StimulusBundle::class);
+            Craft::$app->view->registerAssetBundle(AppBundle::class);
         }
 
         Craft::$app->view->registerTwigExtension(new HtmlExtension());

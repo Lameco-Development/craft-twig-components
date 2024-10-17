@@ -4,7 +4,7 @@ namespace lameco\crafttwigcomponents\AssetsBundles;
 
 use craft\web\AssetBundle;
 
-class StimulusBundle extends AssetBundle
+class AppBundle extends AssetBundle
 {
     public function init()
     {

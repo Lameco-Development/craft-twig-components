@@ -1,0 +1,2 @@
+{% set level = attributes.level ?: 'strong' %}
+<{{ level }} {{ attributes.merge({ class: 'block leading-normal title-fade-in' }) }}>{{ slot | striptags('<strong>') | raw }}</{{ level }}>
