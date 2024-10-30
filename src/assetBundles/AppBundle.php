@@ -1,6 +1,6 @@
 <?php
 
-namespace lameco\crafttwigcomponents\AssetsBundles;
+namespace lameco\crafttwigcomponents\assetBundles;
 
 use craft\web\AssetBundle;
 

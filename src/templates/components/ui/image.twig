@@ -1,0 +1,53 @@
+{% if attributes.image is not empty %}
+    {% set transform = null %}
+    {% set mobileTransform = null %}
+
+    {% if attributes.image.extension != 'svg' %}
+        {% set transform = attributes.transform ?? null %}
+        {% set mobileTransform = attributes.mobileTransform ?? null %}
+    {% endif %}
+
+    {% set imageMobile = attributes.mobile ?? null %}
+    {% set lazyload = attributes.lazyload ?? true %}
+    {% set breakpoint = attributes.breakpoint ?? '992px' %}
+    {% set alt = attributes.image.alt ?? attributes.image.title %}
+    {% set srcset = srcset is defined and srcset is not empty ? srcset : ['1x', '2x'] %}
+
+    {# Set transform for width and height calculation #}
+    {% set widthHeightTransform = (imageMobile is not empty) ? transform : (mobileTransform is defined and mobileTransform is not empty ? mobileTransform : null) %}
+
+    <picture class="{{ attributes.merge({ pictureClass: '' }).pictureClass }}">
+        {# Desktop #}
+        {% do attributes.image.setTransform(transform) %}
+        {{ tag('source', {
+            srcset: attributes.image.getsrcset(srcset),
+            media: '(min-width: ' ~ breakpoint ~ ')',
+        }) }}
+
+        {# Mobile #}
+        {% if imageMobile is not empty %}
+            {% do imageMobile.setTransform(mobileTransform) %}
+            {{ tag('source', {
+                srcset: imageMobile.getsrcset(srcset),
+                media: '(min-width: 0px)',
+            }) }}
+        {% endif %}
+
+        {# Img #}
+        {% do attributes.image.setTransform(transform) %}
+        {{ tag('img', {
+            src: attributes.image.url,
+            width: attributes.image.width,
+            height: attributes.image.height,
+            alt: alt,
+            title: alt,
+            class: attributes.merge({ class: '' }).class,
+            loading: lazyload ? 'lazy' : 'eager'
+        }) }}
+
+        {# Caption #}
+        {% if slot is not empty %}
+            <figcaption class="mt-4 text-grey-300">{{ slot }}</figcaption>
+        {% endif %}
+    </picture>
+{% endif %}

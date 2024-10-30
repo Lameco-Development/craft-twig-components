@@ -5,15 +5,19 @@ namespace lameco\crafttwigcomponents;
 use Craft;
 use craft\base\Plugin as BasePlugin;
 use craft\services\Plugins;
-use craft\web\View;
-use lameco\crafttwigcomponents\AssetsBundles\AppBundle;
-use modules\lameco\web\twig\WebtesterExtension;
+use lameco\crafttwigcomponents\services\EntryHelper;
 use Performing\TwigComponents\Configuration;
-use TalesFromADev\Twig\Extra\Tailwind\TailwindExtension;
 use Twig\Extra\Html\HtmlExtension;
+use craft\web\View;
+use lameco\crafttwigcomponents\assetBundles\AppBundle;
+use lameco\crafttwigcomponents\services\PageBuilder;
 use yii\base\Event;
 use yii\base\InvalidConfigException;
 
+/**
+ * @property-read PageBuilder $pageBuilder
+ * @property-read EntryHelper $entryHelper
+ */
 class Plugin extends BasePlugin
 {
     public string $schemaVersion = '1.0.0';
@@ -22,7 +26,8 @@ class Plugin extends BasePlugin
     {
         return [
             'components' => [
-                // Define component configs here...
+                'pageBuilder' => PageBuilder::class,
+                'entryHelper' => EntryHelper::class
             ],
         ];
     }

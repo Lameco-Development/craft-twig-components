@@ -1,33 +1,42 @@
-{% if hyper is defined and not hyper.isEmpty %}
-    {% set href = hyper.url %}
+{% if hyper is defined and not hyper.isEmpty() %}
+    {% set url = hyper.url %}
     {% set text = hyper.text %}
-    {% set target = hyper.target %}
+    {% set target = hyper.target ?? '_self' %}
 {% else %}
-    {% set href = href ?? null %}
+    {% set url = url ?? null %}
     {% set text = text ?? '' %}
-    {% set target = target ?? null %}
+    {% set target = target ?? '_self' %}
 {% endif %}
 
 {% set icon = attributes.icon ?? null %}
 
 {% set classes = html_cva(
-    base='btn d-inline-flex align-items-center justify-content-between' ~ (icon is not empty ? ' btn--has-icon' : null),
+    base='btn inline-flex items-center justify-between leading-6 outline outline-1 font-semibold overflow-hidden group relative rounded-full' ~ (icon is not empty ? ' btn--has-icon' : null),
     variants={
     color: {
-        primary: 'btn-green-600',
-        secondary: 'btn-orange-500',
-        white: 'btn-white',
+        primary: 'bg-primary text-black outline-primary hover:outline-secondary transition-all',
+        secondary: 'bg-secondary text-black outline-secondary hover:outline-primary hover:bg-primary transition-all',
+        outline: 'bg-transparent text-black outline-primary hover:outline-primary hover:bg-primary',
     },
-}) %}
+    size: {
+        sm: 'px-6 py-2',
+        default: 'px-6 py-3',
+    },
+},
+    defaultVariant={
+    color: 'primary',
+    size: 'default'
+}
 
-<a href="{{ href }}"
-        {{ attributes.class(classes.apply({color}, class ?? null)) }} target="{{ target }}" {{ attributes.type ?? null }}>
-    <span class="btn__overlay"></span>
-    <span class="btn__text position-relative z-1">{{ slot ?? text }}</span>
+    ) %}
 
-    {% if icon is not empty %}
-        <span class="btn__icon d-flex justify-content-center align-items-center ms-6 rounded-circle position-relative">
-            <i class="fa-regular {{ icon }} w-50 h-50"></i>
+{% set variantClasses = classes.apply({color: attributes.variant ?? null, size: attributes.size ?? null}) %}
+
+<a href="{{ url }}"
+   class="{{ attributes.merge({ class: variantClasses }).class }}"
+   target="{{ target }}">
+    <span class="bg-white z-0 absolute top-0 end-0 bottom-0 start-0 transition-transform ease-in-out rounded-full translate-x-[-101%] group-hover:translate-x-0"></span>
+    <span class="relative flex items-center gap-2 z-50">
+            <span>{{ slot is not empty ? slot : text }}</span>
         </span>
-    {% endif %}
 </a>
