@@ -11,7 +11,7 @@
                     </div>
                 {% endif %}
 
-                <x-ui.title class="mb-5" level="{{ block.blockTitleLevel }}">{{ block.blockTitle }}</x-ui.title>
+                <x-ui.title level="{{ block.blockTitleLevel }}">{{ block.blockTitle }}</x-ui.title>
 
                 {% if block.blockIntro is not empty %}
                     <div class="{{ attributes.merge({ introClass: 'content-fade-in' }).introClass }}">

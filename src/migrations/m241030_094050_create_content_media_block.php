@@ -4,6 +4,8 @@ namespace lameco\crafttwigcomponents\migrations;
 
 use Craft;
 use craft\db\Migration;
+use craft\fieldlayoutelements\CustomField;
+use craft\fieldlayoutelements\Template;
 use craft\helpers\Console;
 use lameco\crafttwigcomponents\Plugin;
 use Throwable;
@@ -21,50 +23,77 @@ class m241030_094050_create_content_media_block extends Migration
         try {
             Plugin::getInstance()->pageBuilder->createBlock('Content Media', 'contentMediaBlock', [
                 [
-                    'label' => 'Pre-title',
-                    'handle' => 'commonCkeditorTitle',
-                    'mappedHandle' => 'blockPreTitle'
+                    'name' => 'Media',
+                    'fields' => [
+                        [
+                            'label' => 'Image',
+                            'handle' => 'commonImage',
+                            'mappedHandle' => 'blockImage',
+                            'required' => true,
+                            'width' => 50,
+                        ],
+                        [
+                            'label' => 'Video',
+                            'handle' => 'commonVideo',
+                            'mappedHandle' => 'blockVideo',
+                            'width' => 50,
+                        ],
+                        [
+                            'label' => 'Alignment',
+                            'handle' => 'commonAlignment',
+                            'mappedHandle' => 'blockAlignment',
+                            'width' => 100,
+                        ],
+                    ],
                 ],
                 [
-                    'label' => 'Title Level',
-                    'handle' => 'commonTitleLevel',
-                    'mappedHandle' => 'blockTitleLevel'
-                ],
+                    'name' => 'Content',
+                    'fields' => [
+                        [
+                            'label' => 'Pre-title',
+                            'handle' => 'commonCkeditorTitle',
+                            'mappedHandle' => 'blockPreTitle',
+                        ],
+                        [
+                            'label' => 'Title Level',
+                            'handle' => 'commonTitleLevel',
+                            'mappedHandle' => 'blockTitleLevel',
+                            'width' => 25,
+                        ],
+                        [
+                            'label' => 'Title',
+                            'handle' => 'commonCkeditorTitle',
+                            'mappedHandle' => 'blockTitle',
+                            'width' => 25,
+                        ],
+                        [
+                            'label' => 'Intro',
+                            'handle' => 'commonCkeditorDefault',
+                            'mappedHandle' => 'blockIntro',
+                            'width' => 100,
+                        ],
+                        [
+                            'label' => 'Content',
+                            'handle' => 'commonCkeditorDefault',
+                            'mappedHandle' => 'blockContent',
+                            'required' => true,
+                            'width' => 100,
+                        ],
+                        [
+                            'label' => 'Button',
+                            'handle' => 'commonButton',
+                            'mappedHandle' => 'blockButton',
+                            'width' => 50,
+                        ],
+                    ]],
                 [
-                    'label' => 'Title',
-                    'handle' => 'commonCkeditorTitle',
-                    'mappedHandle' => 'blockTitle'
-                ],
-                [
-                    'label' => 'Intro',
-                    'handle' => 'commonCkeditorDefault',
-                    'mappedHandle' => 'blockIntro'
-                ],
-                [
-                    'label' => 'Content',
-                    'handle' => 'commonCkeditorDefault',
-                    'mappedHandle' => 'blockContent'
-                ],
-                [
-                    'label' => 'Button',
-                    'handle' => 'commonButton',
-                    'mappedHandle' => 'blockButton'
-                ],
-                [
-                    'label' => 'Alignment',
-                    'handle' => 'commonAlignment',
-                    'mappedHandle' => 'blockAlignment'
-                ],
-                [
-                    'label' => 'Image',
-                    'handle' => 'commonImage',
-                    'mappedHandle' => 'blockImage'
-                ],
-                [
-                    'label' => 'Video',
-                    'handle' => 'commonVideo',
-                    'mappedHandle' => 'blockVideo'
-                ],
+                    'name' => 'Anchor',
+                    'fields' => [
+                        Craft::createObject([
+                            'class' => Template::class,
+                            'template' => '_helpers/admin/element.twig'
+                        ])
+                    ]]
             ]);
         } catch (Throwable $e) {
             Console::outputWarning($e->getMessage());

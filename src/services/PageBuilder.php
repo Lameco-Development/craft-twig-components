@@ -5,11 +5,11 @@ namespace lameco\crafttwigcomponents\services;
 use Craft;
 use craft\errors\EntryTypeNotFoundException;
 use craft\fieldlayoutelements\CustomField;
+use craft\fieldlayoutelements\Template;
 use craft\helpers\Console;
-use Exception;
+use craft\models\FieldLayoutTab;
 use JetBrains\PhpStorm\NoReturn;
 use lameco\crafttwigcomponents\Plugin;
-use phpDocumentor\Reflection\Types\Parent_;
 use Throwable;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
@@ -32,30 +32,45 @@ class PageBuilder extends Component
      * @throws InvalidConfigException
      * @throws EntryTypeNotFoundException
      */
-    #[NoReturn] public function createBlock(string $name, string $handle, array $existingFields): void
+    #[NoReturn] public function createBlock(string $name, string $handle, array $tabsConfig): void
     {
         $entries = Craft::$app->getEntries();
         $entryType = $this->entryHelper->createEntryType($name, $handle);
-        $elements = [];
+        $layout = $entryType->getFieldLayout();
+        $tabs = [];
 
-        foreach ($existingFields as $existingField) {
-            $field = Craft::$app->getFields()->getFieldByHandle($existingField['handle']);
-            if (!$field) {
-                Console::outputWarning("Field $handle doesn't exist");
-            } else {
-                $elements[] = Craft::createObject([
-                    'class' => CustomField::class,
-                    'fieldUid' => $field->uid,
-                    'required' => false,
-                    'label' => $existingField['label'],
-                    'handle' => $existingField['mappedHandle']
-                ]);
+        foreach ($tabsConfig as $index => $config) {
+            $elements = [];
+
+            foreach ($config['fields'] as $field) {
+                if ($field instanceof Template) {
+                    $elements[] = $field;
+                } else {
+                    $existingField = Craft::$app->getFields()->getFieldByHandle($field['handle']);
+                    if (!$existingField) {
+                        Console::outputWarning("Field $handle doesn't exist");
+                    } else {
+                        $elements[] = Craft::createObject([
+                            'class' => CustomField::class,
+                            'fieldUid' => $existingField->uid,
+                            'required' => $field['required'] ?? false,
+                            'label' => $field['label'],
+                            'handle' => $field['mappedHandle'],
+                            'width' => $field['width'] ?? 100
+                        ]);
+                    }
+                }
             }
+
+            $tab = new FieldLayoutTab();
+            $tab->layout = $layout;
+            $tab->name = $config['name'];
+            $tab->sortOrder = $index;
+
+            $tab->setElements($elements);
+            $tabs[] = $tab;
         }
 
-        $layout = $entryType->getFieldLayout();
-        $tabs = $layout->getTabs();
-        $tabs[0]->setElements(array_merge($tabs[0]->getElements(), $elements));
         $layout->setTabs($tabs);
         $entryType->setFieldLayout($layout);
 

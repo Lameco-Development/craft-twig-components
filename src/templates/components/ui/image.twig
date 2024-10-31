@@ -10,7 +10,7 @@
     {% set imageMobile = attributes.mobile ?? null %}
     {% set lazyload = attributes.lazyload ?? true %}
     {% set breakpoint = attributes.breakpoint ?? '992px' %}
-    {% set alt = attributes.image.alt ?? attributes.image.title %}
+    {% set alt = attributes.image.alt ?: attributes.image.title %}
     {% set srcset = srcset is defined and srcset is not empty ? srcset : ['1x', '2x'] %}
 
     {# Set transform for width and height calculation #}
