@@ -64,7 +64,7 @@ class m241030_094050_create_content_media_block extends Migration
                             'label' => 'Title',
                             'handle' => 'commonCkeditorTitle',
                             'mappedHandle' => 'blockTitle',
-                            'width' => 25,
+                            'width' => 75,
                         ],
                         [
                             'label' => 'Intro',
@@ -83,17 +83,9 @@ class m241030_094050_create_content_media_block extends Migration
                             'label' => 'Button',
                             'handle' => 'commonButton',
                             'mappedHandle' => 'blockButton',
-                            'width' => 50,
+                            'width' => 100,
                         ],
                     ]],
-                [
-                    'name' => 'Anchor',
-                    'fields' => [
-                        Craft::createObject([
-                            'class' => Template::class,
-                            'template' => '_helpers/admin/element.twig'
-                        ])
-                    ]]
             ]);
         } catch (Throwable $e) {
             Console::outputWarning($e->getMessage());

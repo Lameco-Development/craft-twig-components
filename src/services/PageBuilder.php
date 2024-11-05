@@ -7,6 +7,7 @@ use craft\errors\EntryTypeNotFoundException;
 use craft\fieldlayoutelements\CustomField;
 use craft\fieldlayoutelements\Template;
 use craft\helpers\Console;
+use craft\models\FieldLayout;
 use craft\models\FieldLayoutTab;
 use JetBrains\PhpStorm\NoReturn;
 use lameco\crafttwigcomponents\Plugin;
@@ -71,6 +72,8 @@ class PageBuilder extends Component
             $tabs[] = $tab;
         }
 
+        $this->addAnchorHintToTab($tabs, $layout);
+
         $layout->setTabs($tabs);
         $entryType->setFieldLayout($layout);
 
@@ -78,5 +81,21 @@ class PageBuilder extends Component
             Console::outputWarning("EntryType $handle could not be saved" . PHP_EOL . print_r($entryType->getErrors(), true));
             $entryType->validate();
         }
+    }
+
+    /**
+     * @throws InvalidConfigException
+     */
+    private function addAnchorHintToTab(array &$tabs, FieldLayout $layout): void
+    {
+        $tab = new FieldLayoutTab();
+        $tab->layout = $layout;
+        $tab->name = 'Anchor';
+
+        $tab->setElements([
+            Craft::createObject([
+                'class' => Template::class,
+                'template' => '_helpers/admin/element.twig'])]);
+        $tabs[] = $tab;
     }
 }

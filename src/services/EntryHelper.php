@@ -12,7 +12,7 @@ use yii\base\Component;
 use yii\base\InvalidConfigException;
 
 /**
- * Page Builder service
+ * Entry Helper service
  */
 class EntryHelper extends Component
 {

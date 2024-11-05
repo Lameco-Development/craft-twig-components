@@ -1,0 +1,47 @@
+<?php
+
+namespace lameco\crafttwigcomponents\services;
+
+use Craft;
+use craft\errors\MigrationException;
+use Exception;
+use yii\base\Component;
+use craft\db\MigrationManager;
+use craft\helpers\MigrationHelper;
+use yii\base\InvalidConfigException;
+
+/**
+ * Migration service
+ */
+class Migration extends Component
+{
+    /**
+     * @throws \Throwable
+     * @throws InvalidConfigException
+     * @throws MigrationException
+     */
+    public function migrateComponent(string $migrationName, bool $up = false): void
+    {
+        $migrationClass = "lameco\\crafttwigcomponents\migrations\\$migrationName";
+
+        if (class_exists($migrationClass)) {
+            $migration = new $migrationClass();
+        } else {
+            throw new \Exception("Migration class $migrationClass does not exist.");
+        }
+
+        $migrator = Craft::$app->getMigrator();
+
+        try {
+            if ($up){
+                $migrator->migrateUp($migration);
+            }
+            else{
+                $migrator->migrateDown($migration);
+            }
+        } catch (\Throwable $e) {
+            Craft::error("Migration failed: {$e->getMessage()}", __METHOD__);
+            throw $e;
+        }
+    }
+}

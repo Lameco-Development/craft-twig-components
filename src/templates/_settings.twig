@@ -1,0 +1,26 @@
+{% import "_includes/forms" as forms %}
+
+<table class="data fullwidth">
+    <thead>
+    <tr>
+        <th style="width: 50%;">Name</th>
+        <th style="width: 50%;">Enabled</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for component in settings.components %}
+        <tr>
+            <td>{{ component.name }}</td>
+            <td>
+                <input type="hidden" name="components[{{ loop.index0 }}][name]" value="{{ component.name }}">
+                <input type="hidden" name="components[{{ loop.index0 }}][migration]"
+                       value="{{ component.migration }}">
+                {{ forms.lightswitchField({
+                    name: 'components[' ~ loop.index0 ~ '][enabled]',
+                    on: component.enabled,
+                }) }}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
