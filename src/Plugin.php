@@ -7,7 +7,7 @@ use craft\base\Model;
 use craft\base\Plugin as BasePlugin;
 use craft\services\Plugins;
 use lameco\crafttwigcomponents\services\EntryHelper;
-use lameco\crafttwigcomponents\services\Migration;
+use lameco\crafttwigcomponents\services\MigrationManager;
 use Performing\TwigComponents\Configuration;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -37,7 +37,7 @@ class Plugin extends BasePlugin
             'components' => [
                 'pageBuilder' => PageBuilder::class,
                 'entryHelper' => EntryHelper::class,
-                'migration' => Migration::class
+                'migrationManager' => MigrationManager::class
             ],
         ];
     }
@@ -56,7 +56,7 @@ class Plugin extends BasePlugin
                 $settings = $event->sender->getSettings();
 
                 foreach ($settings->components as $component) {
-                    $this->migration->migrateComponent($component['migration'], $component['enabled']);
+                    $this->migrationManager->migrateComponent($component['migration'], $component['enabled']);
                 }
             }
         );

@@ -4,16 +4,13 @@ namespace lameco\crafttwigcomponents\services;
 
 use Craft;
 use craft\errors\MigrationException;
-use Exception;
 use yii\base\Component;
-use craft\db\MigrationManager;
-use craft\helpers\MigrationHelper;
 use yii\base\InvalidConfigException;
 
 /**
- * Migration service
+ * Migration Manager service
  */
-class Migration extends Component
+class MigrationManager extends Component
 {
     /**
      * @throws \Throwable
@@ -22,7 +19,7 @@ class Migration extends Component
      */
     public function migrateComponent(string $migrationName, bool $up = false): void
     {
-        $migrationClass = "lameco\\crafttwigcomponents\migrations\\$migrationName";
+        $migrationClass = "lameco\\crafttwigcomponents\\migrations\\$migrationName";
 
         if (class_exists($migrationClass)) {
             $migration = new $migrationClass();
