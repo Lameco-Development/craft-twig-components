@@ -107,7 +107,13 @@ class PageBuilder extends Component
         $field = Craft::$app->fields->getFieldById($pageBuilderFieldId);
 
         if ($field instanceof Matrix) {
-            $field->setEntryTypes([...$field->getEntryTypes(), $entryType]);
+            $entryTypes = [...$field->getEntryTypes(), $entryType];
+
+            usort($entryTypes, function($a, $b) {
+                return strcmp($a->name, $b->name);
+            });
+
+            $field->setEntryTypes($entryTypes);
 
             if (!Craft::$app->fields->saveField($field)) {
                 Console::outputWarning("Page Builder field `$field->name` could not be saved");
