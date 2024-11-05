@@ -109,9 +109,14 @@ class Plugin extends BasePlugin
     protected function settingsHtml(): ?string
     {
         $availableFields = Craft::$app->getFields()->getAllFields();
-        $availableFieldOptions = [];
+        $availableFieldOptions = [
+            [
+                'label' => 'Select a field',
+                'value' => null,
+            ]
+        ];
 
-        foreach ($availableFields as $field){
+        foreach ($availableFields as $field) {
             $availableFieldOptions[] = [
                 'label' => $field->name,
                 'value' => $field->id,

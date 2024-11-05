@@ -21,7 +21,6 @@ class Settings extends Model
         return [
             [['components'], 'required'],
             [['components'], 'each', 'rule' => ['safe']],
-            [['pageBuilderFieldId'], 'integer'],
         ];
     }
 }
