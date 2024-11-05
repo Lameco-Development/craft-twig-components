@@ -4,6 +4,7 @@ namespace lameco\crafttwigcomponents\services;
 
 use Craft;
 use craft\errors\MigrationException;
+use Throwable;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
 
@@ -13,7 +14,7 @@ use yii\base\InvalidConfigException;
 class MigrationManager extends Component
 {
     /**
-     * @throws \Throwable
+     * @throws Throwable
      * @throws InvalidConfigException
      * @throws MigrationException
      */
@@ -23,24 +24,20 @@ class MigrationManager extends Component
 
         if (class_exists($migrationClass)) {
             $migration = new $migrationClass();
-        } else {
-            throw new \Exception("Migration class $migrationClass does not exist.");
-        }
+            $migrator = Craft::$app->getMigrator();
 
-        $migrator = Craft::$app->getMigrator();
+            try {
+                $hasRun = $migrator->hasRun($migrationName);
 
-        try {
-            $hasRun = $migrator->hasRun($migrationName);
-
-            if ($up && !$hasRun){
-                $migrator->migrateUp($migration);
+                if ($up && !$hasRun) {
+                    $migrator->migrateUp($migration);
+                } elseif (!$up && $hasRun) {
+                    $migrator->migrateDown($migration);
+                }
+            } catch (Throwable $e) {
+                Craft::error("Migration failed: {$e->getMessage()}", __METHOD__);
+                throw $e;
             }
-            elseif(!$up && $hasRun){
-                $migrator->migrateDown($migration);
-            }
-        } catch (\Throwable $e) {
-            Craft::error("Migration failed: {$e->getMessage()}", __METHOD__);
-            throw $e;
         }
     }
 }
