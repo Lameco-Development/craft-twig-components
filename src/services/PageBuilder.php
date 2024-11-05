@@ -20,14 +20,6 @@ use yii\base\InvalidConfigException;
  */
 class PageBuilder extends Component
 {
-    private EntryHelper $entryHelper;
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->entryHelper = Plugin::getInstance()->entryHelper;
-    }
-
     /**
      * @throws Throwable
      * @throws InvalidConfigException
@@ -36,7 +28,7 @@ class PageBuilder extends Component
     #[NoReturn] public function createBlock(string $name, string $handle, array $tabsConfig): void
     {
         $entries = Craft::$app->getEntries();
-        $entryType = $this->entryHelper->createEntryType($name, $handle);
+        $entryType = Plugin::getInstance()->entryHelper->createEntryType($name, $handle);
         $layout = $entryType->getFieldLayout();
         $tabs = [];
 
