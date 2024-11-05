@@ -6,7 +6,9 @@ use Craft;
 use craft\errors\EntryTypeNotFoundException;
 use craft\fieldlayoutelements\CustomField;
 use craft\fieldlayoutelements\Template;
+use craft\fields\Matrix;
 use craft\helpers\Console;
+use craft\models\EntryType;
 use craft\models\FieldLayout;
 use craft\models\FieldLayoutTab;
 use JetBrains\PhpStorm\NoReturn;
@@ -72,6 +74,11 @@ class PageBuilder extends Component
         if (!$entries->saveEntryType($entryType)) {
             Console::outputWarning("EntryType $handle could not be saved" . PHP_EOL . print_r($entryType->getErrors(), true));
             $entryType->validate();
+        } else {
+            $pageBuilderFieldId = Plugin::getInstance()->getSettings()->pageBuilderFieldId;
+            if ($pageBuilderFieldId !== null) {
+                $this->addBlockToPageBuilderField($pageBuilderFieldId, $entryType);
+            }
         }
     }
 
@@ -89,5 +96,22 @@ class PageBuilder extends Component
                 'class' => Template::class,
                 'template' => '_helpers/admin/element.twig'])]);
         $tabs[] = $tab;
+    }
+
+    /**
+     * @throws InvalidConfigException
+     * @throws Throwable
+     */
+    private function addBlockToPageBuilderField(int $pageBuilderFieldId, EntryType $entryType): void
+    {
+        $field = Craft::$app->fields->getFieldById($pageBuilderFieldId);
+
+        if ($field instanceof Matrix) {
+            $field->setEntryTypes([...$field->getEntryTypes(), $entryType]);
+
+            if (!Craft::$app->fields->saveField($field)) {
+                Console::outputWarning("Page Builder field `$field->name` could not be saved");
+            }
+        }
     }
 }
