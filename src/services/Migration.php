@@ -33,10 +33,12 @@ class Migration extends Component
         $migrator = Craft::$app->getMigrator();
 
         try {
-            if ($up){
+            $hasRun = $migrator->hasRun($migrationName);
+
+            if ($up && !$hasRun){
                 $migrator->migrateUp($migration);
             }
-            else{
+            elseif(!$up && $hasRun){
                 $migrator->migrateDown($migration);
             }
         } catch (\Throwable $e) {

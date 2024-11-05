@@ -108,11 +108,21 @@ class Plugin extends BasePlugin
      */
     protected function settingsHtml(): ?string
     {
+        $availableFields = Craft::$app->getFields()->getAllFields();
+        $availableFieldOptions = [];
+
+        foreach ($availableFields as $field){
+            $availableFieldOptions[] = [
+                'label' => $field->name,
+                'value' => $field->id,
+            ];
+
+        }
+
         return Craft::$app->view->renderTemplate('_craft-twig-components/_settings.twig', [
             'plugin' => $this,
             'settings' => $this->getSettings(),
+            'availableFieldOptions' => $availableFieldOptions
         ]);
-
-
     }
 }

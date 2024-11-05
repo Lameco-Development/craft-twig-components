@@ -14,11 +14,14 @@ class Settings extends Model
         ],
     ];
 
+    public int | null $pageBuilderFieldId = null;
+
     public function defineRules(): array
     {
         return [
             [['components'], 'required'],
             [['components'], 'each', 'rule' => ['safe']],
+            [['pageBuilderFieldId'], 'integer'],
         ];
     }
 }

@@ -1,5 +1,15 @@
 {% import "_includes/forms" as forms %}
 
+<div class="field" style="margin-top: 0;">
+    {{ forms.selectField({
+        label: "Page Builder field",
+        id: "pageBuilderFieldId",
+        name: "pageBuilderFieldId",
+        options: availableFieldOptions,
+        value: settings.pageBuilderFieldId,
+    }) }}
+</div>
+
 <table class="data fullwidth">
     <thead>
     <tr>
