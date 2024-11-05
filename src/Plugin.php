@@ -56,11 +56,7 @@ class Plugin extends BasePlugin
                 $settings = $event->sender->getSettings();
 
                 foreach ($settings->components as $component) {
-                    if ($component['enabled']) {
-                        $this->migration->migrateComponent($component['migration'], true);
-                    } else {
-                        $this->migration->migrateComponent($component['migration'], false);
-                    }
+                    $this->migration->migrateComponent($component['migration'], $component['enabled']);
                 }
             }
         );
