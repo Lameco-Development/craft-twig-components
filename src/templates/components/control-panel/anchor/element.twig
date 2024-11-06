@@ -1,0 +1,9 @@
+<div class="readable">
+    <blockquote class="note tip" style="display: flex; align-items: center; gap: 1rem;">
+        {% if element.id is defined and element.id is not empty %}
+            <strong style="flex-shrink: 0;">Anchor ID: </strong><input type="text" value="#scroll-to-{{ element.id }}" readonly class="nicetext text fullwidth" style="flex-grow: 1;">
+        {% else %}
+            <em>Anchor ID will be available after saving the changes</em>
+        {% endif %}
+    </blockquote>
+</div>

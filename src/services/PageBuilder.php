@@ -94,7 +94,7 @@ class PageBuilder extends Component
         $tab->setElements([
             Craft::createObject([
                 'class' => Template::class,
-                'template' => '_helpers/admin/element.twig'])]);
+                'template' => 'lameco/control-panel/anchor/element.twig'])]);
         $tabs[] = $tab;
     }
 
