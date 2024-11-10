@@ -20,7 +20,7 @@ class MigrationManager extends Component
      */
     public function migrateComponent(string $migrationName, bool $up = false): void
     {
-        $migrationClass = "lameco\\crafttwigcomponents\\migrations\\$migrationName";
+        $migrationClass = "lameco\\crafttwigcomponents\\pageBuilderMigrations\\$migrationName";
 
         if (class_exists($migrationClass)) {
             $migration = new $migrationClass();

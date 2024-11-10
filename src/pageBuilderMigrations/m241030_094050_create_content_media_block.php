@@ -1,6 +1,6 @@
 <?php
 
-namespace lameco\crafttwigcomponents\migrations;
+namespace lameco\crafttwigcomponents\pageBuilderMigrations;
 
 use Craft;
 use craft\db\Migration;
@@ -80,19 +80,19 @@ class m241030_094050_create_content_media_block extends Migration
                             'width' => 100,
                         ],
                         [
-                            'label' => 'Button',
-                            'handle' => 'commonButton',
-                            'mappedHandle' => 'blockButton',
+                            'label' => 'Buttons',
+                            'handle' => 'commonButtons',
+                            'mappedHandle' => 'blockButtons',
                             'width' => 100,
                         ],
                     ]],
             ]);
+
+            return true;
         } catch (Throwable $e) {
             Console::outputWarning($e->getMessage());
             return false;
         }
-
-        return true;
     }
 
     /**
