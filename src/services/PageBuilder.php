@@ -11,6 +11,7 @@ use craft\helpers\Console;
 use craft\models\EntryType;
 use craft\models\FieldLayout;
 use craft\models\FieldLayoutTab;
+use Exception;
 use JetBrains\PhpStorm\NoReturn;
 use lameco\crafttwigcomponents\Plugin;
 use Throwable;
@@ -27,7 +28,7 @@ class PageBuilder extends Component
      * @throws InvalidConfigException
      * @throws EntryTypeNotFoundException
      */
-    #[NoReturn] public function createBlock(string $name, string $handle, array $tabsConfig): void
+    public function createBlock(string $name, string $handle, array $tabsConfig): true
     {
         $entries = Craft::$app->getEntries();
         $entryType = Plugin::getInstance()->entryHelper->createEntryType($name, $handle);
@@ -80,6 +81,8 @@ class PageBuilder extends Component
                 $this->addBlockToPageBuilderField($pageBuilderFieldId, $entryType);
             }
         }
+
+        return true;
     }
 
     /**
@@ -99,6 +102,23 @@ class PageBuilder extends Component
     }
 
     /**
+     * @throws Exception
+     */
+    public function addBlockToSettingsModel(array $block): bool
+    {
+        $plugin = Plugin::getInstance();
+        $settings = $plugin->getSettings();
+
+        $settings->components[] = $block;
+
+        if (!Craft::$app->plugins->savePluginSettings($plugin, $settings->getAttributes())) {
+            throw new Exception('Failed to update plugin settings', __METHOD__);
+        }
+
+        return true;
+    }
+
+    /**
      * @throws InvalidConfigException
      * @throws Throwable
      */
@@ -109,7 +129,7 @@ class PageBuilder extends Component
         if ($field instanceof Matrix) {
             $entryTypes = [...$field->getEntryTypes(), $entryType];
 
-            usort($entryTypes, function($a, $b) {
+            usort($entryTypes, function ($a, $b) {
                 return strcmp($a->name, $b->name);
             });
 

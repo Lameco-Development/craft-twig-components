@@ -12,6 +12,11 @@ class Settings extends Model
             'enabled' => false,
             'migration' => 'm241030_094050_create_content_media_block'
         ],
+        [
+            'name' => 'Collapsible Content',
+            'enabled' => false,
+            'migration' => 'm241111_183745_create_collapsible_content_block'
+        ],
     ];
 
     public int | null $pageBuilderFieldId = null;
