@@ -19,24 +19,28 @@
         outline: 'bg-transparent text-black outline-primary hover:outline-primary hover:bg-primary',
     },
     size: {
-        sm: 'px-6 py-2',
-        default: 'px-6 py-3',
+        sm: 'px-4 py-3',
+        default: 'px-6 py-4',
     },
 },
     defaultVariant={
     color: 'primary',
     size: 'default'
-}
+}) %}
 
-    ) %}
-
-{% set variantClasses = classes.apply({color: attributes.variant ?? null, size: attributes.size ?? null}) %}
+{% set variant = attributes.variant ?? 'primary' %}
+{% set variantClasses = classes.apply({color: variant, size: attributes.size ?? null}) %}
 
 <a href="{{ url }}"
    class="{{ attributes.merge({ class: variantClasses }).class }}"
    target="{{ target }}">
     <span class="bg-white z-0 absolute top-0 end-0 bottom-0 start-0 transition-transform ease-in-out rounded-full translate-x-[-101%] group-hover:translate-x-0"></span>
-    <span class="relative flex items-center gap-2 z-50">
+    <span class="relative flex items-center gap-4 z-50">
         <span>{{ slot is not empty ? slot : text }}</span>
+         {% if icon is defined and icon is not empty %}
+             <span class="w-6 h-6 rounded-full flex items-center justify-center text-sm group-hover:bg-green-400 transition-colors ease-in-out{% if variant == 'primary' %} bg-white{% elseif variant == 'secondary' %} bg-primary{% endif %}">
+                 <i class="{{ icon }}"></i>
+             </span>
+         {% endif %}
     </span>
 </a>
