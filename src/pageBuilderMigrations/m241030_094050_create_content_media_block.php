@@ -4,8 +4,6 @@ namespace lameco\crafttwigcomponents\pageBuilderMigrations;
 
 use Craft;
 use craft\db\Migration;
-use craft\fieldlayoutelements\CustomField;
-use craft\fieldlayoutelements\Template;
 use craft\helpers\Console;
 use lameco\crafttwigcomponents\Plugin;
 use Throwable;

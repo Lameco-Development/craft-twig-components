@@ -12,7 +12,6 @@ use craft\models\EntryType;
 use craft\models\FieldLayout;
 use craft\models\FieldLayoutTab;
 use Exception;
-use JetBrains\PhpStorm\NoReturn;
 use lameco\crafttwigcomponents\Plugin;
 use Throwable;
 use yii\base\Component;
@@ -73,8 +72,8 @@ class PageBuilder extends Component
         $entryType->setFieldLayout($layout);
 
         if (!$entries->saveEntryType($entryType)) {
-            Console::outputWarning("EntryType $handle could not be saved" . PHP_EOL . print_r($entryType->getErrors(), true));
             $entryType->validate();
+            throw new Exception("EntryType $handle could not be saved" . PHP_EOL . print_r($entryType->getErrors(), true));
         } else {
             $pageBuilderFieldId = Plugin::getInstance()->getSettings()->pageBuilderFieldId;
             if ($pageBuilderFieldId !== null) {
@@ -136,7 +135,7 @@ class PageBuilder extends Component
             $field->setEntryTypes($entryTypes);
 
             if (!Craft::$app->fields->saveField($field)) {
-                Console::outputWarning("Page Builder field `$field->name` could not be saved");
+                throw new Exception("Page Builder field `$field->name` could not be saved");
             }
         }
     }

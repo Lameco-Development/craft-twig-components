@@ -4,8 +4,6 @@ namespace lameco\crafttwigcomponents\services;
 
 use Craft;
 use craft\enums\Color;
-use craft\fieldlayoutelements\CustomField;
-use craft\helpers\Console;
 use craft\models\EntryType;
 use Exception;
 use yii\base\Component;
