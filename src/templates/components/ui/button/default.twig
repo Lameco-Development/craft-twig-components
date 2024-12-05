@@ -1,3 +1,5 @@
+{% set theme = _globals.get('lameco.components.theme') %}
+
 {% if hyper is defined and not hyper.isEmpty() %}
     {% set url = hyper.url %}
     {% set text = hyper.text %}
@@ -11,17 +13,17 @@
 {% set icon = attributes.icon ?? null %}
 
 {% set classes = html_cva(
-    base='btn inline-flex items-center justify-between leading-6 outline outline-1 font-semibold overflow-hidden group relative rounded-full' ~ (icon is not empty ? ' btn--has-icon' : null),
+    base='btn inline-flex items-center justify-between outline outline-1 font-semibold overflow-hidden group relative transition-all ' ~ theme.ui.button.base ?? '',
     variants={
-    color: {
-        primary: 'bg-primary text-black outline-primary hover:outline-secondary transition-all',
-        secondary: 'bg-secondary text-black outline-secondary hover:outline-primary hover:bg-primary transition-all',
-        outline: 'bg-transparent text-black outline-primary hover:outline-primary hover:bg-primary',
-    },
-    size: {
-        sm: 'px-4 py-3',
-        default: 'px-6 py-4',
-    },
+        color: {
+            primary: theme.ui.button.primary ?? 'bg-primary text-black outline-primary hover:outline-secondary',
+            secondary: theme.ui.button.secondary ?? 'bg-secondary text-black outline-secondary hover:outline-primary hover:bg-primary',
+            outline: theme.ui.button.outline ?? 'bg-transparent text-black outline-primary hover:outline-primary hover:bg-primary',
+        },
+        size: {
+            sm: theme.ui.button.size.sm ?? 'px-4 py-3',
+            default: theme.ui.button.size.default ?? 'px-6 py-4',
+        },
 },
     defaultVariant={
     color: 'primary',
@@ -38,7 +40,7 @@
     <span class="relative flex items-center gap-4 z-50">
         <span>{{ slot is not empty ? slot : text }}</span>
          {% if icon is defined and icon is not empty %}
-             <span class="w-6 h-6 rounded-full flex items-center justify-center text-sm group-hover:bg-green-400 transition-colors ease-in-out{% if variant == 'primary' %} bg-white{% elseif variant == 'secondary' %} bg-primary{% endif %}">
+             <span class="w-6 h-6 rounded-full flex items-center justify-center text-sm group-hover:bg-primary transition-colors ease-in-out{% if variant == 'primary' %} bg-white{% elseif variant == 'secondary' %} bg-primary{% endif %}">
                  <i class="{{ icon }}"></i>
              </span>
          {% endif %}
