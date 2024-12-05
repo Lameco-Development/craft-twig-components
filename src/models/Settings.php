@@ -17,6 +17,11 @@ class Settings extends Model
             'enabled' => false,
             'migration' => 'm241111_183745_create_collapsible_content_block'
         ],
+        [
+            'name' => 'General Content',
+            'enabled' => false,
+            'migration' => 'm241111_183745_create_general_content_block'
+        ],
     ];
 
     public int | null $pageBuilderFieldId = null;

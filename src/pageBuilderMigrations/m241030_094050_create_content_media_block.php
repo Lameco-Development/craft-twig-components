@@ -78,7 +78,7 @@ class m241030_094050_create_content_media_block extends Migration
                             'width' => 100,
                         ],
                         [
-                            'label' => 'Buttons',
+                            'label' => 'Button',
                             'handle' => 'commonButton',
                             'mappedHandle' => 'blockButton',
                             'width' => 100,
@@ -88,7 +88,7 @@ class m241030_094050_create_content_media_block extends Migration
 
             return true;
         } catch (Throwable $e) {
-            Console::outputWarning($e->getMessage());
+            Console::outputWarning($e);
             return false;
         }
     }
@@ -106,7 +106,7 @@ class m241030_094050_create_content_media_block extends Migration
                 $entries->deleteEntryType($entryType);
             }
         } catch (Throwable $e) {
-            Console::outputWarning($e->getMessage());
+            Console::outputWarning($e);
             return false;
         }
 

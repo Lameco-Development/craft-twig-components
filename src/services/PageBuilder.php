@@ -30,46 +30,9 @@ class PageBuilder extends Component
     public function createBlock(string $name, string $handle, array $tabsConfig): true
     {
         $entries = Craft::$app->getEntries();
-        $entryType = Plugin::getInstance()->entryHelper->createEntryType($name, $handle);
-        $layout = $entryType->getFieldLayout();
-        $tabs = [];
+        $entryType = Plugin::getInstance()->entryHelper->createEntryType($name, $handle, false, $tabsConfig);
 
-        foreach ($tabsConfig as $index => $config) {
-            $elements = [];
-
-            foreach ($config['fields'] as $field) {
-                if ($field instanceof Template) {
-                    $elements[] = $field;
-                } else {
-                    $existingField = Craft::$app->getFields()->getFieldByHandle($field['handle']);
-                    if (!$existingField) {
-                        Console::outputWarning("Field $handle doesn't exist");
-                    } else {
-                        $elements[] = Craft::createObject([
-                            'class' => CustomField::class,
-                            'fieldUid' => $existingField->uid,
-                            'required' => $field['required'] ?? false,
-                            'label' => $field['label'],
-                            'handle' => $field['mappedHandle'],
-                            'width' => $field['width'] ?? 100
-                        ]);
-                    }
-                }
-            }
-
-            $tab = new FieldLayoutTab();
-            $tab->layout = $layout;
-            $tab->name = $config['name'];
-            $tab->sortOrder = $index;
-
-            $tab->setElements($elements);
-            $tabs[] = $tab;
-        }
-
-        $this->addAnchorHintToTab($tabs, $layout);
-
-        $layout->setTabs($tabs);
-        $entryType->setFieldLayout($layout);
+        $this->addAnchorHintToTab($entryType);
 
         if (!$entries->saveEntryType($entryType)) {
             $entryType->validate();
@@ -87,17 +50,20 @@ class PageBuilder extends Component
     /**
      * @throws InvalidConfigException
      */
-    private function addAnchorHintToTab(array &$tabs, FieldLayout $layout): void
+    private function addAnchorHintToTab(EntryType $entryType): void
     {
+        $layout = $entryType->getFieldLayout();
+        $tabs = $layout->getTabs();
         $tab = new FieldLayoutTab();
         $tab->layout = $layout;
         $tab->name = 'Anchor';
-
         $tab->setElements([
             Craft::createObject([
                 'class' => Template::class,
                 'template' => 'lameco/control-panel/anchor/element.twig'])]);
+
         $tabs[] = $tab;
+        $layout->setTabs($tabs);
     }
 
     /**

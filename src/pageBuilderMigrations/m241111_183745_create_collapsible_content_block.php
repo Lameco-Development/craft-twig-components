@@ -55,7 +55,7 @@ class m241111_183745_create_collapsible_content_block extends Migration
 
             return true;
         } catch (Throwable $e) {
-            Console::outputWarning($e->getMessage());
+            Console::outputWarning($e);
             return false;
         }
     }
@@ -74,7 +74,7 @@ class m241111_183745_create_collapsible_content_block extends Migration
 
             return true;
         } catch (Throwable $e) {
-            Console::outputWarning($e->getMessage());
+            Console::outputWarning($e);
             return false;
         }
     }
