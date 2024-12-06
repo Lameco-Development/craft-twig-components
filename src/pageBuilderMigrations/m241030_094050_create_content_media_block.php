@@ -19,7 +19,7 @@ class m241030_094050_create_content_media_block extends Migration
     public function safeUp(): bool
     {
         try {
-            Plugin::getInstance()->pageBuilder->createBlock('Content Media', 'contentMediaBlock', [
+            Plugin::getInstance()->pageBuilder->createBlock('Content Media', 'contentMediaBlock', 'cube', [
                 [
                     'name' => 'Media',
                     'fields' => [
@@ -66,13 +66,13 @@ class m241030_094050_create_content_media_block extends Migration
                         ],
                         [
                             'label' => 'Intro',
-                            'handle' => 'commonCKEditorSimple',
+                            'handle' => 'commonCkeditorSimple',
                             'mappedHandle' => 'blockIntro',
                             'width' => 100,
                         ],
                         [
                             'label' => 'Content',
-                            'handle' => 'commonCKEditorAdvanced',
+                            'handle' => 'commonCkeditorDefault',
                             'mappedHandle' => 'blockContent',
                             'required' => true,
                             'width' => 100,

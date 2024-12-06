@@ -21,7 +21,7 @@ class m241111_183745_create_general_content_block extends Migration
     public function safeUp(): bool
     {
         try {
-            $columnsEntryType = Plugin::getInstance()->entryHelper->createEntryType('Page Builder - General Content - Columns', 'pageBuilderGeneralContentColumns', true, [
+            $columnsEntryType = Plugin::getInstance()->entryHelper->createEntryType('Page Builder - General Content - Columns', 'pageBuilderGeneralContentColumns', 'cubes', true, [
                 [
                     'name' => 'Content',
                     'fields' => [
@@ -39,7 +39,7 @@ class m241111_183745_create_general_content_block extends Migration
                         ],
                         [
                             'label' => 'Content',
-                            'handle' => 'commonCKEditorAdvanced',
+                            'handle' => 'commonCkeditorDefault',
                             'mappedHandle' => 'blockContent',
                             'required' => true,
                             'width' => 100,
@@ -64,7 +64,7 @@ class m241111_183745_create_general_content_block extends Migration
             $columnsMatrixField->setEntryTypes([$columnsEntryType]);
             Craft::$app->fields->saveField($columnsMatrixField);
 
-            Plugin::getInstance()->pageBuilder->createBlock('General Content', 'generalContentBlock', [
+            Plugin::getInstance()->pageBuilder->createBlock('General Content', 'generalContentBlock', 'cube', [
                 [
                     'name' => 'Content',
                     'fields' => [

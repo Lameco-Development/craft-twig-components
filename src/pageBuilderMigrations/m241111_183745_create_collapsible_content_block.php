@@ -4,6 +4,8 @@ namespace lameco\crafttwigcomponents\pageBuilderMigrations;
 
 use Craft;
 use craft\db\Migration;
+use craft\enums\PropagationMethod;
+use craft\fields\Matrix;
 use craft\helpers\Console;
 use lameco\crafttwigcomponents\Plugin;
 use Throwable;
@@ -19,7 +21,44 @@ class m241111_183745_create_collapsible_content_block extends Migration
     public function safeUp(): bool
     {
         try {
-            Plugin::getInstance()->pageBuilder->createBlock('Collapsible Content', 'collapsibleContentBlock', [
+            $itemsEntryType = Plugin::getInstance()->entryHelper->createEntryType('Page Builder - Collapsible Content - Items', 'pageBuilderCollapsibleContentItems', 'cubes', true, [
+                [
+                    'name' => 'Content',
+                    'fields' => [
+                        [
+                            'label' => 'Title',
+                            'handle' => 'commonCkeditorTitle',
+                            'mappedHandle' => 'blockTitle',
+                            'width' => 75,
+                        ],
+                        [
+                            'label' => 'Content',
+                            'handle' => 'commonCkeditorDefault',
+                            'mappedHandle' => 'blockContent',
+                            'required' => true,
+                            'width' => 100,
+                        ],
+                        [
+                            'label' => 'Button',
+                            'handle' => 'commonButton',
+                            'mappedHandle' => 'blockButton',
+                            'width' => 100,
+                        ]
+                    ],
+                ]
+            ]);
+
+            $itemsMatrixField = new Matrix();
+            $itemsMatrixField->name = 'Page Builder - Collapsible Content - Items';
+            $itemsMatrixField->handle = 'pageBuilderCollapsibleContentItems';
+            $itemsMatrixField->propagationMethod = PropagationMethod::None;
+            $itemsMatrixField->minEntries = 1;
+            $itemsMatrixField->viewMode = Matrix::VIEW_MODE_BLOCKS;
+            $itemsMatrixField->createButtonLabel = 'Add item';
+            $itemsMatrixField->setEntryTypes([$itemsEntryType]);
+            Craft::$app->fields->saveField($itemsMatrixField);
+
+            Plugin::getInstance()->pageBuilder->createBlock('Collapsible Content', 'collapsibleContentBlock', 'cube', [
                 [
                     'name' => 'Content',
                     'fields' => [
@@ -37,7 +76,7 @@ class m241111_183745_create_collapsible_content_block extends Migration
                         ],
                         [
                             'label' => 'Content',
-                            'handle' => 'commonCKEditorAdvanced',
+                            'handle' => 'commonCkeditorDefault',
                             'mappedHandle' => 'blockContent',
                             'required' => true,
                             'width' => 100,
@@ -67,10 +106,22 @@ class m241111_183745_create_collapsible_content_block extends Migration
     {
         try {
             $entries = Craft::$app->getEntries();
+
+            $entryType = $entries->getEntryTypeByHandle('pageBuilderCollapsibleContentItems');
+            if ($entryType) {
+                $entries->deleteEntryType($entryType);
+            }
+
             $entryType = $entries->getEntryTypeByHandle('collapsibleContentBlock');
             if ($entryType) {
                 $entries->deleteEntryType($entryType);
             }
+
+            $columnsMatrixField = Craft::$app->getFields()->getFieldByHandle('pageBuilderCollapsibleContentItems');
+            if ($columnsMatrixField) {
+                Craft::$app->fields->deleteField($columnsMatrixField);
+            }
+
 
             return true;
         } catch (Throwable $e) {

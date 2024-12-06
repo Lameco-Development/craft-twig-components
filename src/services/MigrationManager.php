@@ -35,8 +35,8 @@ class MigrationManager extends Component
                     $migrator->migrateDown($migration);
                 }
             } catch (Throwable $e) {
-                Craft::error("Migration failed: {$e->getMessage()}", __METHOD__);
-                throw $e;
+                Craft::error("Lameco component migration failed: $migrationName");
+                Craft::$app->session->addFlash("lameco.component.migration.failed", "Lameco component migration failed $migrationName");
             }
         }
     }

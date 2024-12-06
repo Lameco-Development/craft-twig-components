@@ -18,16 +18,11 @@ use yii\base\InvalidConfigException;
  */
 class EntryHelper extends Component
 {
-    public function addFieldsToLayout(EntryType $entryType)
-    {
-
-    }
-
     /**
      * @throws InvalidConfigException
      * @throws Exception|Throwable
      */
-    public function createEntryType(string $name, string $handle, bool $save = true, ?array $tabsConfig = []): EntryType
+    public function createEntryType(string $name, string $handle, string $icon, bool $save = true, ?array $tabsConfig = []): EntryType
     {
         $entries = Craft::$app->getEntries();
 
@@ -39,7 +34,7 @@ class EntryHelper extends Component
             'class' => EntryType::class,
             'name' => $name,
             'handle' => $handle,
-            'icon' => 'cube',
+            'icon' => $icon,
             'color' => Color::Fuchsia,
             'hasTitleField' => false,
             'showSlugField' => true,

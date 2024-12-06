@@ -27,10 +27,10 @@ class PageBuilder extends Component
      * @throws InvalidConfigException
      * @throws EntryTypeNotFoundException
      */
-    public function createBlock(string $name, string $handle, array $tabsConfig): true
+    public function createBlock(string $name, string $handle, string $icon, array $tabsConfig): true
     {
         $entries = Craft::$app->getEntries();
-        $entryType = Plugin::getInstance()->entryHelper->createEntryType($name, $handle, false, $tabsConfig);
+        $entryType = Plugin::getInstance()->entryHelper->createEntryType($name, $handle, $icon, false, $tabsConfig);
 
         $this->addAnchorHintToTab($entryType);
 
