@@ -32,8 +32,7 @@
                         <div class="pb-5 text-sm text-slate-500">{{ item.blockContent | raw }}</div>
 
                         {% if not item.blockButton.isEmpty() %}
-                            <x-ui.button.default class="mb-5" size="sm" icon="fa-regular fa-arrow-right"
-                                         hyper="{{ item.blockButton }}"></x-ui.button.default>
+                            <x-ui.button.default class="mb-5" size="sm" hyper="{{ item.blockButton }}"></x-ui.button.default>
                         {% endif %}
                     </div>
                 </div>

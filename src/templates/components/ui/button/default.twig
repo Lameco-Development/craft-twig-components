@@ -4,10 +4,12 @@
     {% set url = hyper.url %}
     {% set text = hyper.text %}
     {% set target = hyper.target ?? '_self' %}
+    {% set variant = hyper.commonButtonType.value ?? 'primary' %}
 {% else %}
     {% set url = url ?? null %}
     {% set text = text ?? '' %}
     {% set target = target ?? '_self' %}
+    {% set variant = attributes.variant ?? 'primary' %}
 {% endif %}
 
 {% set icon = attributes.icon ?? null %}
@@ -30,13 +32,12 @@
     size: 'default'
 }) %}
 
-{% set variant = attributes.variant ?? 'primary' %}
 {% set variantClasses = classes.apply({color: variant, size: attributes.size ?? null}) %}
 
 <a href="{{ url }}"
    class="{{ attributes.merge({ class: variantClasses }).class }}"
    target="{{ target }}">
-    <span class="bg-white z-0 absolute top-0 end-0 bottom-0 start-0 transition-transform ease-in-out rounded-full translate-x-[-101%] group-hover:translate-x-0"></span>
+    <span class="bg-white z-0 absolute top-0 end-0 bottom-0 start-0 transition-transform ease-in-out {{ theme.ui.button.overlay ?? '' }}"></span>
     <span class="relative flex items-center gap-4 z-50">
         <span>{{ slot is not empty ? slot : text }}</span>
          {% if icon is defined and icon is not empty %}

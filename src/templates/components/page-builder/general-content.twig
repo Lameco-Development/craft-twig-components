@@ -3,18 +3,24 @@
         <div class="container">
             <div class="flex lg:flex-row flex-col lg:gap-24 gap-14{% if block.blockColumnsAlignment %} lg:justify-center{% endif %}">
                 {% for column in block.blockColumns %}
-                    <div class="{% if block.blockColumns | length > 1 %}col{% else %}lg:w-8/12{% endif %}">
+                    <div class="{% if block.blockColumns | length > 1 %}col{% else %}lg:w-9/12{% endif %}">
+                        {% if block.blockPreTitle is not empty %}
+                            <div class="{{ attributes.merge({ preTitleClass: 'content-fade-in relative' ~ (block.blockTextAlignment ? ' text-center' : '') }).preTitleClass }}">
+                                {{ block.blockPreTitle | raw }}
+                            </div>
+                        {% endif %}
+
                         {% set titleAlignment = block.blockTextAlignment ? 'text-center' : 'text-left' %}
-                        <x-ui.title level="{{ column.blockTitleLevel }}" class="{{ titleAlignment }}">{{ column.blockTitle }}</x-ui.title>
+                        <x-ui.title level="{{ column.blockTitleLevel }}"
+                                    class="{{ titleAlignment }}">{{ column.blockTitle }}</x-ui.title>
 
                         {% if column.blockContent is not empty %}
-                            <div class="content-fade-in col text-block mb-8{% if block.blockTextAlignment %} text-center{% endif %}">{{ column.blockContent | raw }}</div>
+                            <div class="content-fade-in col text-block{% if block.blockTextAlignment %} text-center{% endif %}">{{ column.blockContent | raw }}</div>
                         {% endif %}
 
                         {% if not column.blockButton.isEmpty() %}
-                            <div class="content-fade-in{% if block.blockTextAlignment %} flex justify-center{% endif %}">
-                                <x-ui.button.default icon="fa-regular fa-arrow-right"
-                                                     hyper="{{ column.blockButton }}"></x-ui.button.default>
+                            <div class="content-fade-in mt-4{% if block.blockTextAlignment %} flex justify-center{% endif %}">
+                                <x-ui.button.default hyper="{{ column.blockButton }}"></x-ui.button.default>
                             </div>
                         {% endif %}
                     </div>
