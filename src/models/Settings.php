@@ -22,9 +22,14 @@ class Settings extends Model
             'enabled' => false,
             'migration' => 'm241111_183745_create_general_content_block'
         ],
+        [
+            'name' => 'Call To Action',
+            'enabled' => false,
+            'migration' => 'm241111_183745_create_call_to_action_content_block'
+        ]
     ];
 
-    public int | null $pageBuilderFieldId = null;
+    public int|null $pageBuilderFieldId = null;
 
     public function defineRules(): array
     {
