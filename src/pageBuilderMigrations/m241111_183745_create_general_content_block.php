@@ -26,6 +26,11 @@ class m241111_183745_create_general_content_block extends Migration
                     'name' => 'Content',
                     'fields' => [
                         [
+                            'label' => 'Pre-title',
+                            'handle' => 'commonCkeditorTitle',
+                            'mappedHandle' => 'blockPreTitle',
+                        ],
+                        [
                             'label' => 'Title Level',
                             'handle' => 'commonTitleLevel',
                             'mappedHandle' => 'blockTitleLevel',
