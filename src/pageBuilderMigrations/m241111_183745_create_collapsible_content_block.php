@@ -29,12 +29,14 @@ class m241111_183745_create_collapsible_content_block extends Migration
                             'label' => 'Title',
                             'handle' => 'commonCkeditorTitle',
                             'mappedHandle' => 'blockTitle',
+                            'required' => true,
                             'width' => 75,
                         ],
                         [
                             'label' => 'Content',
                             'handle' => 'commonCkeditorDefault',
                             'mappedHandle' => 'blockContent',
+                            'required' => true,
                             'width' => 100,
                         ],
                         [
@@ -77,7 +79,6 @@ class m241111_183745_create_collapsible_content_block extends Migration
                             'label' => 'Content',
                             'handle' => 'commonCkeditorDefault',
                             'mappedHandle' => 'blockContent',
-                            'required' => true,
                             'width' => 100,
                         ],
                         [
