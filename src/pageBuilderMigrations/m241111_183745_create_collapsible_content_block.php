@@ -35,7 +35,6 @@ class m241111_183745_create_collapsible_content_block extends Migration
                             'label' => 'Content',
                             'handle' => 'commonCkeditorDefault',
                             'mappedHandle' => 'blockContent',
-                            'required' => true,
                             'width' => 100,
                         ],
                         [
