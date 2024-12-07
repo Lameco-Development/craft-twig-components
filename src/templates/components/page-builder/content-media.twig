@@ -17,7 +17,7 @@
                             class="{{ titleClass }}">{{ block.blockTitle }}</x-ui.title>
 
                 {% if block.blockIntro is not empty %}
-                    <div class="{{ attributes.merge({ introClass: 'content-fade-in text-' ~ textColor }).introClass }}">
+                    <div class="{{ attributes.merge({ introClass: 'content-fade-in mb-4 text-' ~ textColor }).introClass }}">
                         {{ block.blockIntro | raw }}
                     </div>
                 {% endif %}
