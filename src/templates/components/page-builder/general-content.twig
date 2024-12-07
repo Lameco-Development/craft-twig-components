@@ -1,12 +1,12 @@
 {% if block.blockColumns is not empty %}
-    <section class="content-block bg-none">
+    <section class="page-builder-block bg-none" data-block="general-content">
         <div class="container">
             <div class="flex lg:flex-row flex-col lg:gap-24 gap-14{% if block.blockColumnsAlignment %} lg:justify-center{% endif %}">
                 {% for column in block.blockColumns %}
                     <div class="{% if block.blockColumns | length > 1 %}col{% else %}lg:w-9/12{% endif %}">
-                        {% if block.blockPreTitle is not empty %}
-                            <div class="{{ attributes.merge({ preTitleClass: 'content-fade-in relative' ~ (block.blockTextAlignment ? ' text-center' : '') }).preTitleClass }}">
-                                {{ block.blockPreTitle | raw }}
+                        {% if column.blockPreTitle is not empty %}
+                            <div class="{{ attributes.merge({ preTitleClass: 'content-fade-in relative mb-2' ~ (block.blockTextAlignment ? ' text-center' : '') }).preTitleClass }}">
+                                {{ column.blockPreTitle | raw }}
                             </div>
                         {% endif %}
 
