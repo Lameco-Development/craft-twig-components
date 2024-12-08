@@ -14,28 +14,13 @@
 
         <div class="sm:w-10/12 w-full mt-8 mx-auto">
             {% for item in block.blockItems %}
-                <div class="collapse__item--js border-b border-slate-200 w-full" id="{{ item.id }}">
-                    <button class="collapse__toggle--js w-full flex justify-between items-center py-3 pl-2 text-slate-800">
-                        <span class="text-lg text-left font-semibold w-[80%] py-3">{{ item.blockTitle }}</span>
+                <x-ui.collapse title="{{ item.blockTitle }}">
+                    <div class="pb-5">{{ item.blockContent | raw }}</div>
 
-                        <span class="w-8 h-8 relative rounded-1 bg-primary flex justify-center items-center overflow-hidden">
-                        <svg class="absolute fill-white absolute w-2/4" xmlns="http://www.w3.org/2000/svg"
-                             viewBox="0 0 448 512"><path
-                                    d="M248 72c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 160L40 232c-13.3 0-24 10.7-24 24s10.7 24 24 24l160 0 0 160c0 13.3 10.7 24 24 24s24-10.7 24-24l0-160 160 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-160 0 0-160z"/></svg>
-                        <svg class="absolute fill-white absolute w-2/4" xmlns="http://www.w3.org/2000/svg"
-                             viewBox="0 0 448 512"><path
-                                    d="M432 256c0 13.3-10.7 24-24 24L40 280c-13.3 0-24-10.7-24-24s10.7-24 24-24l368 0c13.3 0 24 10.7 24 24z"/></svg>
-                    </span>
-                    </button>
-                    <div id="collapse-{{ item.id }}"
-                         class="max-h-0 pl-2 overflow-hidden transition-all duration-300 ease-out">
-                        <div class="pb-5 text-sm text-slate-500">{{ item.blockContent | raw }}</div>
-
-                        {% if not item.blockButton.isEmpty() %}
-                            <x-ui.button.default class="mb-5" size="sm" hyper="{{ item.blockButton }}"></x-ui.button.default>
-                        {% endif %}
-                    </div>
-                </div>
+                    {% if not item.blockButton.isEmpty() %}
+                        <x-ui.button class="mb-5" size="sm" hyper="{{ item.blockButton }}"></x-ui.button>
+                    {% endif %}
+                </x-ui.collapse>
             {% endfor %}
         </div>
     </div>

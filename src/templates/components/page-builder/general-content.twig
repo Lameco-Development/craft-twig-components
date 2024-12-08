@@ -20,7 +20,7 @@
 
                         {% if not column.blockButton.isEmpty() %}
                             <div class="content-fade-in mt-4{% if block.blockTextAlignment %} flex justify-center{% endif %}">
-                                <x-ui.button.default hyper="{{ column.blockButton }}"></x-ui.button.default>
+                                <x-ui.button hyper="{{ column.blockButton }}"></x-ui.button>
                             </div>
                         {% endif %}
                     </div>

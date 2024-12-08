@@ -15,7 +15,7 @@
 {% set icon = attributes.icon ?? null %}
 
 {% set classes = html_cva(
-    base='btn inline-flex items-center justify-between outline font-semibold overflow-hidden group relative transition-all ' ~ theme.ui.button.base ?? '',
+    base='btn inline-flex items-center justify-between outline font-semibold overflow-hidden group relative transition-all duration-200 ' ~ theme.ui.button.base ?? '',
     variants={
         color: {
             primary: theme.ui.button.primary ?? 'bg-primary text-black outline-primary hover:outline-secondary',
