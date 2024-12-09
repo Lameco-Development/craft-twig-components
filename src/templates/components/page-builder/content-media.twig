@@ -5,7 +5,7 @@
 <section class="{{ attributes.merge({ class: 'page-builder-block bg-' ~ background }).class }}" data-block="content-media">
     <div class="relative overflow-hidden">
         <div class="relative z-10 container flex flex-wrap lg:items-center">
-            <div class="{{ attributes.merge({ contentColumnClass: 'lg:ml-1/12 lg:w-1/3 pb-10' ~ (background != 'none' ? ' pt-10' : '') ~ (not block.blockAlignment ? ' lg:order-last' : '')}).contentColumnClass }} ">
+            <div class="{{ attributes.merge({ contentColumnClass: 'lg:ml-1/12 lg:w-1/3 pb-10' ~ (not block.blockAlignment ? ' lg:order-last' : '')}).contentColumnClass }} ">
                 {% if block.blockPreTitle is not empty %}
                     <div class="{{ attributes.merge({ preTitleClass: 'content-fade-in relative text-' ~ textColor }).preTitleClass }}">
                         {{ block.blockPreTitle | raw }}
