@@ -1,6 +1,6 @@
 <?php
 
-namespace lameco\crafttwigcomponents\settingsMigrations;
+namespace lameco\crafttwigcomponents\settingsmigrations;
 
 use Craft;
 use craft\db\Migration;

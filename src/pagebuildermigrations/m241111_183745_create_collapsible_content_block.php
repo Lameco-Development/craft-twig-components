@@ -1,6 +1,6 @@
 <?php
 
-namespace lameco\crafttwigcomponents\pageBuilderMigrations;
+namespace lameco\crafttwigcomponents\pagebuildermigrations;
 
 use Craft;
 use craft\db\Migration;
