@@ -1,0 +1,69 @@
+{% set block = attributes.block %}
+{% set background = attributes.backgroundColor ?? 'none' %}
+{% set textColor = attributes.textColor ?? 'black' %}
+
+<section class="{{ attributes.merge({ class: 'page-builder-block bg-' ~ background }).class }}"
+         data-block="content-media">
+    <div class="relative container flex flex-wrap lg:items-center">
+        <div class="{{ attributes.merge({ contentColumnClass: 'lg:ml-1/12 lg:w-1/3 pb-10' ~ (not block.blockAlignment ? ' lg:order-last' : ' lg:ml-1/12')}).contentColumnClass }} ">
+            {% if block.blockPreTitle is not empty %}
+                <div class="{{ attributes.merge({ preTitleClass: 'content-fade-in relative text-' ~ textColor }).preTitleClass }}">
+                    {{ block.blockPreTitle | raw }}
+                </div>
+            {% endif %}
+
+            {% set titleClass = 'text-' ~ textColor %}
+            <x-ui.title level="{{ block.blockTitleLevel }}"
+                        class="{{ titleClass }}">{{ block.blockTitle }}</x-ui.title>
+
+            {% if block.blockIntro is not empty %}
+                <div class="{{ attributes.merge({ introClass: 'content-fade-in mb-4 text-' ~ textColor }).introClass }}">
+                    {{ block.blockIntro | raw }}
+                </div>
+            {% endif %}
+
+            {% if block.blockContent is not empty %}
+                <div class="content-fade-in text-{{ textColor }}">
+                    {{ block.blockContent | raw }}
+                </div>
+            {% endif %}
+
+            {% if not block.blockButton.isEmpty() %}
+                <div class="content-fade-in">
+                    <x-ui.button class="mt-6" hyper="{{ block.blockButton }}"></x-ui.button>
+                </div>
+            {% endif %}
+
+            {{ contentSlot ?? null }}
+        </div>
+
+        <div class="{{ attributes.merge({ mediaColumnClass: 'relative w-full lg:w-1/2' ~ (not block.blockAlignment ? ' lg:order-first' : ' lg:ml-1/12') }).mediaColumnClass }}">
+            {% if block.blockImage is not empty %}
+                {% set image = block.blockImage.eagerly().withTransforms(attributes.imageTransform ?? []).one() %}
+
+                <x-ui.image
+                        image="{{ image }}"
+                        transform="{{ attributes.imageTransform ?? null }}"
+                        class="w-full h-full object-cover"
+                ></x-ui.image>
+            {% endif %}
+
+            {% if block.blockVideo is not empty %}
+                {% set video = block.blockVideo.one() %}
+                {% set embeddedAsset = craft.embeddedAssets.get(video) %}
+                {% if embeddedAsset is not empty %}
+                    {% set iframeSrc = embeddedAsset.getIframeSrc(['autoplay=1','byline=0','title=0']) %}
+                    <div class="{{ attributes.merge({ videoClass: 'photo-swipe--iframe-js absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2' }).videoClass }}">
+                        <a href="{{ iframeSrc }}" target="_blank" data-pswp-type="iframe"
+                           data-pswp-iframe-url="{{ iframeSrc }}"
+                           class="w-24 h-24 rounded-full bg-white flex items-center justify-center text-2xl hover:bg-green-400 transition-colors ease-in-out">
+                            <i class="fa-solid fa-play"></i>
+                        </a>
+                    </div>
+                {% endif %}
+            {% endif %}
+
+            {{ mediaSlot ?? null }}
+        </div>
+    </div>
+</section>
