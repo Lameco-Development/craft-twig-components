@@ -8,7 +8,7 @@
                 {% for column in block.blockColumns %}
                     <div class="{% if block.blockColumns | length > 1 %}col{% else %}lg:w-9/12{% endif %}">
                         {% if column.blockPreTitle is not empty %}
-                            <div class="{{ attributes.merge({ preTitleClass: 'content-fade-in relative mb-2' ~ (block.blockTextAlignment ? ' text-center' : '') }).preTitleClass }}">
+                            <div class="{{ attributes.merge({ preTitleClass: 'content-fade-in relative mb-2 text-' ~ textColor ~ (block.blockTextAlignment ? ' text-center' : '') }).preTitleClass }}">
                                 {{ column.blockPreTitle | raw }}
                             </div>
                         {% endif %}
