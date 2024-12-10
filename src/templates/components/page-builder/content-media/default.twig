@@ -12,9 +12,8 @@
                 </div>
             {% endif %}
 
-            {% set titleClass = 'text-' ~ textColor %}
             <x-ui.title level="{{ block.blockTitleLevel }}"
-                        class="{{ titleClass }}">{{ block.blockTitle }}</x-ui.title>
+                        class="{{ 'text-' ~ textColor }}">{{ block.blockTitle }}</x-ui.title>
 
             {% if block.blockIntro is not empty %}
                 <div class="{{ attributes.merge({ introClass: 'content-fade-in mb-4 text-' ~ textColor }).introClass }}">

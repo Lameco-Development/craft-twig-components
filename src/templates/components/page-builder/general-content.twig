@@ -13,12 +13,8 @@
                             </div>
                         {% endif %}
 
-                        {% set titleClass = 'text-' ~ textColor %}
-                        {% if block.blockTextAlignment %}
-                            {% set titleClass = titleClass ~ ' text-center' %}
-                        {% endif %}
                         <x-ui.title level="{{ column.blockTitleLevel }}"
-                                    class="{{ titleClass }}">{{ column.blockTitle }}</x-ui.title>
+                                    class="{{ 'text-' ~ textColor ~ (block.blockTextAlignment ? ' text-center': '') }}">{{ column.blockTitle }}</x-ui.title>
 
                         {% if column.blockContent is not empty %}
                             <div class="content-fade-in col text-block text-{{ textColor }}{% if block.blockTextAlignment %} text-center{% endif %}">{{ column.blockContent | raw }}</div>
