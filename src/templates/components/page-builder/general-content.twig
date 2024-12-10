@@ -15,7 +15,7 @@
 
                         {% set titleClass = 'text-' ~ textColor %}
                         {% if block.blockTextAlignment %}
-                            {% set titleClass = ' text-' ~ textColor %}
+                            {% set titleClass = titleClass ~ ' text-center' %}
                         {% endif %}
                         <x-ui.title level="{{ column.blockTitleLevel }}"
                                     class="{{ titleClass }}">{{ column.blockTitle }}</x-ui.title>
