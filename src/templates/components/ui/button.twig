@@ -27,24 +27,38 @@
             sm: theme.ui.button.size.sm ?? 'px-4 py-3',
             default: theme.ui.button.size.default ?? 'px-6 py-4',
         },
-},
+    },
     defaultVariant={
-    color: 'primary',
-    size: 'default'
-}) %}
+        color: 'primary',
+        size: 'default'
+    }) %}
 
 {% set variantClasses = classes.apply({color: variant, size: attributes.size ?? null}) %}
 
-<a href="{{ url }}"
-   class="{{ attributes.merge({ class: variantClasses }).class }}"
-   target="{{ target }}">
-    <span class="bg-white z-0 absolute top-0 end-0 bottom-0 start-0 transition-transform ease-in-out {{ theme.ui.button.overlay ?? '' }}"></span>
-    <span class="relative flex items-center gap-4 z-50">
+{% if url is empty %}
+    <button class="{{ attributes.merge({ class: variantClasses }).class }}">
+        <span class="bg-white z-0 absolute top-0 end-0 bottom-0 start-0 transition-transform ease-in-out {{ theme.ui.button.overlay ?? '' }}"></span>
+        <span class="relative flex items-center gap-4 z-50">
         <span>{{ slot is not empty ? slot : text }}</span>
-         {% if icon is defined and icon is not empty %}
-             <span class="w-6 h-6 rounded-full flex items-center justify-center text-sm group-hover:bg-primary transition-colors ease-in-out{% if variant == 'primary' %} bg-white{% elseif variant == 'secondary' %} bg-primary{% endif %}">
-                 <i class="{{ icon }}"></i>
-             </span>
-         {% endif %}
-    </span>
-</a>
+             {% if icon is defined and icon is not empty %}
+                 <span class="w-6 h-6 rounded-full flex items-center justify-center text-sm group-hover:bg-primary transition-colors ease-in-out{% if variant == 'primary' %} bg-white{% elseif variant == 'secondary' %} bg-primary{% endif %}">
+                     <i class="{{ icon }}"></i>
+                 </span>
+             {% endif %}
+        </span>
+    </button>
+{% else %}
+    <a href="{{ url }}"
+       class="{{ attributes.merge({ class: variantClasses }).class }}"
+       target="{{ target }}">
+        <span class="bg-white z-0 absolute top-0 end-0 bottom-0 start-0 transition-transform ease-in-out {{ theme.ui.button.overlay ?? '' }}"></span>
+        <span class="relative flex items-center gap-4 z-50">
+            <span>{{ slot is not empty ? slot : text }}</span>
+             {% if icon is defined and icon is not empty %}
+                 <span class="w-6 h-6 rounded-full flex items-center justify-center text-sm group-hover:bg-primary transition-colors ease-in-out{% if variant == 'primary' %} bg-white{% elseif variant == 'secondary' %} bg-primary{% endif %}">
+                     <i class="{{ icon }}"></i>
+                 </span>
+             {% endif %}
+        </span>
+    </a>
+{% endif %}
