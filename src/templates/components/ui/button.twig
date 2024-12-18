@@ -1,4 +1,4 @@
-{% set theme = _globals.get('lameco.components.theme') %}
+{% set theme = theme is defined and theme is not empty ? theme | json_decode : _globals.get('lameco.components.theme') %}
 
 {% if hyper is defined and not hyper.isEmpty() %}
     {% set url = hyper.url %}
@@ -12,6 +12,7 @@
     {% set variant = attributes.variant ?? 'primary' %}
 {% endif %}
 
+{% set attr = attributes.attr ?? null %}
 {% set icon = attributes.icon ?? null %}
 
 {% set classes = html_cva(
@@ -36,10 +37,10 @@
 {% set variantClasses = classes.apply({color: variant, size: attributes.size ?? null}) %}
 
 {% if url is empty %}
-    <button class="{{ attributes.merge({ class: variantClasses }).class }}">
+    <button class="{{ attributes.merge({ class: variantClasses }).class }}" {{ attr ? attr | raw : null }}>
         <span class="bg-white z-0 absolute top-0 end-0 bottom-0 start-0 transition-transform ease-in-out {{ theme.ui.button.overlay ?? '' }}"></span>
         <span class="relative flex items-center gap-4 z-50">
-        <span>{{ slot is not empty ? slot : text }}</span>
+            <span>{{ slot is not empty ? slot : text }}</span>
              {% if icon is defined and icon is not empty %}
                  <span class="w-6 h-6 rounded-full flex items-center justify-center text-sm group-hover:bg-primary transition-colors ease-in-out{% if variant == 'primary' %} bg-white{% elseif variant == 'secondary' %} bg-primary{% endif %}">
                      <i class="{{ icon }}"></i>
@@ -50,7 +51,7 @@
 {% else %}
     <a href="{{ url }}"
        class="{{ attributes.merge({ class: variantClasses }).class }}"
-       target="{{ target }}">
+       target="{{ target }}" {{ attr ? attr | raw : null }}>
         <span class="bg-white z-0 absolute top-0 end-0 bottom-0 start-0 transition-transform ease-in-out {{ theme.ui.button.overlay ?? '' }}"></span>
         <span class="relative flex items-center gap-4 z-50">
             <span>{{ slot is not empty ? slot : text }}</span>
