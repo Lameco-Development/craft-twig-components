@@ -41,7 +41,7 @@
             height: attributes.image.height,
             alt: alt,
             title: alt,
-            class: attributes.merge({ class: '' }).class,
+            class: attributes.class ?? '',
             loading: lazyload ? 'lazy' : 'eager'
         }) }}
 
