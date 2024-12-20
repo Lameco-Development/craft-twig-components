@@ -42,7 +42,7 @@
         <span class="relative flex items-center gap-4 z-50">
             <span>{{ slot is not empty ? slot : text }}</span>
              {% if icon is defined and icon is not empty %}
-                 <span class="w-6 h-6 rounded-full flex items-center justify-center text-sm group-hover:bg-primary transition-colors ease-in-out{% if variant == 'primary' %} bg-white{% elseif variant == 'secondary' %} bg-primary{% endif %}">
+                 <span class="w-6 h-6 rounded-full flex items-center justify-center text-sm group-hover:bg-primary transition-colors ease-in-out">
                      <i class="{{ icon }}"></i>
                  </span>
              {% endif %}
@@ -56,7 +56,7 @@
         <span class="relative flex items-center gap-4 z-50">
             <span>{{ slot is not empty ? slot : text }}</span>
              {% if icon is defined and icon is not empty %}
-                 <span class="w-6 h-6 rounded-full flex items-center justify-center text-sm group-hover:bg-primary transition-colors ease-in-out{% if variant == 'primary' %} bg-white{% elseif variant == 'secondary' %} bg-primary{% endif %}">
+                 <span class="w-6 h-6 rounded-full flex items-center justify-center text-sm group-hover:bg-primary transition-colors ease-in-out">
                      <i class="{{ icon }}"></i>
                  </span>
              {% endif %}
