@@ -2,7 +2,7 @@
 {% set textColor = attributes.textColor ?? 'black' %}
 
 {% if block.blockColumns is not empty %}
-    <section class="page-builder-block bg-{{ block.blockBackgroundColor }}" data-block="general-content">
+    <section class="page-builder-block bg-{{ block.blockBackgroundColor ?? 'none' }}" data-block="general-content">
         <div class="container">
             <div class="flex lg:flex-row flex-col lg:gap-24 gap-14{% if block.blockColumnsAlignment %} lg:justify-center{% endif %}">
                 {% for column in block.blockColumns %}
