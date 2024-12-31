@@ -1,8 +1,9 @@
 {% set block = attributes.block %}
 {% set textColor = attributes.textColor ?? 'black' %}
+{% set containerClass = attributes.containerClass ?? '' %}
 
 <section class="page-builder-block" data-block="call-to-action">
-    <div class="container py-12 bg-{{ block.blockBackgroundColor }} rounded-lg">
+    <div class="container py-12 bg-{{ block.blockBackgroundColor }} {{ containerClass }}">
         <div class="flex lg:flex-row flex-col lg:gap-24 gap-14 justify-center">
             <div class="lg:w-9/12">
                 <x-ui.title level="{{ block.blockTitleLevel }}"
