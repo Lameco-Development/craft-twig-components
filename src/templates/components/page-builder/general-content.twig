@@ -24,7 +24,7 @@
 
                         {% if column.blockButtons is not empty %}
                             <div class="flex flex-wrap gap-4{% if block.blockTextAlignment %} justify-center{% endif %}">
-                                {% for button in block.blockButtons %}
+                                {% for button in column.blockButtons %}
                                     {% if not button.isEmpty() %}
                                         <div class="content-fade-in mt-8 flex{% if block.blockTextAlignment %} justify-center{% endif %}">
                                             <x-ui.button hyper="{{ button }}"></x-ui.button>
