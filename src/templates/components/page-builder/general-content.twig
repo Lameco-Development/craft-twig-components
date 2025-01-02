@@ -13,8 +13,10 @@
                             </div>
                         {% endif %}
 
-                        <x-ui.title level="{{ column.blockTitleLevel }}"
-                                    class="{{ 'text-' ~ textColor ~ (block.blockTextAlignment ? ' text-center': '') }}">{{ column.blockTitle }}</x-ui.title>
+                        {% if column.blockTitle is not empty %}
+                            <x-ui.title level="{{ column.blockTitleLevel }}"
+                                        class="{{ 'text-' ~ textColor ~ (block.blockTextAlignment ? ' text-center': '') }}">{{ column.blockTitle }}</x-ui.title>
+                        {% endif %}
 
                         {% if column.blockContent is not empty %}
                             <div class="content-fade-in col text-block text-{{ textColor }}{% if block.blockTextAlignment %} text-center{% endif %}">{{ column.blockContent | raw }}</div>
