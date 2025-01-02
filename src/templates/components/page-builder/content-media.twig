@@ -2,6 +2,7 @@
 {% set background = attributes.backgroundColor ?? 'none' %}
 {% set textColor = attributes.textColor ?? 'black' %}
 {% set imageClass = attributes.imageClass ?? 'w-full h-full object-cover' %}
+{% set pictureClass = attributes.pictureClass ?? null %}
 
 <section class="{{ attributes.merge({ class: 'page-builder-block bg-' ~ background }).class }}" data-block="content-media">
     <div class="relative overflow-hidden">
@@ -45,6 +46,7 @@
                             image="{{ image }}"
                             transform="{{ attributes.imageTransform ?? null }}"
                             class="{{ imageClass }}"
+                            pictureClass="{{ pictureClass ?? null }}"
                     ></x-ui.image>
                 {% endif %}
 
