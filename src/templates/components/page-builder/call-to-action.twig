@@ -12,15 +12,17 @@
                 {% if block.blockContent is not empty %}
                     <div class="content-fade-in col text-block text-{{ textColor }}{% if block.blockTextAlignment %} text-center{% endif %}">{{ block.blockContent | raw }}</div>
                 {% endif %}
-                <div class="flex gap-8{% if block.blockTextAlignment %} justify-center{% endif %}">
-                {% for button in block.blockButtons %}
-                    {% if not button.isEmpty() %}
-                        <div class="content-fade-in mt-8 flex{% if block.blockTextAlignment %} justify-center{% endif %}">
-                            <x-ui.button hyper="{{ button }}"></x-ui.button>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-                </div>
+                {% if block.blockButtons is not empty %}
+                    <div class="flex flex-wrap gap-4{% if block.blockTextAlignment %} justify-center{% endif %}">
+                        {% for button in block.blockButtons %}
+                            {% if not button.isEmpty() %}
+                                <div class="content-fade-in mt-8 flex{% if block.blockTextAlignment %} justify-center{% endif %}">
+                                    <x-ui.button hyper="{{ button }}"></x-ui.button>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

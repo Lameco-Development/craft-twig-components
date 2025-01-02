@@ -29,9 +29,15 @@
                 </div>
             {% endif %}
 
-            {% if not block.blockButton.isEmpty() %}
-                <div class="content-fade-in">
-                    <x-ui.button class="mt-6" hyper="{{ block.blockButton }}"></x-ui.button>
+            {% if block.blockButtons is not empty %}
+                <div class="flex flex-wrap gap-4">
+                    {% for button in block.blockButtons %}
+                        {% if not button.isEmpty() %}
+                            <div class="content-fade-in mt-8 flex">
+                                <x-ui.button hyper="{{ button }}"></x-ui.button>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
                 </div>
             {% endif %}
 

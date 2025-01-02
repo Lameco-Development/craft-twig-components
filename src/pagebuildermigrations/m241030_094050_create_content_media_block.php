@@ -79,8 +79,8 @@ class m241030_094050_create_content_media_block extends Migration
                         ],
                         [
                             'label' => 'Button',
-                            'handle' => 'commonButton',
-                            'mappedHandle' => 'blockButton',
+                            'handle' => 'commonButtons',
+                            'mappedHandle' => 'blockButtons',
                             'width' => 100,
                         ],
                     ]],

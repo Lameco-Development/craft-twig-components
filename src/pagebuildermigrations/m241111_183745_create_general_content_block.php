@@ -50,11 +50,12 @@ class m241111_183745_create_general_content_block extends Migration
                             'width' => 100,
                         ],
                         [
-                            'label' => 'Button',
-                            'handle' => 'commonButton',
-                            'mappedHandle' => 'blockButton',
+                            'label' => 'Buttons',
+                            'handle' => 'commonButtons',
+                            'mappedHandle' => 'blockButtons',
                             'width' => 100,
                         ]
+
                     ],
                 ]
             ]);

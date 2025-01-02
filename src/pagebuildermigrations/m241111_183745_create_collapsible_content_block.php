@@ -41,8 +41,8 @@ class m241111_183745_create_collapsible_content_block extends Migration
                         ],
                         [
                             'label' => 'Button',
-                            'handle' => 'commonButton',
-                            'mappedHandle' => 'blockButton',
+                            'handle' => 'commonButtons',
+                            'mappedHandle' => 'blockButtons',
                             'width' => 100,
                         ]
                     ],

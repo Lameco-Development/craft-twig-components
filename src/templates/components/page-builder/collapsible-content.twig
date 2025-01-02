@@ -17,8 +17,16 @@
                 <x-ui.collapse title="{{ item.blockTitle }}">
                     <div class="pb-5">{{ item.blockContent | raw }}</div>
 
-                    {% if not item.blockButton.isEmpty() %}
-                        <x-ui.button class="mb-5" size="sm" hyper="{{ item.blockButton }}"></x-ui.button>
+                    {% if item.blockButtons is not empty %}
+                        <div class="flex flex-wrap gap-4">
+                            {% for button in item.blockButtons %}
+                                {% if not button.isEmpty() %}
+                                    <div class="content-fade-in mt-8 flex">
+                                        <x-ui.button hyper="{{ button }}"></x-ui.button>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
                     {% endif %}
                 </x-ui.collapse>
             {% endfor %}
