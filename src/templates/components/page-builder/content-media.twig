@@ -46,7 +46,7 @@
                             image="{{ image }}"
                             transform="{{ attributes.imageTransform ?? null }}"
                             class="{{ imageClass }}"
-                            pictureClass="{{ pictureClass ?? null }}"
+                            pictureClass="{{ attributes.merge({ pictureClass ?? null }) }}"
                     ></x-ui.image>
                 {% endif %}
 
