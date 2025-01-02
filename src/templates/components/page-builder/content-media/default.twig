@@ -1,6 +1,8 @@
 {% set block = attributes.block %}
 {% set background = attributes.backgroundColor ?? 'none' %}
 {% set textColor = attributes.textColor ?? 'black' %}
+{% set imageClass = attributes.imageClass ?? 'w-full h-full object-cover' %}
+{% set pictureClass = attributes.pictureClass ?? null %}
 
 <section class="{{ attributes.merge({ class: 'page-builder-block bg-' ~ background }).class }}"
          data-block="content-media">
@@ -43,7 +45,8 @@
                 <x-ui.image
                         image="{{ image }}"
                         transform="{{ attributes.imageTransform ?? null }}"
-                        class="w-full h-full object-cover"
+                        class="{{ imageClass }}"
+                        pictureClass="{{ pictureClass ?? null }}"
                 ></x-ui.image>
             {% endif %}
 
