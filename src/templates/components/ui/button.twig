@@ -1,32 +1,36 @@
 {# Get the theme  #}
 {% set theme = theme is defined and theme is not empty ? theme | json_decode : _globals.get('lameco.components.theme') %}
 
+{# Define variables based on Hyper or attributes #}
 {% if hyper is defined and not hyper.isEmpty() %}
     {% set url = hyper.url %}
     {% set text = hyper.text %}
     {% set target = hyper.target ?? '_self' %}
-    {% set variant = hyper.commonButtonType.value ?? attributes.variant ?? 'primary' %}
+    {% set variant = hyper.commonButtonType.value ?? variant ?? 'primary' %}
 {% else %}
     {% set url = url ?? null %}
     {% set text = text ?? '' %}
     {% set target = target ?? '_self' %}
-    {% set variant = attributes.variant ?? 'primary' %}
+    {% set variant = variant ?? 'primary' %}
 {% endif %}
 
-{% set attr = attributes.attr ?? null %}
+{# Other variables #}
+{% set attr = attr ?? '' %}
+{% set iconPosition = iconPosition ?? theme.ui.button.icon.position ?? 'end' %}
+{% set iconWrapper = theme.ui.button.icon.wrapper ?? '' %}
+{% set icon = icon ?? theme.ui.button.icon.html ?? '' %}
+{% set contentWrapper = theme.ui.button.content.wrapper ?? 'gap-4' %}
 
-{% set iconWrapper = attributes.iconWrapper ?? theme.ui.button.iconWrapper ?? '' %}
-{% set icon = attributes.icon ?? null %}
-
+{# Get default classes based on theme and variant #}
 {% set classes = html_cva(
-    base='inline-flex overflow-hidden group relative transition-all ease-in-out ' ~ theme.ui.button.base ?? 'outline font-semibold',
+    base='inline-flex overflow-hidden group relative ' ~ theme.ui.button.base,
     variants={
-        color: {
-            primary: theme.ui.button.color.primary ?? 'bg-primary text-black outline-primary hover:outline-secondary',
-            secondary: theme.ui.button.color.secondary ?? 'bg-secondary text-black outline-secondary hover:outline-primary hover:bg-primary',
-            outline: theme.ui.button.color.outline ?? 'bg-transparent text-black outline-primary hover:outline-primary hover:bg-primary',
-            text: theme.ui.button.color.text ?? '',
-            white: theme.ui.button.color.white ?? 'bg-white text-black outline-white hover:outline-primary hover:bg-primary',
+        type: {
+            primary: theme.ui.button.type.primary ?? 'bg-primary text-black outline-primary hover:outline-secondary',
+            secondary: theme.ui.button.type.secondary ?? 'bg-secondary text-black outline-secondary hover:outline-primary hover:bg-primary',
+            outline: theme.ui.button.type.outline ?? 'bg-transparent text-black outline-primary hover:outline-primary hover:bg-primary',
+            text: theme.ui.button.type.text ?? '',
+            white: theme.ui.button.type.white ?? 'bg-white text-black outline-white hover:outline-primary hover:bg-primary',
         },
         size: {
             sm: theme.ui.button.size.sm ?? 'px-4 py-3',
@@ -38,7 +42,7 @@
         size: 'default'
     }) %}
 
-{% set variantClasses = classes.apply({color: variant, size: attributes.size ?? null}) %}
+{% set variantClasses = classes.apply({type: variant, size: attributes.size ?? null}) %}
 
 {% if url is empty %}
     <button class="{{ attributes.merge({ class: variantClasses }).class }}" {{ attr ? attr | raw : null }}>
@@ -48,21 +52,22 @@
        target="{{ target }}" {{ attr ? attr | raw : null }}>
 {% endif %}
 
-    {% if theme.ui.button.overlay is defined and theme.ui.button.overlay is not empty %}
-        <span class="bg-white z-0 absolute top-0 end-0 bottom-0 start-0 transition-transform ease-in-out {{ theme.ui.button.overlay ?? '' }}"></span>
+    {% if theme.ui.button.overlay is defined and theme.ui.button.overlay is not empty and variant != 'text' %}
+        <span class="{{ theme.ui.button.overlay.base ?? '' }} {{ theme.ui.button.overlay[variant] ?? '' }}"></span>
     {% endif %}
-    <span class="relative flex items-center justify-between gap-4 z-50 transition-colors duration-200">
-        {% if (iconFirst is defined and iconFirst) and icon is defined and icon is not empty %}
+
+    <span class="relative flex items-center justify-between z-50 {{ contentWrapper }}">
+        {% if iconPosition == 'start' and icon is defined and icon is not empty %}
             <span class="flex items-center justify-center {{ iconWrapper }}">
-                 <i class="{{ icon }}"></i>
+                 {{ icon | raw }}
              </span>
         {% endif %}
 
-        <span>{{ slot is not empty ? slot : text }}</span>
+        <span>{{ text }}</span>
 
-        {% if iconFirst is not defined and icon is defined and icon is not empty %}
+        {% if iconPosition == 'end' and icon is defined and icon is not empty %}
             <span class="flex items-center justify-center {{ iconWrapper }}">
-                <i class="{{ icon }}"></i>
+                {{ icon | raw }}
             </span>
         {% endif %}
     </span>
