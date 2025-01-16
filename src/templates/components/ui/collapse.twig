@@ -4,10 +4,10 @@
     <button class="w-full flex justify-between items-center py-3 pl-2 text-slate-800" @click="expanded = ! expanded">
         <span class="text-lg text-left font-semibold w-[80%] py-3">{{ attributes.title }}</span>
 
-        <span class="flex justify-center items-center {{ theme.ui.collapse.iconWrapper ?? 'w-8 h-8 bg-black' }}">
+        <span class="flex justify-center items-center {{ theme.ui.collapse.icon.wrapper ?? 'w-8 h-8 bg-black' }}">
             <span class="flex justify-center items-center transition-transform ease-out"
                   :class="{ 'rotate-180' : expanded }">
-                <i class="absolute text-{{ theme.ui.collapse.iconColor ?? 'black' }} {{ theme.ui.collapse.icon }}"></i>
+                <i class="absolute text-{{ theme.ui.collapse.icon.color ?? 'black' }}">{{ theme.ui.collapse.icon.html | raw }}</i>
             </span>
         </span>
     </button>
