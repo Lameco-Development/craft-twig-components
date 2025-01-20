@@ -23,7 +23,7 @@
 
 {# Get default classes based on theme and variant #}
 {% set classes = html_cva(
-    base='inline-flex overflow-hidden group relative ' ~ theme.ui.button.base,
+    base='inline-flex overflow-hidden group relative z-0 ' ~ theme.ui.button.base,
     variants={
         type: {
             primary: theme.ui.button.type.primary ?? 'bg-primary text-black outline-primary hover:outline-secondary',
