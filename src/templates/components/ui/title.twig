@@ -1,2 +1,7 @@
+{# Get the theme  #}
+{% set theme = theme is defined and theme is not empty ? theme | json_decode : _globals.get('lameco.components.theme') %}
+
 {% set level = attributes.level ?: 'strong' %}
-<{{ level }} class="{{ attributes.merge({ class: 'block title-fade-in' }).class }}">{{ slot | striptags(attributes.stripTags ?? '<strong>') | raw }}</{{ level }}>
+{% set class = attributes.merge({ class: 'block' ~ (theme.fadeInAnimation ? ' title-fade-in' : '') }).class %}
+
+<{{ level }} class="{{ class }}">{{ slot | striptags(attributes.stripTags ?? '<strong>') | raw }}</{{ level }}>
