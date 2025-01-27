@@ -4,7 +4,7 @@
 {# Define variables based on Hyper or attributes #}
 {% if hyper is defined and not hyper.isEmpty() %}
     {% set url = hyper.url %}
-    {% set text = hyper.text %}
+    {% set text = text ?? hyper.text ?? '' %}
     {% set target = hyper.target ?? '_self' %}
     {% set variant = hyper.commonButtonType.value ?? variant ?? 'primary' %}
 {% else %}
