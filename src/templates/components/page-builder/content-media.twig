@@ -1,0 +1,80 @@
+{# Get the theme  #}
+{% set theme = theme is defined and theme is not empty ? theme | json_decode : _globals.get('lameco.components.theme') %}
+
+{% set block = block %}
+
+{% set sectionClass = sectionClass ?? 'bg-none' %}
+{% set containerClass = containerClass ?? 'container' %}
+{% set innerClass = innerClass ?? 'flex flex-col lg:flex-row lg:items-center gap-8' %}
+
+{% set mediaColClass = mediaColClass ?? 'w-full lg:w-1/2' %}
+{% set imageTransform = imageTransform ?? null %}
+{% set imageClass = imageClass ?? 'absolute inset-0 w-full h-full object-cover' %}
+{% set imageSlot = imageSlot ?? null %}
+
+{% set contentColClass = contentColClass ?? 'w-full lg:w-1/2' %}
+{% set contentSlot = contentSlot ?? null %}
+
+{% set preTitleClass = preTitleClass ?? null %}
+{% set titleClass = titleClass ?? null %}
+{% set introClass = introClass ?? null %}
+{% set contentClass = contentClass ?? null %}
+{% set buttonWrapperClass = buttonWrapperClass ?? 'flex flex-wrap gap-4' %}
+
+{% set blockImage = block.blockImage.eagerly().withTransforms(attributes.imageTransform ?? []).one() %}
+
+<section class="page-builder-block {{ sectionClass }}" data-block="{{ block.type }}">
+    <div class="{{ containerClass }}">
+        <div class="{{ innerClass }}">
+            {# Media #}
+            <div class="{{ mediaColClass }}{{ block.blockAlignment ? ' lg:order-last' : '' }} relative">
+                {% if blockImage is not empty %}
+
+                    <x-ui.image
+                            image="{{ blockImage }}"
+                            transform="{{ imageTransform }}"
+                            class="{{ imageClass }}"
+                    ></x-ui.image>
+                {% endif %}
+
+                {{ imageSlot | raw }}
+            </div>
+
+            {# Content #}
+            <div class="{{ contentColClass }}{{ block.blockAlignment ? ' lg:order-first' : '' }}{{ theme.fadeInAnimation ? ' content-fade-in' : '' }} relative">
+                {% if block['blockPreTitle'] is defined and block.blockPreTitle is not empty %}
+                    <div class="{{ preTitelClass }}">
+                        {{ block.blockPreTitle | raw }}
+                    </div>
+                {% endif %}
+
+                <x-ui.title level="{{ block.blockTitleLevel }}"
+                            class="{{ titleClass }}">{{ block.blockTitle }}</x-ui.title>
+
+                {% if block['blockIntro'] is defined and block.blockIntro is not empty %}
+                    <div class="{{ introClass }}">
+                        {{ block.blockIntro | raw }}
+                    </div>
+                {% endif %}
+
+                {% if block.blockContent is not empty %}
+                    <div class="{{ contentClass }}">
+                        {{ block.blockContent | raw }}
+                    </div>
+                {% endif %}
+
+                {% if block.blockButtons is not empty %}
+                    <div class="{{ buttonWrapperClass }}">
+                        {% for button in block.blockButtons %}
+                            {% if not button.isEmpty() %}
+                                <x-ui.button hyper="{{ button }}"></x-ui.button>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {{ contentSlot | raw }}
+            </div>
+        </div>
+    </div>
+</section>
