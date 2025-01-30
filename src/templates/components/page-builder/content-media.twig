@@ -8,9 +8,11 @@
 {% set innerClass = innerClass ?? 'flex flex-col lg:flex-row lg:items-center gap-8' %}
 
 {% set mediaColClass = mediaColClass ?? 'w-full lg:w-1/2' %}
+{% set mediaSlot = mediaSlot ?? null %}
 {% set imageTransform = imageTransform ?? null %}
 {% set imageClass = imageClass ?? 'absolute inset-0 w-full h-full object-cover' %}
-{% set imageSlot = imageSlot ?? null %}
+{% set videoClass = videoClass ?? 'w-24 h-24 rounded-full bg-white hover:bg-primary flex items-center justify-center transition-colors' %}
+{% set videoIcon = videoIcon ?? '<i class="fa-solid fa-play"></i>' %}
 
 {% set contentColClass = contentColClass ?? 'w-full lg:w-1/2' %}
 {% set contentSlot = contentSlot ?? null %}
@@ -29,7 +31,6 @@
             {# Media #}
             <div class="{{ mediaColClass }}{{ block.blockAlignment ? ' lg:order-last' : '' }} relative">
                 {% if blockImage is not empty %}
-
                     <x-ui.image
                             image="{{ blockImage }}"
                             transform="{{ imageTransform }}"
@@ -37,7 +38,22 @@
                     ></x-ui.image>
                 {% endif %}
 
-                {{ imageSlot | raw }}
+                {% if block.blockVideo is not empty %}
+                    {% set video = block.blockVideo.one() %}
+                    {% set embeddedAsset = craft.embeddedAssets.get(video) %}
+                    {% if embeddedAsset is not empty %}
+                        {% set iframeSrc = embeddedAsset.getIframeSrc(['autoplay=1','byline=0','title=0']) %}
+                        <div class="{{ attributes.merge({ videoClass: 'photo-swipe--iframe-js absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2' }).videoClass }}">
+                            <a href="{{ iframeSrc }}" target="_blank" data-pswp-type="iframe"
+                               data-pswp-iframe-url="{{ iframeSrc }}"
+                               class="{{ videoClass }}">
+                                {{ videoIcon | raw }}
+                            </a>
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+                {{ mediaSlot | raw }}
             </div>
 
             {# Content #}
