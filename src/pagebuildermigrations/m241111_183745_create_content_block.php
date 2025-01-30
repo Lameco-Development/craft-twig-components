@@ -11,9 +11,9 @@ use lameco\crafttwigcomponents\Plugin;
 use Throwable;
 
 /**
- * m241111_183745_create_general_content_block migration.
+ * m241111_183745_create_content_block migration.
  */
-class m241111_183745_create_general_content_block extends Migration
+class m241111_183745_create_content_block extends Migration
 {
     /**
      * @inheritdoc
@@ -21,7 +21,7 @@ class m241111_183745_create_general_content_block extends Migration
     public function safeUp(): bool
     {
         try {
-            $columnsEntryType = Plugin::getInstance()->entryHelper->createEntryType('Page Builder - General Content - Columns', 'pageBuilderGeneralContentColumns', 'cubes', true, [
+            $columnsEntryType = Plugin::getInstance()->entryHelper->createEntryType('Page Builder - Content - Columns', 'pageBuilderContentColumns', 'cubes', true, [
                 [
                     'name' => 'Content',
                     'fields' => [
@@ -61,7 +61,7 @@ class m241111_183745_create_general_content_block extends Migration
             ]);
 
             $columnsMatrixField = new Matrix();
-            $columnsMatrixField->name = 'Page Builder - General Content - Columns';
+            $columnsMatrixField->name = 'Page Builder - Content - Columns';
             $columnsMatrixField->handle = 'pageBuilderGeneralContentColumns';
             $columnsMatrixField->propagationMethod = PropagationMethod::None;
             $columnsMatrixField->minEntries = 1;
@@ -70,15 +70,21 @@ class m241111_183745_create_general_content_block extends Migration
             $columnsMatrixField->setEntryTypes([$columnsEntryType]);
             Craft::$app->fields->saveField($columnsMatrixField);
 
-            Plugin::getInstance()->pageBuilder->createBlock('General Content', 'generalContentBlock', 'cube', [
+            Plugin::getInstance()->pageBuilder->createBlock('Content', 'contentBlock', 'cube', [
                 [
                     'name' => 'Content',
                     'fields' => [
                         [
-                            'label' => 'Column Alignment',
-                            'handle' => 'commonTextAlignment',
-                            'mappedHandle' => 'blockColumnsAlignment',
-                            'width' => 50,
+                            'label' => 'Title Level',
+                            'handle' => 'commonTitleLevel',
+                            'mappedHandle' => 'blockTitleLevel',
+                            'width' => 25,
+                        ],
+                        [
+                            'label' => 'Title',
+                            'handle' => 'commonCkeditorTitle',
+                            'mappedHandle' => 'blockTitle',
+                            'width' => 75,
                         ],
                         [
                             'label' => 'Text Alignment',
@@ -114,17 +120,17 @@ class m241111_183745_create_general_content_block extends Migration
         try {
             $entries = Craft::$app->getEntries();
 
-            $entryType = $entries->getEntryTypeByHandle('pageBuilderGeneralContentColumns');
+            $entryType = $entries->getEntryTypeByHandle('pageBuilderContentColumns');
             if ($entryType) {
                 $entries->deleteEntryType($entryType);
             }
 
-            $entryType = $entries->getEntryTypeByHandle('generalContentBlock');
+            $entryType = $entries->getEntryTypeByHandle('contentBlock');
             if ($entryType) {
                 $entries->deleteEntryType($entryType);
             }
 
-            $columnsMatrixField = Craft::$app->getFields()->getFieldByHandle('pageBuilderGeneralContentColumns');
+            $columnsMatrixField = Craft::$app->getFields()->getFieldByHandle('pageBuilderContentColumns');
             if ($columnsMatrixField) {
                 Craft::$app->fields->deleteField($columnsMatrixField);
             }

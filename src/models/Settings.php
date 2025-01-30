@@ -18,9 +18,9 @@ class Settings extends Model
             'migration' => 'm241111_183745_create_collapsible_content_block'
         ],
         [
-            'name' => 'General Content',
+            'name' => 'Content',
             'enabled' => false,
-            'migration' => 'm241111_183745_create_general_content_block'
+            'migration' => 'm241111_183745_create_content_block'
         ],
         [
             'name' => 'Call To Action',
