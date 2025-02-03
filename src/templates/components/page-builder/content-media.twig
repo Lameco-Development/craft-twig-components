@@ -23,7 +23,7 @@
 {% set contentClass = contentClass ?? null %}
 {% set buttonWrapperClass = buttonWrapperClass ?? 'flex flex-wrap gap-4' %}
 
-{% set blockImage = block.blockImage.eagerly().withTransforms(attributes.imageTransform ?? []).one() %}
+{% set blockImage = block.blockImage.eagerly().withTransforms(imageTransform).one() %}
 
 <section class="page-builder-block {{ sectionClass }}" data-block="{{ block.type }}">
     <div class="{{ containerClass }}">
