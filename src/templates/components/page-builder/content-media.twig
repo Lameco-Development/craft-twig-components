@@ -15,6 +15,7 @@
 {% set videoIcon = videoIcon ?? '<i class="fa-solid fa-play"></i>' %}
 
 {% set contentColClass = contentColClass ?? 'w-full lg:w-1/2' %}
+{% set contentInnerClass = contentInnerClass ?? 'relative' %}
 {% set contentSlot = contentSlot ?? null %}
 
 {% set preTitleClass = preTitleClass ?? null %}
@@ -58,36 +59,38 @@
 
             {# Content #}
             <div class="{{ contentColClass }}{{ block.blockAlignment ? ' lg:order-first' : '' }}{{ theme.fadeInAnimation ? ' content-fade-in' : '' }} relative">
-                {% if block['blockPreTitle'] is defined and block.blockPreTitle is not empty %}
-                    <div class="{{ preTitelClass }}">
-                        {{ block.blockPreTitle | raw }}
-                    </div>
-                {% endif %}
+                <div class="{{ contentInnerClass }}">
+                    {% if block['blockPreTitle'] is defined and block.blockPreTitle is not empty %}
+                        <div class="{{ preTitelClass }}">
+                            {{ block.blockPreTitle | raw }}
+                        </div>
+                    {% endif %}
 
-                <x-ui.title level="{{ block.blockTitleLevel }}"
-                            class="{{ titleClass }}">{{ block.blockTitle }}</x-ui.title>
+                    <x-ui.title level="{{ block.blockTitleLevel }}"
+                                class="{{ titleClass }}">{{ block.blockTitle }}</x-ui.title>
 
-                {% if block['blockIntro'] is defined and block.blockIntro is not empty %}
-                    <div class="{{ introClass }}">
-                        {{ block.blockIntro | raw }}
-                    </div>
-                {% endif %}
+                    {% if block['blockIntro'] is defined and block.blockIntro is not empty %}
+                        <div class="{{ introClass }}">
+                            {{ block.blockIntro | raw }}
+                        </div>
+                    {% endif %}
 
-                {% if block.blockContent is not empty %}
-                    <div class="{{ contentClass }}">
-                        {{ block.blockContent | raw }}
-                    </div>
-                {% endif %}
+                    {% if block.blockContent is not empty %}
+                        <div class="{{ contentClass }}">
+                            {{ block.blockContent | raw }}
+                        </div>
+                    {% endif %}
 
-                {% if block.blockButtons is not empty %}
-                    <div class="{{ buttonWrapperClass }}">
-                        {% for button in block.blockButtons %}
-                            {% if not button.isEmpty() %}
-                                <x-ui.button hyper="{{ button }}"></x-ui.button>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                {% endif %}
+                    {% if block.blockButtons is not empty %}
+                        <div class="{{ buttonWrapperClass }}">
+                            {% for button in block.blockButtons %}
+                                {% if not button.isEmpty() %}
+                                    <x-ui.button hyper="{{ button }}"></x-ui.button>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
 
                 {{ contentSlot | raw }}
             </div>
