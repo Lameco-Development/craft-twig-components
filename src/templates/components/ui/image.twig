@@ -1,11 +1,11 @@
 {% if attributes.image is not empty %}
     {% set class = class ?? '' %}
-    {% set transform = null %}
-    {% set mobileTransform = null %}
+    {% set transform = transform ?? null %}
+    {% set mobileTransform = mobileTransform ?? null %}
 
-    {% if attributes.image.extension != 'svg' %}
-        {% set transform = transform ?? null %}
-        {% set mobileTransform = mobileTransform ?? null %}
+    {% if attributes.image.extension == 'svg' %}
+        {% set transform = null %}
+        {% set mobileTransform = null %}
     {% endif %}
 
     {% set imageMobile = imageMobile ?? null %}
