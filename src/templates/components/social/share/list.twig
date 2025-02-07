@@ -3,7 +3,7 @@
 
 {% set entry = entry ?? null %}
 {% set text = text ?? ('share' | t) %}
-{% set items = items ?? theme.social.share.list.items ?? ['mail', 'linkedin', 'facebook', 'twitter', 'whatsapp'] %}
+{% set items = items ?? theme.social.share.items ?? ['mail', 'linkedin', 'facebook', 'twitter', 'whatsapp'] %}
 {% set wrapperClass = wrapperClass ?? theme.social.share.list.wrapper ?? 'flex flex-wrap gap-4 items-center' %}
 {% set listClass = listClass ?? theme.social.share.list.list ?? 'flex flex-wrap gap-2 items-center' %}
 {% set itemClass = (itemClass ?? theme.social.share.list.item ?? 'h-8 w-8 flex justify-center items-center') ~ ' transition-all' %}
