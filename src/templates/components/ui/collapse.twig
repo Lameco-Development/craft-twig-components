@@ -2,7 +2,7 @@
 
 <div class="w-full {{ theme.ui.collapse.wrapper ?? 'border-b border-slate-200' }}" x-data="{ expanded: false }">
     <button class="group w-full flex justify-between items-center gap-4 cursor-pointer {{ theme.ui.collapse.button ?? 'py-3 pl-2 text-slate-800' }}" @click="expanded = ! expanded">
-        <span>{{ attributes.title }}</span>
+        <span>{{ attributes.title | raw }}</span>
 
         <span class="flex justify-center items-center {{ theme.ui.collapse.icon.wrapper ?? 'w-8 h-8 bg-black' }} shrink-0 transition-transform ease-out">
             {% if theme.ui.collapse.icon.openHtml is defined and theme.ui.collapse.icon.closedHtml is defined %}
