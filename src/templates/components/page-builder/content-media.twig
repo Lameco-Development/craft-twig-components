@@ -67,7 +67,7 @@
                     {% endif %}
 
                     <x-ui.title level="{{ block.blockTitleLevel }}"
-                                class="{{ titleClass }}">{{ block.blockTitle }}</x-ui.title>
+                                class="{{ titleClass }}">{{ block.blockTitle ?? block.title }}</x-ui.title>
 
                     {% if block['blockIntro'] is defined and block.blockIntro is not empty %}
                         <div class="{{ introClass }}">
