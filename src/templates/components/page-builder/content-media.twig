@@ -6,28 +6,32 @@
 {% set sectionClass = sectionClass ?? 'bg-none' %}
 {% set containerClass = containerClass ?? 'container' %}
 {% set innerClass = innerClass ?? 'flex flex-col lg:flex-row lg:items-center gap-8' %}
+{% set containerSlot = containerSlot ?? null %}
 
-{% set mediaColClass = mediaColClass ?? 'w-full lg:w-1/2' %}
+{% set mediaColClass = mediaColClass ?? 'lg:w-1/2' %}
 {% set mediaSlot = mediaSlot ?? null %}
 {% set imageTransform = imageTransform ?? null %}
 {% set imageClass = imageClass ?? 'absolute inset-0 w-full h-full object-cover' %}
 {% set videoClass = videoClass ?? 'w-24 h-24 rounded-full bg-white hover:bg-primary flex items-center justify-center transition-colors' %}
 {% set videoIcon = videoIcon ?? '<i class="fa-solid fa-play"></i>' %}
+{% set videoSlot = videoSlot ?? null %}
 
-{% set contentColClass = contentColClass ?? 'w-full lg:w-1/2' %}
+{% set contentColClass = contentColClass ?? 'lg:w-1/2' %}
 {% set contentInnerClass = contentInnerClass ?? 'relative' %}
 {% set contentSlot = contentSlot ?? null %}
 
 {% set preTitleClass = preTitleClass ?? null %}
 {% set titleClass = titleClass ?? null %}
 {% set introClass = introClass ?? null %}
-{% set contentClass = contentClass ?? null %}
-{% set buttonWrapperClass = buttonWrapperClass ?? 'flex flex-wrap gap-4' %}
+{% set contentClass = contentClass ?? 'text-block' %}
+{% set buttonWrapperClass = buttonWrapperClass ?? 'gap-4 mt-4' %}
 
 {% set blockImage = block.blockImage.eagerly().withTransforms(imageTransform).one() %}
 
 <section class="page-builder-block {{ sectionClass }}" data-block="{{ block.type }}">
     <div class="{{ containerClass }}">
+        {{ containerSlot | raw }}
+
         <div class="{{ innerClass }}">
             {# Media #}
             <div class="{{ mediaColClass }}{{ block.blockAlignment ? ' lg:order-last' : '' }} relative">
@@ -40,17 +44,21 @@
                 {% endif %}
 
                 {% if block.blockVideo is not empty %}
-                    {% set video = block.blockVideo.one() %}
-                    {% set embeddedAsset = craft.embeddedAssets.get(video) %}
-                    {% if embeddedAsset is not empty %}
-                        {% set iframeSrc = embeddedAsset.getIframeSrc(['autoplay=1','byline=0','title=0']) %}
-                        <div class="{{ attributes.merge({ videoClass: 'photo-swipe--iframe-js absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2' }).videoClass }}">
-                            <a href="{{ iframeSrc }}" target="_blank" data-pswp-type="iframe"
-                               data-pswp-iframe-url="{{ iframeSrc }}"
-                               class="{{ videoClass }}">
-                                {{ videoIcon | raw }}
-                            </a>
-                        </div>
+                    {% if videoSlot is not empty %}
+                        {{ videoSlot | raw }}
+                    {% else %}
+                        {% set video = block.blockVideo.one() %}
+                        {% set embeddedAsset = craft.embeddedAssets.get(video) %}
+                        {% if embeddedAsset is not empty %}
+                            {% set iframeSrc = embeddedAsset.getIframeSrc(['autoplay=1','byline=0','title=0']) %}
+                            <div class="{{ attributes.merge({ videoClass: 'photo-swipe--iframe-js absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2' }).videoClass }}">
+                                <a href="{{ iframeSrc }}" target="_blank" data-pswp-type="iframe"
+                                   data-pswp-iframe-url="{{ iframeSrc }}"
+                                   class="{{ videoClass }}">
+                                    {{ videoIcon | raw }}
+                                </a>
+                            </div>
+                        {% endif %}
                     {% endif %}
                 {% endif %}
 
@@ -82,7 +90,7 @@
                     {% endif %}
 
                     {% if block.blockButtons is not empty %}
-                        <div class="{{ buttonWrapperClass }}">
+                        <div class="flex flex-wrap {{ buttonWrapperClass }}">
                             {% for button in block.blockButtons %}
                                 {% if not button.isEmpty() %}
                                     <x-ui.button hyper="{{ button }}"></x-ui.button>
