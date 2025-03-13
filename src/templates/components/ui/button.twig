@@ -45,18 +45,19 @@
 {% set variantClasses = classes.apply({type: variant, size: attributes.size ?? null}) %}
 
 {% if url is empty %}
-    <button class="{{ attributes.merge({ class: variantClasses }).class }}" {{ attr ? attr | raw : null }}>
-{% else %}
+<button class="{{ attributes.merge({ class: variantClasses }).class }}" {{ attr ? attr | raw : null }}>
+    {% else %}
     <a href="{{ url }}"
        class="{{ attributes.merge({ class: variantClasses }).class }}"
-       target="{{ target }}" {{ attr ? attr | raw : null }}>
-{% endif %}
+       target="{{ target }}" {{ attr ? attr | raw : null }}
+            {% if target != '_blank' and currenSite.baseUrl not in url %}rel="nofollow"{% endif %}>
+        {% endif %}
 
-    {% if theme.ui.button.overlay is defined and theme.ui.button.overlay is not empty and variant != 'text' %}
-        <span class="{{ theme.ui.button.overlay.base ?? '' }} {{ theme.ui.button.overlay[variant] ?? '' }}"></span>
-    {% endif %}
+        {% if theme.ui.button.overlay is defined and theme.ui.button.overlay is not empty and variant != 'text' %}
+            <span class="{{ theme.ui.button.overlay.base ?? '' }} {{ theme.ui.button.overlay[variant] ?? '' }}"></span>
+        {% endif %}
 
-    <span class="relative flex items-center justify-between z-50 {{ contentWrapper }}">
+        <span class="relative flex items-center justify-between z-50 {{ contentWrapper }}">
         {% if iconPosition == 'start' and icon is defined and icon is not empty %}
             <span class="flex items-center justify-center {{ iconWrapper }}">
                  {{ icon | raw }}
@@ -72,8 +73,8 @@
         {% endif %}
     </span>
 
-{% if url is empty %}
-    </button>
+        {% if url is empty %}
+</button>
 {% else %}
     </a>
 {% endif %}
