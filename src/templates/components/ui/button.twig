@@ -50,7 +50,7 @@
     <a href="{{ url }}"
        class="{{ attributes.merge({ class: variantClasses }).class }}"
        target="{{ target }}" {{ attr ? attr | raw : null }}
-            {% if target != '_blank' and currenSite.baseUrl not in url %}rel="nofollow"{% endif %}>
+            {% if target != '_blank' and currentSite.baseUrl not in url %}rel="nofollow"{% endif %}>
         {% endif %}
 
         {% if theme.ui.button.overlay is defined and theme.ui.button.overlay is not empty and variant != 'text' %}
