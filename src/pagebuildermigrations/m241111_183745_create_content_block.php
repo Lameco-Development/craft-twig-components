@@ -21,7 +21,7 @@ class m241111_183745_create_content_block extends Migration
     public function safeUp(): bool
     {
         try {
-            $columnsEntryType = Plugin::getInstance()->entryHelper->createEntryType('Page Builder - Content - Columns', 'pageBuilderContentColumns', 'cubes', true, [
+            $columnsEntryType = Plugin::getInstance()->entryHelper->createEntryType('Content Column', 'pageBuilderContentColumns', 'cubes', true, [
                 [
                     'name' => 'Content',
                     'fields' => [
