@@ -45,7 +45,7 @@
                             </div>
 
                             {% if column.blockButtons is not empty %}
-                                <div class="{{ columnButtonClass }}{{ block.blockTextAlignment.value ? ' justify-center': '' }}">
+                                <div class="{{ columnButtonClass }}{{ block.blockTextAlignment.value ?? '' }}">
                                     {% for button in column.blockButtons %}
                                         {% if not button.isEmpty() %}
                                             <x-ui.button hyper="{{ button }}"></x-ui.button>
