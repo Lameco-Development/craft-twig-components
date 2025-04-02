@@ -28,7 +28,7 @@
                 <div class="{{ columnWrapperClass }}">
                     {% for column in block.blockColumns %}
                         <div class="{{ columnClass }}{{ theme.fadeInAnimation ? ' content-fade-in' : '' }}">
-                            <div class="{{ columnContentClass }}{{ block.blockTextAlignment.value ? ' text-center': '' }} text-block">
+                            <div class="{{ columnContentClass }}{{ block.blockTextAlignment.value ?? '' }} text-block">
                                 {% if column.blockPreTitle is not empty %}
                                     <strong class="{{ columnPreTitleClass }} block">
                                         {{ column.blockPreTitle | raw }}
