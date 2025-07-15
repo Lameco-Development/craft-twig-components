@@ -1,0 +1,25 @@
+{% set video = video ?? null %}
+{% set class = class ?? null %}
+
+{% if video is not empty %}
+  {% set embeddedAsset = craft.embeddedAssets.get(video) %}
+  {% if embeddedAsset is not empty %}
+    <div
+      class="background-video-wrapper--js absolute inset-0 h-full w-full overflow-hidden {{
+      class
+      }}"
+    >
+      <div class="background-video-container--js top-50 start-50 -translate-1/2">
+        <iframe
+          class="h-full w-full"
+          src="{{
+          embeddedAsset.getIframeSrc(
+            ['background=1', 'muted=1', 'autoplay=1', 'loop=1', 'byline=0', 'title=0']
+          )
+          }}"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+  {% endif %}
+{% endif %}
