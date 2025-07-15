@@ -1,0 +1,78 @@
+{# Theme #}
+{% set theme = theme is defined and theme is not empty
+  ? theme|json_decode
+  : _globals.get('lameco.components.theme')
+%}
+
+{# Component Variables #}
+{% set video = video ?? null %}
+{% set videoOptions = videoOptions ?? [] %}
+{% set image = image ?? null %}
+{% set imageTransform = imageTransform ?? null %}
+{% set class = class ?? 'aspect-video relative' %}
+{% set consentType = consentType ?? 'marketing' %}
+
+{# Component #}
+{% if video is not empty %}
+  {# Get embeddedAsset from video [asset] #}
+  {% set embeddedAsset = craft.embeddedAssets.get(video) %}
+  {% if embeddedAsset is not empty %}
+    {# Get image from embeddedAsset if image is not defined #}
+    {% set image = image is empty ? embeddedAsset.image : image %}
+
+    {# Check Theme Configuration Mode #}
+
+    {# Mode = 'embed' #}
+    {% if theme.ui.video.mode == 'embed' %}
+      <div class="{{ class }} {{ theme.ui.video.embed.class ?? '' }}">
+        {{ _self.image(image, imageTransform, video) }}
+
+        <iframe
+          class="absolute inset-0 h-full w-full"
+          {% if embeddedAsset.providerName in ['YouTube'] %}
+            data-cookieblock-src="{{ embeddedAsset.getIframeSrc(videoOptions) }}"
+            data-cookieconsent="{{ consentType }}"
+          {% else %}
+            src="{{ embeddedAsset.getIframeSrc(videoOptions) }}"
+          {% endif %}
+          allowfullscreen
+        ></iframe>
+
+        {{ _self.consent(embeddedAsset, consentType, theme) }}
+      </div>
+
+    {# Mode = 'lightbox #}
+    {% elseif theme.ui.video.mode == 'lightbox' %}
+      <div class="relative ui-video__iframe--js {{ class }}  {{ theme.ui.video.lightbox.class ?? '' }}">
+        {{ _self.image(image, imageTransform, video) }}
+
+        <a href="{{ embeddedAsset.getIframeSrc(videoOptions) }}" class="cookieconsent-optin-{{ consentType }} absolute top-1/2 start-1/2 -translate-1/2 {{ theme.ui.video.lightbox.button.class }}">
+          {{ theme.ui.video.lightbox.button.html | raw }}
+        </a>
+
+        {# Concent overlay #}
+        {{ _self.consent(embeddedAsset, consentType, theme) }}
+      </div>
+    {% endif %}
+  {% endif %}
+{% endif %}
+
+{% macro image (image, imageTransform, video) %}
+  {% if image is string %}
+    <img
+      src="{{ image }}"
+      alt="{{ video.title }}"
+      loading="lazy"
+      class="absolute inset-0 h-full w-full object-cover"
+    />
+  {% else %}
+    <x-ui.image image="{{ image }}" transform="{{ imageTransform }}" class="absolute inset-0 h-full w-full object-cover"></x-ui.image>
+  {% endif %}
+{% endmacro %}
+
+{% macro consent (embeddedAsset, consentType, theme) %}
+  {% if embeddedAsset.providerName in ['YouTube'] %}
+    {% set class = "absolute inset-0 h-full w-full flex justify-center items-center " ~ theme.ui.video.consent.class %}
+    <x-consent.default class="{{ class }}" consentType="{{ consentType }}" type="video"></x-consent.default>
+  {% endif %}
+{% endmacro %}
