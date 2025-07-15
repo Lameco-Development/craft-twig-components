@@ -3,14 +3,15 @@
 {% set type = type ?? 'form' %}
 
 <div class="cookieconsent-optout-{{ consentType }} {{ class }} z-99">
-  {# Content #}
-  {% set link_html = '<a class="underline" href="javascript:Cookiebot.renew()">'
-    ~ (('consent.accept.' ~ consentType)|t('consent'))
-    ~ '</a>'
-  %}
-  {{
-    'consent.accept.message'
-      |t('consent', { button: link_html|raw, type: ('consent.type.' ~ type)|t('consent') })
-      |raw
-  }}
+  <div>
+    {% set link_html = '<a class="underline" href="javascript:Cookiebot.renew()">'
+      ~ (('consent.accept.' ~ consentType)|t('consent'))
+      ~ '</a>'
+    %}
+    {{
+      'consent.accept.message'
+        |t('consent', { button: link_html|raw, type: ('consent.type.' ~ type)|t('consent') })
+        |raw
+    }}
+  </div>
 </div>
