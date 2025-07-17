@@ -6,12 +6,12 @@
 
 {# Component Variables #}
 {% set video = video ?? null %}
-{% set videoOptions = videoOptions ?? [] %}
 {% set image = image ?? null %}
 {% set imageTransform = imageTransform ?? null %}
 {% set class = class ?? 'aspect-video relative' %}
 {% set consentType = consentType ?? 'marketing' %}
 {% set mode = theme.ui.video.mode ?? 'embed' %}
+{% set videoOptions = videoOptions ?? (mode == 'lightbox' ? ['autoplay=1', 'byline=0', 'title=0'] : []) %}
 
 {# Component #}
 {% if video is not empty %}
