@@ -1,0 +1,20 @@
+{
+  "src/assets/ts/app.ts": {
+    "file": "assets/craftTwigComponents.js",
+    "name": "craftTwigComponents",
+    "src": "src/assets/ts/app.ts",
+    "isEntry": true,
+    "dynamicImports": [
+      "src/assets/ts/components/uiVideoDefault.ts"
+    ],
+    "css": [
+      "assets/craftTwigComponents.css"
+    ]
+  },
+  "src/assets/ts/components/uiVideoDefault.ts": {
+    "file": "assets/uiVideoDefault.js",
+    "name": "uiVideoDefault",
+    "src": "src/assets/ts/components/uiVideoDefault.ts",
+    "isDynamicEntry": true
+  }
+}

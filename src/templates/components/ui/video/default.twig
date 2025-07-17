@@ -11,6 +11,7 @@
 {% set imageTransform = imageTransform ?? null %}
 {% set class = class ?? 'aspect-video relative' %}
 {% set consentType = consentType ?? 'marketing' %}
+{% set mode = theme.ui.video.mode ?? 'embed' %}
 
 {# Component #}
 {% if video is not empty %}
@@ -23,7 +24,7 @@
     {# Check Theme Configuration Mode #}
 
     {# Mode = 'embed' #}
-    {% if theme.ui.video.mode == 'embed' %}
+    {% if mode == 'embed' %}
       <div class="{{ class }} {{ theme.ui.video.embed.class ?? '' }}">
         {{ _self.image(image, imageTransform, video) }}
 
@@ -42,12 +43,12 @@
       </div>
 
     {# Mode = 'lightbox #}
-    {% elseif theme.ui.video.mode == 'lightbox' %}
+    {% elseif mode == 'lightbox' %}
       <div class="relative ui-video__iframe--js {{ class }}  {{ theme.ui.video.lightbox.class ?? '' }}">
         {{ _self.image(image, imageTransform, video) }}
 
-        <a href="{{ embeddedAsset.getIframeSrc(videoOptions) }}" class="cookieconsent-optin-{{ consentType }} absolute top-1/2 start-1/2 -translate-1/2 {{ theme.ui.video.lightbox.button.class }}">
-          {{ theme.ui.video.lightbox.button.html | raw }}
+        <a href="{{ embeddedAsset.getIframeSrc(videoOptions) }}" data-pswp-type="iframe" data-pswp-iframe-url="{{ embeddedAsset.getIframeSrc(videoOptions) }}" class="cookieconsent-optin-{{ consentType }} absolute top-1/2 start-1/2 -translate-1/2 {{ theme.ui.video.lightbox.button.class ?? '' }}">
+          {{ theme.ui.video.lightbox is defined and theme.ui.video.lightbox.button.html ? (theme.ui.video.lightbox.button.html | raw) : ('video.play' | t) }}
         </a>
 
         {# Concent overlay #}
@@ -72,7 +73,7 @@
 
 {% macro consent (embeddedAsset, consentType, theme) %}
   {% if embeddedAsset.providerName in ['YouTube'] %}
-    {% set class = "absolute inset-0 h-full w-full flex justify-center items-center " ~ theme.ui.video.consent.class %}
+    {% set class = "absolute inset-0 h-full w-full flex justify-center items-center " ~ theme.ui.video.consent.class ?? '' %}
     <x-consent.default class="{{ class }}" consentType="{{ consentType }}" type="video"></x-consent.default>
   {% endif %}
 {% endmacro %}

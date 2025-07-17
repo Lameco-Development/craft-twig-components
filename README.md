@@ -1,17 +1,51 @@
-# Requirements
+# Steps to use the plugin
 
-- Craft CMS >= 4.9
-- PHP >= 8.3
-- AlpineJS >= 3
-  - Collapse
+1. Define the themeConfig
 
-# Tailwind
-
-This plugin uses Tailwind. To include the default classes in the compilation of TailwindCSS add the templates folder as a source in your (S)CSS file using:
-```scss
-@source "../../../vendor/lameco/craft-twig-components/**/*.twig";
+```twig
+{% set ComponentsThemeConfig = {
+  gsapAnimations: false,
+  
+  ui: {
+    video: {
+      mode: "[embed|lightbox]",
+      embed: {
+        class: ""
+      },
+      lightbox: {
+        class: "",
+        button: {
+          class: "",
+          html: ""
+        }
+      },
+      consent: {
+        class: ""
+      }
+    }
+  }
+}
 ```
 
-# Wiki
+2. Add the themeConfig to the `_globals` so they are available most of the time. 
 
-Go to [Wiki](/wiki/Home)
+> If you are using Sprig for example the themeConfig will not be available in the Sprig templates. You can pass the themeConfig (or a portion of the stripped down themeConfig) to the Sprig template using the `sprig` function and passing the theme object into the `theme` attribute of a component.
+> 
+> Be sure to `| json_encode` the themeConfig when passing it to Sprig, because Sprig only allows string, boolean, numbers or arrays.
+> 
+> ```twig
+> {{ sprig('path/to/template', { theme: ComponentsThemeConfig | json_encode }) }}
+
+
+
+```twig
+{% do _globals.set('lameco.components.theme', ComponentsThemeConfig) %}
+```
+
+3. Register the assets to make sure the plugin's styles and scripts are loaded in your templates:
+
+```twig
+{% do view.registerAssetBundle(
+'lameco\\crafttwigcomponents\\assetbundles\\CraftTwigComponents\\CraftTwigComponentsAsset'
+) %}
+```

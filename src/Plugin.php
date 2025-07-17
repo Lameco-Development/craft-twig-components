@@ -5,22 +5,22 @@ namespace lameco\crafttwigcomponents;
 use Craft;
 use craft\base\Model;
 use craft\base\Plugin as BasePlugin;
+use craft\events\ModelEvent;
 use craft\services\Plugins;
+use craft\web\View;
+use lameco\crafttwigcomponents\assetbundles\CraftTwigComponents\CraftTwigComponentsAsset;
+use lameco\crafttwigcomponents\models\Settings;
 use lameco\crafttwigcomponents\services\EntryHelper;
 use lameco\crafttwigcomponents\services\MigrationManager;
+use lameco\crafttwigcomponents\services\PageBuilder;
 use Performing\TwigComponents\Configuration;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Extra\Html\HtmlExtension;
-use craft\web\View;
-use lameco\crafttwigcomponents\assetBundles\AppBundle;
-use lameco\crafttwigcomponents\services\PageBuilder;
-use lameco\crafttwigcomponents\models\Settings;
 use yii\base\Event;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
-use craft\events\ModelEvent;
 
 /**
  * @property-read PageBuilder $pageBuilder
@@ -64,7 +64,7 @@ class Plugin extends BasePlugin
         $twig = Craft::$app->getView()->getTwig();
 
         if (Craft::$app->request->getIsSiteRequest()) {
-            Craft::$app->view->registerAssetBundle(AppBundle::class);
+            Craft::$app->view->registerAssetBundle(CraftTwigComponentsAsset::class);
         }
 
         Craft::$app->view->registerTwigExtension(new HtmlExtension());
