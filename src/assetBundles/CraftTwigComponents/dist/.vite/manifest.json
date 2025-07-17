@@ -5,11 +5,18 @@
     "src": "src/assets/ts/app.ts",
     "isEntry": true,
     "dynamicImports": [
-      "src/assets/ts/components/uiVideoDefault.ts"
+      "src/assets/ts/components/uiVideoDefault.ts",
+      "src/assets/ts/components/uiVideoBackground.ts"
     ],
     "css": [
       "assets/craftTwigComponents.css"
     ]
+  },
+  "src/assets/ts/components/uiVideoBackground.ts": {
+    "file": "assets/uiVideoBackground.js",
+    "name": "uiVideoBackground",
+    "src": "src/assets/ts/components/uiVideoBackground.ts",
+    "isDynamicEntry": true
   },
   "src/assets/ts/components/uiVideoDefault.ts": {
     "file": "assets/uiVideoDefault.js",
