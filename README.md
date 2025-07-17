@@ -1,3 +1,9 @@
+# Requirements
+
+- Craft CMS 5.0+
+- TailwindCSS 4.0+
+- PHP 8.4+
+
 # Steps to use the plugin
 
 1. Define the themeConfig

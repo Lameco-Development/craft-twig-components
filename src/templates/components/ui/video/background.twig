@@ -5,11 +5,11 @@
   {% set embeddedAsset = craft.embeddedAssets.get(video) %}
   {% if embeddedAsset is not empty %}
     <div
-      class="background-video-wrapper--js absolute inset-0 h-full w-full overflow-hidden {{
+      class="ui-video-background__wrapper--js absolute inset-0 h-full w-full overflow-hidden {{
       class
       }}"
     >
-      <div class="background-video-container--js top-50 start-50 -translate-1/2">
+      <div class="ui-video-background__container--js -translate-1/2 absolute start-1/2 top-1/2">
         <iframe
           class="h-full w-full"
           src="{{
