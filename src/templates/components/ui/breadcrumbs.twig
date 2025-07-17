@@ -1,0 +1,66 @@
+{# Theme #}
+{% set theme = theme is defined and theme is not empty
+  ? theme|json_decode
+  : _globals.get('lameco.components.theme')
+%}
+
+{# Component Variables #}
+{% set backUrl = backUrl ?? null %}
+{% set class = theme.ui.breadcrumbs.class ?? class ?? '' %}
+{% set itemClass = theme.ui.breadcrumbs.item.class ?? itemClass ?? '' %}
+{% set currentClass = theme.ui.breadcrumbs.item.current.class ?? currentClass ?? '' %}
+
+<nav class="flex overflow-x-auto {{ class }}">
+  {# Back #}
+  {% if backUrl is not empty %}
+    <a
+      class="{{ theme.ui.breadcrumbs.back.class ?? itemClass ?? '' }} transition-colors"
+      href="{{ backUrl }}"
+    >
+      {{ theme.ui.breadcrumbs is defined
+        and theme.ui.breadcrumbs.back is defined
+        and theme.ui.breadcrumbs.back.html
+        ? theme.ui.breadcrumbs.back.html|raw
+        : 'breadcrumbs.back'|t }}
+    </a>
+  {% endif %}
+
+  {# Items #}
+  {% for crumb in craft.navigation.breadcrumbs() %}
+    {% if loop.first %}
+      {# Home #}
+      <a class="{{ itemClass }} whitespace-nowrap transition-colors" href="{{ crumb.url }}">
+        {{ theme.ui.breadcrumbs is defined
+          and theme.ui.breadcrumbs.home is defined
+          and theme.ui.breadcrumbs.home.html
+          ? theme.ui.breadcrumbs.home.html|raw
+          : 'breadcrumbs.home'|t }}
+      </a>
+
+      {# Separator #}
+      {{ theme.ui.breadcrumbs is defined
+        and theme.ui.breadcrumbs.separator is defined
+        and theme.ui.breadcrumbs.separator.html
+        ? theme.ui.breadcrumbs.separator.html|raw
+        : '<span>/</span>'|raw }}
+
+      {# Item #}
+    {% elseif not loop.last and not loop.first %}
+      <a class="{{ itemClass }} whitespace-nowrap transition-colors" href="{{ crumb.url }}">
+        {{- crumb.title -}}
+      </a>
+
+      {# Seprator #}
+      {{ theme.ui.breadcrumbs is defined
+        and theme.ui.breadcrumbs.separator is defined
+        and theme.ui.breadcrumbs.separator.html
+        ? theme.ui.breadcrumbs.separator.html|raw
+        : '<span>/</span>'|raw }}
+    {% else %}
+      {# Current #}
+      <span class="{{ currentClass }} whitespace-nowrap">{{- crumb.title -}}</span>
+    {% endif %}
+  {% endfor %}
+</nav>
+
+{{ include('_partials/structured-data/breadcrumbs.twig') }}

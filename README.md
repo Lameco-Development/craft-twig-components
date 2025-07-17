@@ -28,6 +28,26 @@
       consent: {
         class: ""
       }
+    },
+    
+    breadcrumbs: {
+        class: "",
+        home: {
+            html: ""
+        },
+        back: {
+            class: "",
+            html: ""
+        },
+        separator: {
+            html: ""
+        },
+        "item": {
+            class: "",
+            current: {
+                class: ""
+            }
+        }
     }
   }
 }
