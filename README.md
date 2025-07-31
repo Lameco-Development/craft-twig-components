@@ -13,6 +13,19 @@
   gsapAnimations: false,
   
   ui: {
+    image: {
+      picture: {
+        class: ""
+      },
+      img: {
+        class: "",
+        mobileBreakpoint: ""
+      },
+      caption: {
+        class: ""
+      }
+    },
+  
     video: {
       mode: "[embed|lightbox]",
       embed: {
