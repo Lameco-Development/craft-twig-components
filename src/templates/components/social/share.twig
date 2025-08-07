@@ -38,17 +38,22 @@
   <div class="{{ theme.social.share.class ?? 'flex flex-wrap items-center gap-4' }}">
     <span>{{ text }}</span>
 
-    <div class="{{ theme.social.share.list.class ?? 'flex flex-wrap items-center gap-2' }}">
+    <ul class="{{ theme.social.share.list.class ?? 'flex flex-wrap items-center gap-2' }}">
       {% for item in items|filter(item => socialMap[item] is defined) %}
-        <a
-          href="{{ socialMap[item].href }}"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="{{ theme.social.share.item.class ?? 'flex h-8 w-8 items-center justify-center' }}"
-        >
-          <i class="{{ socialMap[item].icon }}"></i>
-        </a>
+        <li>
+          <a
+            href="{{ socialMap[item].href }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="{{
+            theme.social.share.item.class
+              ?? 'flex h-8 w-8 items-center justify-center'
+            }}"
+          >
+            <i class="{{ socialMap[item].icon }}"></i>
+          </a>
+        </li>
       {% endfor %}
-    </div>
+    </ul>
   </div>
 {% endif %}

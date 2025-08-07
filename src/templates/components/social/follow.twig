@@ -1,0 +1,50 @@
+{# Theme #}
+{% set theme = theme is defined and theme is not empty
+  ? theme|json_decode
+  : _globals.get('lameco.components.theme')
+%}
+
+{# Component Variables #}
+{% set text = text ?? theme.social.follow.text ?? ('share'|t) %}
+{% set items = items ?? theme.social.follow.items
+  ?? ['facebook', 'linkedin', 'twitter', 'instagram', 'pinterest', 'youtube', 'vimeo']
+%}
+
+{% set socials = [
+  { key: 'facebook', icon: 'fa-brands fa-facebook-f', label: 'Facebook' },
+  { key: 'linkedin', icon: 'fa-brands fa-linkedin-in', label: 'LinkedIn' },
+  { key: 'twitter', icon: 'fa-brands fa-x-twitter', label: 'Twitter' },
+  { key: 'instagram', icon: 'fa-brands fa-instagram', label: 'Instagram' },
+  { key: 'pinterest', icon: 'fa-brands fa-pinterest', label: 'Pinterest' },
+  { key: 'youtube', icon: 'fa-brands fa-youtube', label: 'YouTube' },
+  { key: 'vimeo', icon: 'fa-brands fa-vimeo-v', label: 'Vimeo' }
+] %}
+
+{% if items is not empty %}
+  <div class="{{ theme.social.follow.class ?? 'flex flex-wrap items-center gap-4' }}">
+    <span>{{ text }}</span>
+
+    <ul class="{{ theme.social.follow.list.class ?? 'flex flex-wrap items-center gap-2' }}">
+      {% for key in items %}
+        {% set social = socials|filter(s => s.key == key)|first %}
+        {% set link = seomatic.site.sameAsLinks[key] ?? null %}
+        {% if social and link and link.url is not empty %}
+          <li>
+            <a
+              href="{{ link.url }}"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="{{
+              theme.social.share.item.class
+                ?? 'flex h-8 w-8 items-center justify-center'
+              }}"
+              aria-label="{{ social.label }}"
+            >
+              <i class="{{ social.icon }}"></i>
+            </a>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}

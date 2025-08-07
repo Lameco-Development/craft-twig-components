@@ -103,6 +103,18 @@
   },
   
   social: {
+    follow: {
+       class: "",
+       text: "",
+       items: [ "facebook", "linkedin", "twitter", "instagram", "pinterest", "youtube", "vimeo" ],
+       list: {
+        class: "",
+       },
+       item: {
+        class: "",
+       }
+    },
+    
     share: {
        class: "",
        text: "",
