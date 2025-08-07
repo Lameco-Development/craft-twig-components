@@ -13,7 +13,7 @@
   gsapAnimations: false,
   
   ui: {
-  
+
     image: {
       picture: {
         class: ""
@@ -132,6 +132,29 @@
     loader: {
         class: "",
         html: ""
+    },
+    
+    pagination: {
+        class: "",
+        neighbours: 1,
+        item: {
+            class: "",
+            active: {
+                class: ""
+            }
+        },
+        prev: {
+            class: "",
+            html: ""
+        },
+        next: {
+            class: "",
+            html: ""
+        },
+        ellipsis: {
+            class: "",
+            html: ""
+        }
     }
   }
 } %}

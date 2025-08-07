@@ -1,0 +1,108 @@
+{# Theme #}
+{% set theme = theme is defined and theme is not empty
+  ? theme|json_decode
+  : _globals.get('lameco.components.theme')
+%}
+
+{# Component Variables #}
+{% set pageInfo = pageInfo ?? null %}
+{% set neighbours = theme.sprig.pagination.neighbours ?? 1 %}
+{% set prev = theme.sprig.pagination.prev.html ?? '<i class="fa-regular fa-arrow-left"></i>' %}
+{% set next = theme.sprig.pagination.next.html ?? '<i class="fa-regular fa-arrow-right"></i>' %}
+{% set ellipsisHtml = theme.sprig.pagination.ellipsis.html ?? "&hellip;" %}
+{% set ellipsisClass = theme.sprig.pagination.ellipsis.class ?? "&hellip;" %}
+{% set itemClass = theme.sprig.pagination.item.class ?? 'flex items-center justify-center' %}
+{% set itemActiveClass = theme.sprig.pagination.item.active.class ?? '' %}
+{% set itemDisabledClass = theme.sprig.pagination.item.disabled.class ?? '' %}
+
+{# Component #}
+{% if pageInfo is defined and pageInfo.totalPages > 1 %}
+  {% import _self as self %}
+
+  {# seomatic #}
+  {# https://github.com/nystudio107/craft-seomatic#pagination-and-seo #}
+  {% if seomatic is defined %}
+    {% do seomatic.helper.paginate(pageInfo) %}
+
+    {% if pageInfo.currentPage != 1 %}
+      {% do seomatic.meta.robots('noindex, follow') %}
+    {% endif %}
+  {% endif %}
+
+
+  <nav class="{{ theme.sprig.pagination.class ?? '' }}" role="navigation" aria-label="{{ 'pagination'| t }}">
+    <ul class="{{ theme.sprig.pagination.list.class ?? 'flex items-center' }}">
+
+      {# previous #}
+      {{ self.textLink(pageInfo.prevUrl, prev, 'pagination.prevPage'| t, pageInfo.currentPage - 1, pageInfo.prevUrl is not empty, '') }}
+
+      {# first #}
+      {% if pageInfo.currentPage - neighbours > 1 %}
+        {{ self.numericLink(pageInfo.firstUrl, '1', false, itemClass, itemActiveClass, itemDisabledClass) }}
+      {% endif %}
+
+      {# ellipsis before current #}
+      {% if pageInfo.currentPage - neighbours > 2 %}
+        {{ self.ellipsis(ellipsisClass, ellipsisHtml) }}
+      {% endif %}
+
+      {# links before current #}
+      {% for page, url in pageInfo.getPrevUrls(neighbours) %}
+        {{ self.numericLink(url, page, false, itemClass, itemActiveClass, itemDisabledClass) }}
+      {% endfor %}
+
+      {# current #}
+      {{ self.numericLink('', pageInfo.currentPage, true, itemClass, itemActiveClass, itemDisabledClass) }}
+
+      {# links after current #}
+      {% for page, url in pageInfo.getNextUrls(neighbours) %}
+        {{ self.numericLink(url, page, false, itemClass, itemActiveClass, itemDisabledClass) }}
+      {% endfor %}
+
+      {# ellipsis after current #}
+      {% if pageInfo.totalPages - pageInfo.currentPage > neighbours + 1 %}
+        {{ self.ellipsis(ellipsisClass, ellipsisHtml) }}
+      {% endif %}
+
+      {# last #}
+      {% if pageInfo.currentPage + neighbours < pageInfo.totalPages %}
+        {{ self.numericLink(pageInfo.lastUrl, pageInfo.totalPages, false, itemClass, itemActiveClass, itemDisabledClass) }}
+      {% endif %}
+
+      {# next #}
+      {{ self.textLink(pageInfo.nextUrl, next, ('pagination.nextPage' | t), pageInfo.currentPage + 1, pageInfo.nextUrl is not empty, '') }}
+
+    </ul>
+  </nav>
+{% endif %}
+
+{# Macros #}
+{# single numeric link #}
+{% macro numericLink(url, number, current, class, activeClass, disabledClass) %}
+  <li>
+    <button sprig s-val:page="{{ number }}" s-swap="innerHTML show:top" {% if replace is defined and replace is not empty %} s-replace="{{ replace }}"{% endif %} s-indicator=".sprig-loader--js"
+            class="transition-colors {{ class }} {{ current ? activeClass }}"
+            aria-label="{{ current ? ('pagination.currentPage' | t) : ('pagination.goToPage' | t) ~ ' ' ~ number }}" {{ current ? 'aria-current="page"' }}>
+      {{ number }}
+    </button>
+  </li>
+{% endmacro %}
+
+{# next/prev link #}
+{% macro textLink(url, content, aria, number, enabled, class, activeClass, disabledClass) %}
+  <li >
+    <button sprig s-val:page="{{ number }}" s-swap="innerHTML show:top" {% if replace is defined and replace is not empty %} s-replace="{{ replace }}"{% endif %} s-indicator=".sprig-loader--js"
+            class="transition-colors {{ enabled ? class : disabledClass }}"{% if not enabled %} disabled{% endif %} aria-label="{{ aria }}">
+      {{ content|raw }}
+    </button>
+  </li>
+{% endmacro %}
+
+{# ellipsis #}
+{% macro ellipsis(class, html) %}
+  <li>
+        <span class="w-10 h-10 leading-10 text-center">
+            {{ content|raw }}
+        </span>
+  </li>
+{% endmacro %}
