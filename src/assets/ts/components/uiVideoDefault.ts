@@ -4,7 +4,6 @@ import PhotoSwipeLightbox from "photoswipe/lightbox";
 export const init = (uiVideoIframes) => {
   uiVideoIframes.forEach((iframe) => {
     const gallery = iframe.querySelector("a");
-    console.log(iframe);
     const lightbox = new PhotoSwipeLightbox({
       gallery: gallery,
       pswpModule: PhotoSwipe,
@@ -39,6 +38,5 @@ export const init = (uiVideoIframes) => {
     });
 
     lightbox.init();
-    console.log(lightbox);
   });
 };
