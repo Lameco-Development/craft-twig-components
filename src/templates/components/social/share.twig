@@ -1,0 +1,54 @@
+{# Theme #}
+{% set theme = theme is defined and theme is not empty
+  ? theme|json_decode
+  : _globals.get('lameco.components.theme')
+%}
+
+{# Component Variables #}
+{% set entry = entry ?? null %}
+{% set text = text ?? theme.social.share.text ?? ('share'|t) %}
+{% set items = items ?? theme.social.share.items
+  ?? ['mail', 'linkedin', 'facebook', 'twitter', 'whatsapp']
+%}
+
+{# Define the mapping for each social network #}
+{% set socialMap = {
+  mail: {
+    href: 'mailto:?subject=' ~ entry.title ~ '&body=' ~ entry.url,
+    icon: 'fa-regular fa-envelope'
+  },
+  linkedin: {
+    href: 'https://www.linkedin.com/shareArticle?mini=true&url=' ~ entry.url,
+    icon: 'fa-brands fa-linkedin-in'
+  },
+  facebook: {
+    href: 'https://www.facebook.com/sharer/sharer.php?u=' ~ entry.url,
+    icon: 'fa-brands fa-facebook-f'
+  },
+  whatsapp: { href: 'https://wa.me/?text=' ~ entry.url, icon: 'fa-brands fa-whatsapp' },
+  twitter: {
+    href: 'https://x.com/intent/post?text=' ~ (entry.title|url_encode) ~ '&url='
+      ~ (entry.url|url_encode),
+    icon: 'fa-brands fa-x-twitter'
+  }
+} %}
+
+{# Component #}
+{% if entry is not empty %}
+  <div class="{{ theme.social.share.class ?? 'flex flex-wrap items-center gap-4' }}">
+    <span>{{ text }}</span>
+
+    <div class="{{ theme.social.share.list.class ?? 'flex flex-wrap items-center gap-2' }}">
+      {% for item in items|filter(item => socialMap[item] is defined) %}
+        <a
+          href="{{ socialMap[item].href }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="{{ theme.social.share.item.class ?? 'flex h-8 w-8 items-center justify-center' }}"
+        >
+          <i class="{{ socialMap[item].icon }}"></i>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}

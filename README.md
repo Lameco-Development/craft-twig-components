@@ -13,6 +13,7 @@
   gsapAnimations: false,
   
   ui: {
+  
     image: {
       picture: {
         class: ""
@@ -99,8 +100,22 @@
             html: ""
         }
     }
+  },
+  
+  social: {
+    share: {
+       class: "",
+       text: "",
+       items: [ "mail", "linkedin", "facebook", "twitter", "whatsapp" ],
+       list: {
+        class: "",
+       },
+       item: {
+        class: "",
+       }
+    }
   }
-}
+} %}
 ```
 
 2. Add the themeConfig to the `_globals` so they are available most of the time. 
@@ -124,4 +139,17 @@
 {% do view.registerAssetBundle(
 'lameco\\crafttwigcomponents\\assetbundles\\CraftTwigComponents\\CraftTwigComponentsAsset'
 ) %}
+```
+
+# FontAwesome
+
+The Component Library uses FontAwesome for icons used in fallback logic if nothing in the themeConfig is defined.
+In the `fontawesome.ts` file import the pre-defined icons using:
+```js 
+import { twigComponentsFontAwesomeIcons } from "../../../vendor/lameco/craft-twig-components/src/assets/ts/fontAwesome";
+
+library.add(
+    ...twigComponentsFontAwesomeIcons,
+    // other icons you want to add
+)
 ```
