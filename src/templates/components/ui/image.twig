@@ -4,30 +4,31 @@
   : _globals.get('lameco.components.theme')
 %}
 
-{% if attributes.image is not empty %}
-  {% set pictureClass = pictureClass ?? theme.ui.image.picture.class ?? '' %}
-  {% set imgClass = imgClass ?? theme.ui.image.image.class ?? '' %}
-  {% set captionClass = captionClass ?? theme.ui.image.caption.class ?? '' %}
+{# Component Variables #}
+{% set pictureClass = pictureClass ?? theme.ui.image.picture.class ?? '' %}
+{% set imgClass = imgClass ?? theme.ui.image.image.class ?? '' %}
+{% set captionClass = captionClass ?? theme.ui.image.caption.class ?? '' %}
+{% set transform = transform ?? null %}
+{% set mobileTransform = mobileTransform ?? null %}
+{% set imageMobile = imageMobile ?? null %}
+{% set lazyload = lazyload ?? true %}
+{% set breakpoint = breakpoint ?? theme.ui.image.image.mobileBreakpoint ?? '992px' %}
+{% set srcset = srcset is defined and srcset is not empty ? srcset : ['1x', '2x'] %}
 
-  {% set transform = transform ?? null %}
-  {% set mobileTransform = mobileTransform ?? null %}
+{# Set transform for width and height calculation #}
+{% set widthHeightTransform = imageMobile is not empty
+  ? transform
+  : mobileTransform is defined and mobileTransform is not empty ? mobileTransform : null
+%}
 
-  {% if attributes.image.extension == 'svg' %}
+{# Component #}
+{% if image is not empty %}
+  {% if image.extension == 'svg' %}
     {% set transform = null %}
     {% set mobileTransform = null %}
   {% endif %}
 
-  {% set imageMobile = imageMobile ?? null %}
-  {% set lazyload = lazyload ?? true %}
-  {% set breakpoint = breakpoint ?? theme.ui.image.image.mobileBreakpoint ?? '992px' %}
   {% set alt = image.alt ? : image.title %}
-  {% set srcset = srcset is defined and srcset is not empty ? srcset : ['1x', '2x'] %}
-
-  {# Set transform for width and height calculation #}
-  {% set widthHeightTransform = imageMobile is not empty
-    ? transform
-    : mobileTransform is defined and mobileTransform is not empty ? mobileTransform : null
-  %}
 
   <picture class="{{ pictureClass }}">
     {# Desktop #}

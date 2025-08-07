@@ -1,6 +1,10 @@
-{# Get the theme  #}
-{% set theme = theme is defined and theme is not empty ? theme | json_decode : _globals.get('lameco.components.theme') %}
+{# Theme #}
+{% set theme = theme is defined and theme is not empty
+  ? theme|json_decode
+  : _globals.get('lameco.components.theme')
+%}
 
+{# Component Variables #}
 {# Define variables based on Hyper or attributes #}
 {% if hyper is defined and not hyper.isEmpty() %}
     {% set url = hyper.url %}
@@ -44,37 +48,38 @@
 
 {% set variantClasses = classes.apply({type: variant, size: attributes.size ?? null}) %}
 
+{# Component #}
 {% if url is empty %}
-<button class="{{ attributes.merge({ class: variantClasses }).class }}" {{ attr ? attr | raw : null }}>
-    {% else %}
-    <a href="{{ url }}"
-       class="{{ attributes.merge({ class: variantClasses }).class }}"
-       target="{{ target }}" {{ attr ? attr | raw : null }}
-            {% if target == '_blank' and currentSite.baseUrl not in url %}rel="nofollow"{% endif %}>
-        {% endif %}
+  <button class="{{ attributes.merge({ class: variantClasses }).class }}" {{ attr ? attr | raw : null }}>
+{% else %}
+  <a href="{{ url }}"
+     class="{{ attributes.merge({ class: variantClasses }).class }}"
+     target="{{ target }}" {{ attr ? attr | raw : null }}
+          {% if target == '_blank' and currentSite.baseUrl not in url %}rel="nofollow"{% endif %}>
+      {% endif %}
 
-        {% if theme.ui.button.overlay is defined and theme.ui.button.overlay is not empty and variant != 'text' %}
-            <span class="{{ theme.ui.button.overlay.base ?? '' }} {{ theme.ui.button.overlay[variant] ?? '' }}"></span>
-        {% endif %}
+      {% if theme.ui.button.overlay is defined and theme.ui.button.overlay is not empty and variant != 'text' %}
+          <span class="{{ theme.ui.button.overlay.base ?? '' }} {{ theme.ui.button.overlay[variant] ?? '' }}"></span>
+      {% endif %}
 
-        <span class="relative flex items-center justify-between z-50 {{ contentWrapper }}">
-        {% if iconPosition == 'start' and icon is defined and icon is not empty %}
-            <span class="flex items-center justify-center {{ iconWrapper }}">
-                 {{ icon | raw }}
-             </span>
-        {% endif %}
+      <span class="relative flex items-center justify-between z-50 {{ contentWrapper }}">
+      {% if iconPosition == 'start' and icon is defined and icon is not empty %}
+          <span class="flex items-center justify-center {{ iconWrapper }}">
+               {{ icon | raw }}
+           </span>
+      {% endif %}
 
-        <span>{{ text }}</span>
+      <span>{{ text }}</span>
 
-        {% if iconPosition == 'end' and icon is defined and icon is not empty %}
-            <span class="flex items-center justify-center {{ iconWrapper }}">
-                {{ icon | raw }}
-            </span>
-        {% endif %}
-    </span>
+      {% if iconPosition == 'end' and icon is defined and icon is not empty %}
+          <span class="flex items-center justify-center {{ iconWrapper }}">
+              {{ icon | raw }}
+          </span>
+      {% endif %}
+  </span>
 
-        {% if url is empty %}
-</button>
+{% if url is empty %}
+  </button>
 {% else %}
     </a>
 {% endif %}

@@ -8,7 +8,7 @@
 
 1. Define the themeConfig
 
-```twig
+```json
 {% set ComponentsThemeConfig = {
   gsapAnimations: false,
   
@@ -55,7 +55,7 @@
         separator: {
             html: ""
         },
-        "item": {
+        item: {
             class: "",
             current: {
                 class: ""

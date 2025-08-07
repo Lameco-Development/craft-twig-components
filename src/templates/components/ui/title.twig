@@ -4,9 +4,11 @@
   : _globals.get('lameco.components.theme')
 %}
 
+{# Component Variables #}
 {% set level = level ?? 'strong' %}
 {% set class = class ?? 'block' %}
 
+{# Component #}
 {% if slot is not empty %}
     <{{ level }} class="{{ class }}{{ theme.gsapAnimations ? ' title-fade-in' : '' }}">{{ slot | striptags(attributes.stripTags ?? '<strong>') | raw }}</{{ level }}>
 {% endif %}

@@ -4,8 +4,10 @@
   : _globals.get('lameco.components.theme')
 %}
 
+{# Component Variables #}
 {% set class = class ?? '' %}
 
+{# Component #}
 <div class="{{ theme.ui.collapse.class ?? '' }} {{ class }}" x-data="{ expanded: false }">
   <button
     class="w-full text-start {{ theme.ui.collapse.button.class ?? 'flex items-center gap-4' }}"

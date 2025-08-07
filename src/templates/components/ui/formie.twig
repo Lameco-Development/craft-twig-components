@@ -1,6 +1,8 @@
+{# Component Variables #}
 {% set form = form ?? null %}
 {% set themeConfig = themeConfig ?? null %}
 
+{# Component #}
 {% if form is not empty %}
   {{ craft.formie.renderForm(form, themeConfig) }}
 
