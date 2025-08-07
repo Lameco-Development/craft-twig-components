@@ -1,10 +1,12 @@
+{# Theme #}
+{% set theme = theme is defined and theme is not empty
+  ? theme|json_decode
+  : _globals.get('lameco.components.theme')
+%}
+
+{% set level = level ?? 'strong' %}
+{% set class = class ?? 'block' %}
+
 {% if slot is not empty %}
-    {# Get the theme  #}
-    {% set theme = theme is defined and theme is not empty ? theme | json_decode : _globals.get('lameco.components.theme') %}
-
-    {% set level = attributes.level ?: 'strong' %}
-    {% set class = attributes.merge({ class: 'block' ~ (theme.fadeInAnimation ? ' title-fade-in' : '') }).class %}
-
-
-    <{{ level }} class="{{ class }}">{{ slot | striptags(attributes.stripTags ?? '<strong>') | raw }}</{{ level }}>
+    <{{ level }} class="{{ class }}{{ theme.gsapAnimations ? ' title-fade-in' : '' }}">{{ slot | striptags(attributes.stripTags ?? '<strong>') | raw }}</{{ level }}>
 {% endif %}
