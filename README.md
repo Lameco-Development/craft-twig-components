@@ -8,7 +8,7 @@
 
 1. Define the themeConfig
 
-```json
+```twig
 {% set ComponentsThemeConfig = {
   gsapAnimations: false,
   
@@ -76,6 +76,27 @@
             html: "",
             openHTML: "",
             closeHTML: ""
+        }
+    },
+    
+    button: {
+        class: "",
+        overlay: {
+            class: "",
+        },
+        type: {
+            [primary|primaryDark|secondary|secondaryDark|text|textDark]: {
+                class: "",
+                overlay: ""
+            }        
+        }
+        inner: {
+            class: ""
+        },
+        icon : {
+            position: "[start|end]",
+            class: "",
+            html: ""
         }
     }
   }
