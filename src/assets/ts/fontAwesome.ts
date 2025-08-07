@@ -8,6 +8,7 @@ import { faXTwitter as fabTwitter } from "@fortawesome/free-brands-svg-icons/faX
 import { faTiktok as fabTiktok } from "@fortawesome/free-brands-svg-icons/faTiktok";
 import { faLinkedinIn as fabLinkedin } from "@fortawesome/free-brands-svg-icons/faLinkedinIn";
 import { faPinterest as fabPinterest } from "@fortawesome/free-brands-svg-icons/faPinterest";
+import { faWhatsapp as fabWhatsapp } from "@fortawesome/free-brands-svg-icons/faWhatsapp";
 
 import { faEnvelope as farEnvelope } from "@fortawesome/pro-regular-svg-icons/faEnvelope";
 import { faAngleLeft as farAngleLeft } from "@fortawesome/pro-regular-svg-icons/faAngleLeft";
@@ -23,6 +24,7 @@ export const twigComponentsFontAwesomeIcons = [
   fabTiktok,
   fabLinkedin,
   fabPinterest,
+  fabWhatsapp,
 
   fabYoutube,
   fabVimeo,
