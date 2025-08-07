@@ -61,6 +61,22 @@
                 class: ""
             }
         }
+    },
+    
+    collapse: {
+        class: "",
+        button: {
+            class: ""
+        },
+        title: {
+            class: ""
+        },
+        icon: {
+            class: "",
+            html: "",
+            openHTML: "",
+            closeHTML: ""
+        }
     }
   }
 }

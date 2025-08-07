@@ -1,21 +1,37 @@
-{% set theme = _globals.get('lameco.components.theme') %}
+{# Theme #}
+{% set theme = theme is defined and theme is not empty
+  ? theme|json_decode
+  : _globals.get('lameco.components.theme')
+%}
 
-<div class="w-full {{ theme.ui.collapse.wrapper ?? 'border-b border-slate-200' }}" x-data="{ expanded: false }">
-    <button class="group w-full flex justify-between items-center gap-4 cursor-pointer {{ theme.ui.collapse.button ?? 'py-3 pl-2 text-slate-800' }}" @click="expanded = ! expanded">
-        <span class="{{ theme.ui.collapse.title ?? '' }}">{{ attributes.title | raw }}</span>
+{% set class = class ?? '' %}
 
-        <span class="flex justify-center items-center {{ theme.ui.collapse.icon.wrapper ?? 'w-8 h-8 bg-black' }} shrink-0 transition-transform ease-out">
-            {% if theme.ui.collapse.icon.openHtml is defined and theme.ui.collapse.icon.closedHtml is defined %}
-                <span x-show="expanded">{{ theme.ui.collapse.icon.openHtml | raw }}</span>
-                <span x-show="!expanded">{{ theme.ui.collapse.icon.closedHtml | raw }}</span>
-            {% else %}
-                <span :class="{ 'rotate-180' : expanded }">{{ theme.ui.collapse.icon.html | raw }}</span>
-            {% endif %}
+<div class="{{ theme.ui.collapse.class ?? '' }} {{ class }}" x-data="{ expanded: false }">
+  <button
+    class="w-full text-start {{ theme.ui.collapse.button.class ?? 'flex items-center gap-4' }}"
+    @click="expanded = ! expanded"
+  >
+    <span class="{{ theme.ui.collapse.title.class ?? 'grow' }}">{{ title|raw }}</span>
+
+    <span class="flex items-center justify-center {{ theme.ui.collapse.icon.class ?? '' }}">
+      {% if
+        theme.ui.collapse.icon is defined
+          and theme.ui.collapse.icon.openHtml is defined
+          and theme.ui.collapse.icon.closedHtml is defined %}
+        <span x-show="expanded">{{ theme.ui.collapse.icon.openHtml|raw }}</span>
+        <span x-show="!expanded">{{ theme.ui.collapse.icon.closedHtml|raw }}</span>
+      {% else %}
+        <span class="transition-transform" :class="{ 'rotate-180' : expanded }">
+          {{ theme.ui.collapse.icon is defined and theme.ui.collapse.icon.html is defined
+            ? theme.ui.collapse.icon.html|raw
+            : '<i class="fa-regular fa-angle-down"></i>' }}
         </span>
-    </button>
-    <div x-show="expanded" x-collapse>
-        <div class="{{ theme.ui.collapse.content ?? 'pl-2' }}">
-            {{ slot }}
-        </div>
+      {% endif %}
+    </span>
+  </button>
+  <div x-show="expanded" x-collapse>
+    <div class="{{ theme.ui.collapse.content ?? '' }}">
+      {{ slot }}
     </div>
+  </div>
 </div>
