@@ -1,0 +1,7 @@
+.sprig-loader {
+  @apply transition-opacity ease-in-out pointer-events-none opacity-0;
+
+  &.htmx-request {
+    @apply pointer-events-auto opacity-100;
+  }
+}

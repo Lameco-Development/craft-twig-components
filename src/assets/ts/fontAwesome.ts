@@ -13,6 +13,7 @@ import { faWhatsapp as fabWhatsapp } from "@fortawesome/free-brands-svg-icons/fa
 import { faEnvelope as farEnvelope } from "@fortawesome/pro-regular-svg-icons/faEnvelope";
 import { faAngleLeft as farAngleLeft } from "@fortawesome/pro-regular-svg-icons/faAngleLeft";
 import { faAngleDown as farAngleDown } from "@fortawesome/pro-regular-svg-icons/faAngleDown";
+import { faSpinner as farSpinner } from "@fortawesome/pro-regular-svg-icons/faSpinner";
 
 /**
  * FontAwesome brand icons used in Twig Components.
@@ -32,4 +33,5 @@ export const twigComponentsFontAwesomeIcons = [
   farEnvelope,
   farAngleLeft,
   farAngleDown,
+  farSpinner,
 ];
