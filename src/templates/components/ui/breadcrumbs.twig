@@ -20,9 +20,9 @@
     >
       {{ theme.ui.breadcrumbs is defined
         and theme.ui.breadcrumbs.back is defined
-        and theme.ui.breadcrumbs.back.html
+        and theme.ui.breadcrumbs.back.html is defined
         ? theme.ui.breadcrumbs.back.html|raw
-        : 'breadcrumbs.back'|t }}
+        : ('<i class="fa-regular fa-angle-left"></i> ' ~ ('breadcrumbs.back'|t))|raw }}
     </a>
   {% endif %}
 
