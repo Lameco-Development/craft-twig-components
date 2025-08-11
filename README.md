@@ -207,7 +207,7 @@ At least the following AlpineJS plugins are required:
 
 The Component Library uses Sprig for dynamic components. Make sure to include Sprig in your project and initialize it properly.
 
-### Paginatioon
+### Pagination
 
 Since the pagination is a Sprig component, you need to pass the themeConfig to the Sprig template. You can do this by passing the `theme` attribute to the Sprig component:
 
