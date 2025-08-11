@@ -20,7 +20,7 @@
 
 {# Component #}
 {% if image is not empty or video is not empty %}
-  <section class="page-builder-block {{ sectionClass }}" data-block="{{ block.type }}">
+  <section class="page-builder-block {{ sectionClass }} relative" data-block="{{ block.type }}">
     <div class="{{ containerClass }}">
       <div class="{{ innerClass }}">
         {% if video is not empty %}
@@ -37,6 +37,8 @@
             imgClass="{{ imageClass }}"
           ></x-ui.image>
         {% endif %}
+
+        {{ slot|raw }}
       </div>
     </div>
   </section>
