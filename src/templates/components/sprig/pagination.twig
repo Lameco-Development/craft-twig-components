@@ -7,8 +7,10 @@
 {# Component Variables #}
 {% set pageInfo = pageInfo ?? null %}
 {% set neighbours = theme.sprig.pagination.neighbours ?? 1 %}
-{% set prev = theme.sprig.pagination.prev.html ?? '<i class="fa-regular fa-arrow-left"></i>' %}
-{% set next = theme.sprig.pagination.next.html ?? '<i class="fa-regular fa-arrow-right"></i>' %}
+{% set prevHtml = theme.sprig.pagination.prev.html ?? '<i class="fa-regular fa-arrow-left"></i>' %}
+{% set prevClass = theme.sprig.pagination.prev.class ?? '' %}
+{% set nextHtml = theme.sprig.pagination.next.html ?? '<i class="fa-regular fa-arrow-right"></i>' %}
+{% set nextClass = theme.sprig.pagination.next.class ?? '' %}
 {% set ellipsisHtml = theme.sprig.pagination.ellipsis.html ?? "&hellip;" %}
 {% set ellipsisClass = theme.sprig.pagination.ellipsis.class ?? "&hellip;" %}
 {% set itemClass = theme.sprig.pagination.item.class ?? 'flex items-center justify-center' %}
@@ -34,11 +36,11 @@
     <ul class="{{ theme.sprig.pagination.list.class ?? 'flex items-center' }}">
 
       {# previous #}
-      {{ self.textLink(pageInfo.prevUrl, prev, 'pagination.prevPage'| t, pageInfo.currentPage - 1, pageInfo.prevUrl is not empty, '') }}
+      {{ self.textLink(pageInfo.prevUrl, prevHtml, 'pagination.prevPage'| t, pageInfo.currentPage - 1, pageInfo.prevUrl is not empty, prevClass, itemDisabledClass) }}
 
       {# first #}
       {% if pageInfo.currentPage - neighbours > 1 %}
-        {{ self.numericLink(pageInfo.firstUrl, '1', false, itemClass, itemActiveClass, itemDisabledClass) }}
+        {{ self.numericLink(pageInfo.firstUrl, '1', false, itemClass) }}
       {% endif %}
 
       {# ellipsis before current #}
@@ -48,15 +50,15 @@
 
       {# links before current #}
       {% for page, url in pageInfo.getPrevUrls(neighbours) %}
-        {{ self.numericLink(url, page, false, itemClass, itemActiveClass, itemDisabledClass) }}
+        {{ self.numericLink(url, page, false, itemClass) }}
       {% endfor %}
 
       {# current #}
-      {{ self.numericLink('', pageInfo.currentPage, true, itemClass, itemActiveClass, itemDisabledClass) }}
+      {{ self.numericLink('', pageInfo.currentPage, true, itemClass, itemActiveClass) }}
 
       {# links after current #}
       {% for page, url in pageInfo.getNextUrls(neighbours) %}
-        {{ self.numericLink(url, page, false, itemClass, itemActiveClass, itemDisabledClass) }}
+        {{ self.numericLink(url, page, false, itemClass) }}
       {% endfor %}
 
       {# ellipsis after current #}
@@ -66,11 +68,11 @@
 
       {# last #}
       {% if pageInfo.currentPage + neighbours < pageInfo.totalPages %}
-        {{ self.numericLink(pageInfo.lastUrl, pageInfo.totalPages, false, itemClass, itemActiveClass, itemDisabledClass) }}
+        {{ self.numericLink(pageInfo.lastUrl, pageInfo.totalPages, false, itemClass) }}
       {% endif %}
 
       {# next #}
-      {{ self.textLink(pageInfo.nextUrl, next, ('pagination.nextPage' | t), pageInfo.currentPage + 1, pageInfo.nextUrl is not empty, '') }}
+      {{ self.textLink(pageInfo.nextUrl, nextHtml, ('pagination.nextPage' | t), pageInfo.currentPage + 1, pageInfo.nextUrl is not empty, prevClass, itemDisabledClass) }}
 
     </ul>
   </nav>
@@ -78,7 +80,7 @@
 
 {# Macros #}
 {# single numeric link #}
-{% macro numericLink(url, number, current, class, activeClass, disabledClass) %}
+{% macro numericLink(url, number, current, class, activeClass) %}
   <li>
     <button sprig s-val:page="{{ number }}" s-swap="innerHTML show:top" {% if replace is defined and replace is not empty %} s-replace="{{ replace }}"{% endif %} s-indicator=".sprig-loader--js"
             class="transition-colors {{ class }} {{ current ? activeClass }}"
@@ -89,11 +91,11 @@
 {% endmacro %}
 
 {# next/prev link #}
-{% macro textLink(url, content, aria, number, enabled, class, activeClass, disabledClass) %}
+{% macro textLink(url, html, aria, number, enabled, class, disabledClass) %}
   <li >
     <button sprig s-val:page="{{ number }}" s-swap="innerHTML show:top" {% if replace is defined and replace is not empty %} s-replace="{{ replace }}"{% endif %} s-indicator=".sprig-loader--js"
             class="transition-colors {{ enabled ? class : disabledClass }}"{% if not enabled %} disabled{% endif %} aria-label="{{ aria }}">
-      {{ content|raw }}
+      {{ html|raw }}
     </button>
   </li>
 {% endmacro %}
@@ -102,7 +104,7 @@
 {% macro ellipsis(class, html) %}
   <li>
         <span class="w-10 h-10 leading-10 text-center">
-            {{ content|raw }}
+            {{ html|raw }}
         </span>
   </li>
 {% endmacro %}
