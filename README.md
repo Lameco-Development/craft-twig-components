@@ -2,6 +2,7 @@
 
 - Craft CMS 5.0+
 - TailwindCSS 4.0+
+- AlpineJS 3.0+
 - PHP 8.4+
 
 # Steps to use the plugin
@@ -183,7 +184,7 @@
 ) %}
 ```
 
-# FontAwesome
+## FontAwesome
 
 The Component Library uses FontAwesome for icons used in fallback logic if nothing in the themeConfig is defined.
 In the `fontawesome.ts` file import the pre-defined icons using:
@@ -194,4 +195,28 @@ library.add(
     ...twigComponentsFontAwesomeIcons,
     // other icons you want to add
 )
+```
+
+## AlpineJS
+
+The Component Library uses AlpineJS for the interactive components. Make sure to include AlpineJS in your project and initialize it properly.
+At least the following AlpineJS plugins are required:
+- collapse
+
+## Sprig
+
+The Component Library uses Sprig for dynamic components. Make sure to include Sprig in your project and initialize it properly.
+
+### Paginatioon
+
+Since the pagination is a Sprig component, you need to pass the themeConfig to the Sprig template. You can do this by passing the `theme` attribute to the Sprig component:
+
+```twig
+{{ sprig('path/to/pagination', { theme: ComponentsThemeConfig }) }}
+```
+
+Then when rendering the pagination, you can access the themeConfig in the Sprig template like this:
+
+```twig
+<x-sprig.pagination pageInfo="..." theme="{{ theme | json_encode }}"></x-sprig.pagination>
 ```
