@@ -13,6 +13,7 @@
 
 {% set contentWrapperClass = contentWrapperClass ?? '' %}
 {% set buttonWrapperClass = buttonWrapperClass ?? '' %}
+{% set buttonDarkMode = buttonDarkMode ?? false %}
 
 {% set titleClass = titleClass is defined
   ? titleClass ~ (theme.gsapAnimations ? ' content-fade-in' : '')
@@ -67,12 +68,11 @@
                   or button is instance of('verbb\\hyper\\links\\Email')
                   or button is instance of('verbb\\hyper\\links\\Phone')
                   or (button is instance of('verbb\\hyper\\links\\Url') and not button.isEmpty()) %}
-                <x-ui.button hyper="{{ button }}" type="{{ button.linkType.value }}"></x-ui.button>
+                {% set type = button.linkType.value ~ (buttonDarkMode ? 'Dark') %}
+                <x-ui.button hyper="{{ button }}" type="{{ type }}"></x-ui.button>
               {% elseif button.linkButton is defined and button.linkButton is not empty %}
-                <x-ui.button
-                  link="{{ button.linkButton }}"
-                  type="{{ button.linkType.value }}"
-                ></x-ui.button>
+                {% set type = button.linkType.value ~ (buttonDarkMode ? 'Dark') %}
+                <x-ui.button link="{{ button.linkButton }}" type="{{ type }}"></x-ui.button>
               {% endif %}
             {% endfor %}
           </div>
