@@ -11,8 +11,9 @@ import { faPinterest as fabPinterest } from "@fortawesome/free-brands-svg-icons/
 import { faWhatsapp as fabWhatsapp } from "@fortawesome/free-brands-svg-icons/faWhatsapp";
 
 import { faEnvelope as farEnvelope } from "@fortawesome/pro-regular-svg-icons/faEnvelope";
-import { faAngleLeft as farAngleLeft } from "@fortawesome/pro-regular-svg-icons/faAngleLeft";
-import { faAngleDown as farAngleDown } from "@fortawesome/pro-regular-svg-icons/faAngleDown";
+import { faChevronLeft as farChevronLeft } from "@fortawesome/pro-regular-svg-icons/faChevronLeft";
+import { faChevronRight as farChevronRight } from "@fortawesome/pro-regular-svg-icons/faChevronRight";
+import { faChevronDown as farChevronDown } from "@fortawesome/pro-regular-svg-icons/faChevronDown";
 import { faSpinner as farSpinner } from "@fortawesome/pro-regular-svg-icons/faSpinner";
 
 /**
@@ -31,7 +32,8 @@ export const twigComponentsFontAwesomeIcons = [
   fabVimeo,
 
   farEnvelope,
-  farAngleLeft,
-  farAngleDown,
+  farChevronLeft,
+  farChevronRight,
+  farChevronDown,
   farSpinner,
 ];
