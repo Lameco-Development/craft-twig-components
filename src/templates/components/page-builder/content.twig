@@ -14,12 +14,24 @@
 {% set contentWrapperClass = contentWrapperClass ?? '' %}
 {% set buttonWrapperClass = buttonWrapperClass ?? '' %}
 
-{% set titleClass = titleClass ?? '' %}
+{% set titleClass = titleClass is defined
+  ? titleClass ~ (theme.gsapAnimations ? ' content-fade-in' : '')
+  : theme.gsapAnimations ? ' content-fade-in' : ''
+%}
+{% set preTitleClass = preTitleClass is defined
+  ? preTitleClass ~ (theme.gsapAnimations ? ' content-fade-in' : '')
+  : theme.gsapAnimations ? ' content-fade-in' : ''
+%}
 
+{# Component #}
 {% if block.content is not empty %}
   <section class="page-builder-block {{ sectionClass }}" data-block="{{ block.type }}">
     <div class="{{ containerClass }}">
       <div class="{{ innerClass }}">
+        {% if block.preTitle is not empty %}
+          <strong class="{{ preTitleClass }}">{{ block.preTitle }}</strong>
+        {% endif %}
+
         {% if block.title is not empty %}
           <x-ui.title level="{{ block.titleLevel }}" class="{{ titleClass }}">
             {{ block.title }}
@@ -27,13 +39,19 @@
         {% endif %}
 
         {% if block.content is not empty %}
-          <div class="{{ contentWrapperClass }} text-block">
+          <div
+            class="{{ contentWrapperClass }}{{
+            theme.gsapAnimations
+              ? ' content-fade-in'
+              : ''
+            }} text-block"
+          >
             {{ block.content|raw }}
           </div>
         {% endif %}
 
         {% if block.buttons is not empty %}
-          <div class="{{ buttonWrapperClass }}">
+          <div class="{{ buttonWrapperClass }}{{ theme.gsapAnimations ? ' content-fade-in' : '' }}">
             {% for button in block.buttons|filter(
               button => ((button is instance of('verbb\\hyper\\links\\Entry')
                 or button is instance of('verbb\\hyper\\links\\Custom')

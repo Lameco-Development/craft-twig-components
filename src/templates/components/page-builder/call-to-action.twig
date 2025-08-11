@@ -1,29 +1,105 @@
+{# Theme #}
+{% set theme = theme is defined and theme is not empty
+  ? theme|json_decode
+  : _globals.get('lameco.components.theme')
+%}
+
+{# Component Variables #}
 {% set block = attributes.block %}
-{% set textColor = attributes.textColor ?? 'black' %}
-{% set containerClass = attributes.containerClass ?? '' %}
 
-<section class="page-builder-block" data-block="call-to-action">
-    <div class="container py-12 bg-{{ block.blockBackgroundColor }} {{ containerClass }}">
-        <div class="flex lg:flex-row flex-col lg:gap-24 gap-14 justify-center">
-            <div class="lg:w-9/12">
-                <x-ui.title level="{{ block.blockTitleLevel }}"
-                            class="{{ 'text-' ~ textColor ~ (block.blockTextAlignment ? ' text-center': '') }}">{{ block.blockTitle }}</x-ui.title>
+{% set sectionClass = sectionClass ?? 'bg-none' %}
+{% set containerClass = containerClass ?? 'container' %}
+{% set innerClass = innerClass ?? '' %}
+{% set contentClass = contentClass ?? '' %}
 
-                {% if block.blockContent is not empty %}
-                    <div class="content-fade-in col text-block text-{{ textColor }}{% if block.blockTextAlignment %} text-center{% endif %}">{{ block.blockContent | raw }}</div>
-                {% endif %}
-                {% if block.blockButtons is not empty %}
-                    <div class="flex flex-wrap gap-4{% if block.blockTextAlignment %} justify-center{% endif %}">
-                        {% for button in block.blockButtons %}
-                            {% if not button.isEmpty() %}
-                                <div class="content-fade-in mt-8 flex{% if block.blockTextAlignment %} justify-center{% endif %}">
-                                    <x-ui.button hyper="{{ button }}"></x-ui.button>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
+{% set imageClass = imageClass ?? '' %}
+{% set imagePictureClass = imagePictureClass ?? '' %}
+{% set imageImgClass = imageImgClass ?? '' %}
+{% set image = null %}
+
+{% if block.image is defined and block.image is not empty %}
+  {% set imageTransform = imageTransform ?? '' %}
+  {% set image = block.image.eagerly().one() %}
+{% endif %}
+
+{% set contentWrapperClass = contentWrapperClass ?? '' %}
+{% set buttonWrapperClass = buttonWrapperClass ?? '' %}
+{% set buttonDarkMode = buttonDarkMode ?? false %}
+
+{% set titleClass = titleClass is defined
+  ? titleClass ~ (theme.gsapAnimations ? ' content-fade-in' : '')
+  : theme.gsapAnimations ? ' content-fade-in' : ''
+%}
+{% set preTitleClass = preTitleClass is defined
+  ? preTitleClass ~ (theme.gsapAnimations ? ' content-fade-in' : '')
+  : theme.gsapAnimations ? ' content-fade-in' : ''
+%}
+
+{# Component #}
+<section class="page-builder-block {{ sectionClass }}" data-block="{{ block.type }}">
+  <div class="{{ containerClass }}">
+    <div class="{{ innerClass }}">
+      <div class="{{ contentClass }}{{ theme.gsapAnimations ? ' content-fade-in' : '' }}">
+        {% if block.preTitle is not empty %}
+          <strong class="{{ preTitleClass }}">{{ block.preTitle }}</strong>
+        {% endif %}
+
+        {% if block.title is not empty %}
+          <x-ui.title level="{{ block.titleLevel }}" class="{{ titleClass }}">
+            {{ block.title }}
+          </x-ui.title>
+        {% endif %}
+
+        {% if block.content is not empty %}
+          <div
+            class="{{ contentWrapperClass }}{{
+            theme.gsapAnimations
+              ? ' content-fade-in'
+              : ''
+            }} text-block"
+          >
+            {{ block.content|raw }}
+          </div>
+        {% endif %}
+
+        {% if block.buttons is not empty %}
+          <div class="{{ buttonWrapperClass }}{{ theme.gsapAnimations ? ' content-fade-in' : '' }}">
+            {% for button in block.buttons|filter(
+              button => ((button is instance of('verbb\\hyper\\links\\Entry')
+                or button is instance of('verbb\\hyper\\links\\Custom')
+                or button is instance of('verbb\\hyper\\links\\Email')
+                or button is instance of('verbb\\hyper\\links\\Phone')
+                or (button is instance of('verbb\\hyper\\links\\Url') and not button.isEmpty()))
+                and not button.isEmpty())
+                or (button.linkButton is defined and button.linkButton is not empty)
+            ) %}
+              {% if
+                button is instance of('verbb\\hyper\\links\\Entry')
+                  or button is instance of('verbb\\hyper\\links\\Custom')
+                  or button is instance of('verbb\\hyper\\links\\Email')
+                  or button is instance of('verbb\\hyper\\links\\Phone')
+                  or (button is instance of('verbb\\hyper\\links\\Url') and not button.isEmpty()) %}
+                {% set type = button.linkType.value ~ (buttonDarkMode ? 'Dark') %}
+                <x-ui.button hyper="{{ button }}" type="{{ type }}"></x-ui.button>
+              {% elseif button.linkButton is defined and button.linkButton is not empty %}
+                {% set type = button.linkType.value ~ (buttonDarkMode ? 'Dark') %}
+                <x-ui.button link="{{ button.linkButton }}" type="{{ type }}"></x-ui.button>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      {% if image is not empty %}
+        <div class="{{ imageClass }}">
+          <x-ui.image
+            image="{{ image }}"
+            transform="{{ imageTransform }}"
+            pictureClass="{{ imagePictureClass }}"
+            imgClass="{{ imageImgClass }}"
+          ></x-ui.image>
         </div>
+      {% endif %}
     </div>
+  </div>
 </section>
