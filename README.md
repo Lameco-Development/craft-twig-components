@@ -170,8 +170,6 @@
 > ```twig
 > {{ sprig('path/to/template', { theme: ComponentsThemeConfig | json_encode }) }}
 
-
-
 ```twig
 {% do _globals.set('lameco.components.theme', ComponentsThemeConfig) %}
 ```
@@ -182,6 +180,12 @@
 {% do view.registerAssetBundle(
 'lameco\\crafttwigcomponents\\assetbundles\\CraftTwigComponents\\CraftTwigComponentsAsset'
 ) %}
+```
+
+4. Add the Twig Components template source to SCSS.
+
+```scss
+@source "../../../vendor/lameco/craft-twig-components/**/*.twig";
 ```
 
 ## FontAwesome
