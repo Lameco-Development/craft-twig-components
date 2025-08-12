@@ -9,39 +9,51 @@
 
 {% set sectionClass = sectionClass ?? 'bg-none' %}
 {% set containerClass = containerClass ?? 'container' %}
-{% set innerClass = innerClass ?? '' %}
-{% set contentClass = contentClass ?? '' %}
+{% set innerClass = innerClass ?? null %}
+{% set contentClass = contentClass ?? null %}
 
-{% set imageClass = imageClass ?? '' %}
-{% set imagePictureClass = imagePictureClass ?? '' %}
-{% set imageImgClass = imageImgClass ?? '' %}
+{% set imageClass = imageClass ?? null %}
+{% set imagePictureClass = imagePictureClass ?? null %}
+{% set imageImgClass = imageImgClass ?? null %}
 {% set image = null %}
 
 {% if block.image is defined and block.image is not empty %}
-  {% set imageTransform = imageTransform ?? '' %}
+  {% set imageTransform = imageTransform ?? null %}
   {% set image = block.image.eagerly().one() %}
 {% endif %}
 
-{% set contentWrapperClass = contentWrapperClass ?? '' %}
-{% set buttonWrapperClass = buttonWrapperClass ?? '' %}
+{% set contentWrapperClass = contentWrapperClass ?? null %}
+{% set buttonWrapperClass = buttonWrapperClass ?? null %}
 {% set buttonDarkMode = buttonDarkMode ?? false %}
 
 {% set titleClass = titleClass is defined
-  ? titleClass ~ (theme.gsapAnimations ? ' content-fade-in' : '')
-  : theme.gsapAnimations ? ' content-fade-in' : ''
+  ? titleClass
+    ~ (theme.gsapAnimations is defined and theme.gsapAnimations ? ' content-fade-in' : '')
+  : theme.gsapAnimations is defined and theme.gsapAnimations ? ' content-fade-in' : ''
 %}
-{% set preTitleClass = preTitleClass is defined
-  ? preTitleClass ~ (theme.gsapAnimations ? ' content-fade-in' : '')
-  : theme.gsapAnimations ? ' content-fade-in' : ''
-%}
+{% set preTitleClass = preTitleClass ?? null %}
 
 {# Component #}
 <section class="page-builder-block {{ sectionClass }}" data-block="{{ block.type }}">
   <div class="{{ containerClass }}">
     <div class="{{ innerClass }}">
-      <div class="{{ contentClass }}{{ theme.gsapAnimations ? ' content-fade-in' : '' }}">
+      <div
+        class="{{ contentClass }}{{
+        theme.gsapAnimations is defined and theme.gsapAnimations
+          ? ' content-fade-in'
+          : ''
+        }}"
+      >
         {% if block.preTitle is not empty %}
-          <strong class="{{ preTitleClass }}">{{ block.preTitle }}</strong>
+          <strong
+            class="{{ preTitleClass }}{{
+            theme.gsapAnimations is defined and theme.gsapAnimations
+              ? ' content-fade-in'
+              : ''
+            }}"
+          >
+            {{ block.preTitle }}
+          </strong>
         {% endif %}
 
         {% if block.title is not empty %}
@@ -53,7 +65,7 @@
         {% if block.content is not empty %}
           <div
             class="{{ contentWrapperClass }}{{
-            theme.gsapAnimations
+            theme.gsapAnimations is defined and theme.gsapAnimations
               ? ' content-fade-in'
               : ''
             }} text-block"
@@ -63,7 +75,13 @@
         {% endif %}
 
         {% if block.buttons is not empty %}
-          <div class="{{ buttonWrapperClass }}{{ theme.gsapAnimations ? ' content-fade-in' : '' }}">
+          <div
+            class="{{ buttonWrapperClass }}{{
+            theme.gsapAnimations is defined and theme.gsapAnimations
+              ? ' content-fade-in'
+              : ''
+            }}"
+          >
             {% for button in block.buttons|filter(
               button => ((button is instance of('verbb\\hyper\\links\\Entry')
                 or button is instance of('verbb\\hyper\\links\\Custom')

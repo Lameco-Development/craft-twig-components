@@ -10,5 +10,5 @@
 
 {# Component #}
 {% if slot is not empty %}
-    <{{ level }} class="{{ class }}{{ theme.gsapAnimations ? ' title-fade-in' : '' }}">{{ slot | striptags(attributes.stripTags ?? '<strong>') | raw }}</{{ level }}>
+    <{{ level }} class="{{ class }}{{ theme.gsapAnimations is defined and theme.gsapAnimations ? ' title-fade-in' : '' }}">{{ slot | striptags(attributes.stripTags ?? '<strong>') | raw }}</{{ level }}>
 {% endif %}

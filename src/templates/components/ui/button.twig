@@ -32,7 +32,7 @@
 
 {# Get default classes based on theme and variant #}
 {% set classes = html_cva(
-    base='group/button inline-flex relative z-0 ' ~ theme.ui.button.class,
+    base='group/button inline-flex relative z-0 ' ~ theme.ui.button.class ?? '',
     variants={
         type: {
             primary: theme.ui.button.type.primary.class ?? '',

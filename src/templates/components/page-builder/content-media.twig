@@ -72,7 +72,7 @@
       {# Content #}
       <div
         class="{{ contentColClass }}{{ block.alignment ? ' lg:order-first' : '' }}{{
-        theme.gsapAnimations
+        theme.gsapAnimations is defined and theme.gsapAnimations
           ? ' content-fade-in'
           : ''
         }} relative"
@@ -98,7 +98,11 @@
 
           {% if block.buttons is not empty %}
             <div
-              class="{{ buttonWrapperClass }}{{ theme.gsapAnimations ? ' content-fade-in' : '' }}"
+              class="{{ buttonWrapperClass }}{{
+              theme.gsapAnimations is defined and theme.gsapAnimations
+                ? ' content-fade-in'
+                : ''
+              }}"
             >
               {% for button in block.buttons|filter(
                 button => ((button is instance of('verbb\\hyper\\links\\Entry')
