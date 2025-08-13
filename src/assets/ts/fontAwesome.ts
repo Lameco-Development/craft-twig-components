@@ -15,6 +15,7 @@ import { faChevronLeft as farChevronLeft } from "@fortawesome/pro-regular-svg-ic
 import { faChevronRight as farChevronRight } from "@fortawesome/pro-regular-svg-icons/faChevronRight";
 import { faChevronDown as farChevronDown } from "@fortawesome/pro-regular-svg-icons/faChevronDown";
 import { faSpinner as farSpinner } from "@fortawesome/pro-regular-svg-icons/faSpinner";
+import { faTimes as farTimes } from "@fortawesome/pro-regular-svg-icons/faTimes";
 
 /**
  * FontAwesome brand icons used in Twig Components.
@@ -36,4 +37,5 @@ export const twigComponentsFontAwesomeIcons = [
   farChevronRight,
   farChevronDown,
   farSpinner,
+  farTimes,
 ];

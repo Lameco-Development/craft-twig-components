@@ -1,44 +1,80 @@
-{# Get the theme  #}
-{% set theme = theme is defined and theme is not empty ? theme | json_decode : _globals.get('lameco.components.theme') %}
+{# Theme #}
+{% set theme = theme is defined and theme is not empty
+  ? theme|json_decode
+  : _globals.get('lameco.components.theme')
+%}
 
+{# Component Variables #}
+{% set modalTrigger = modalTrigger ?? null %}
+
+{# Component #}
 {% if modalTrigger is defined and modalTrigger is not empty %}
-    <div
-        class="fixed inset-0 w-full h-full z-[999] {{ theme.ui.modal.overlay ?? 'bg-black/80' }}"
-        @click="{{ modalTrigger }} = !{{ modalTrigger }}"
-        x-show="{{ modalTrigger }}"
-        x-transition:enter="transition"
-        x-transition:enter-start="opacity-0"
-        x-transition:enter-end="opacity-100"
-        x-transition:leave="transition"
-        x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0"
-    ></div>
+  <div
+    class="fixed inset-0 z-[999] h-full w-full {{
+    theme.ui.modal.overlay is defined and theme.ui.modal.overlay.class is defined
+      ? theme.ui.modal.overlay.class
+      : 'bg-black/80'
+    }}"
+    @click="{{ modalTrigger }} = !{{ modalTrigger }}"
+    x-show="{{ modalTrigger }}"
+    x-transition:enter="transition"
+    x-transition:enter-start="opacity-0"
+    x-transition:enter-end="opacity-100"
+    x-transition:leave="transition"
+    x-transition:leave-start="opacity-100"
+    x-transition:leave-end="opacity-0"
+  ></div>
 
+  <div
+    class="pointer-events-none fixed inset-0 z-[999] h-full w-full overflow-y-auto overflow-x-hidden"
+    x-show="{{ modalTrigger }}"
+    x-transition:enter="transition"
+    x-transition:enter-start="opacity-0 scale-90"
+    x-transition:enter-end="opacity-100 scale-100"
+    x-transition:leave="transition"
+    x-transition:leave-start="opacity-100 scale-100"
+    x-transition:leave-end="opacity-0 scale-90"
+  >
     <div
-        class="fixed inset-0 w-full h-full z-[999] overflow-y-auto overflow-x-hidden pointer-events-none"
-        x-show="{{ modalTrigger }}"
-        x-transition:enter="transition"
-        x-transition:enter-start="opacity-0 scale-90"
-        x-transition:enter-end="opacity-100 scale-100"
-        x-transition:leave="transition"
-        x-transition:leave-start="opacity-100 scale-100"
-        x-transition:leave-end="opacity-0 scale-90"
+      class="mx-auto my-8 flex min-h-[calc(100%-4rem)] w-full items-center justify-center px-4 {{
+      theme.ui.modal is defined and theme.ui.modal.class is defined
+        ? theme.ui.modal.class
+        : 'max-w-[540px]'
+      }}"
     >
-        <div class="w-full min-h-[calc(100%-4rem)] mx-auto my-8 px-4 flex items-center justify-center {{ theme.ui.modal.content.wrapper ?? 'max-w-[540px]' }}">
-            <div class="w-full relative flex flex-col pointer-events-auto {{ theme.ui.modal.content.inner ?? 'bg-white p-8' }}">
-                <button
-                    class="absolute flex items-center justify-center transition-colors {{ theme.ui.modal.button.class ?? 'w-12 h-12 top-0 end-0' }}"
-                    @click="{{ modalTrigger }} = !{{ modalTrigger }}"
-                >
-                    {{ theme.ui.modal.button.icon ? theme.ui.modal.button.icon | raw : 'close' }}
-                </button>
+      <div
+        class="pointer-events-auto relative flex w-full flex-col {{
+        theme.ui.modal.content.class
+          ?? 'bg-white p-8'
+        }}"
+      >
+        <button
+          class="absolute flex items-center justify-center transition-colors {{
+          theme.ui.modal is defined and theme.ui.modal.button is defined
+            ? theme.ui.modal.button.class
+            : 'top-0 end-0'
+          }}"
+          @click="{{ modalTrigger }} = !{{ modalTrigger }}"
+        >
+          {{ theme.ui.modal is defined and theme.ui.modal.button is defined
+            ? theme.ui.modal.button.html|raw
+            : '<i class="fa-regular fa-times"></i>' }}
+        </button>
 
-                {% if title is defined and title is not empty %}
-                    <strong class="{{ theme.ui.modal.title ?? null }}">{{ title }}</strong>
-                {% endif %}
+        {% if title is defined and title is not empty %}
+          <strong
+            class="{{
+            theme.ui.modal is defined and theme.ui.modal.title is defined
+              ? theme.ui.modal.title.class
+              : null
+            }}"
+          >
+            {{ title }}
+          </strong>
+        {% endif %}
 
-                {{ slot | raw }}
-            </div>
-        </div>
+        {{ slot|raw }}
+      </div>
     </div>
+  </div>
 {% endif %}

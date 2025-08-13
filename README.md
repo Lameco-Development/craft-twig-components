@@ -14,36 +14,6 @@
   gsapAnimations: false,
   
   ui: {
-
-    image: {
-      picture: {
-        class: ""
-      },
-      img: {
-        class: "",
-        mobileBreakpoint: ""
-      },
-      caption: {
-        class: ""
-      }
-    },
-  
-    video: {
-      mode: "[embed|lightbox]",
-      embed: {
-        class: ""
-      },
-      lightbox: {
-        class: "",
-        button: {
-          class: "",
-          html: ""
-        }
-      },
-      consent: {
-        class: ""
-      }
-    },
     
     breadcrumbs: {
         class: "",
@@ -62,22 +32,6 @@
             current: {
                 class: ""
             }
-        }
-    },
-    
-    collapse: {
-        class: "",
-        button: {
-            class: ""
-        },
-        title: {
-            class: ""
-        },
-        icon: {
-            class: "",
-            html: "",
-            openHTML: "",
-            closeHTML: ""
         }
     },
     
@@ -101,6 +55,66 @@
             html: ""
         }
     }
+    
+    collapse: {
+        class: "",
+        button: {
+            class: ""
+        },
+        title: {
+            class: ""
+        },
+        icon: {
+            class: "",
+            html: "",
+            openHTML: "",
+            closeHTML: ""
+        }
+    },
+
+    image: {
+      picture: {
+        class: ""
+      },
+      img: {
+        class: "",
+        mobileBreakpoint: ""
+      },
+      caption: {
+        class: ""
+      }
+    },
+    
+    modal: {
+      class: "",
+      overlay: {
+        class: ""
+      },
+      content: {
+        class: ""
+      },
+      button: {
+        class: "",
+        html: ""
+      }
+    },
+  
+    video: {
+      mode: "[embed|lightbox]",
+      embed: {
+        class: ""
+      },
+      lightbox: {
+        class: "",
+        button: {
+          class: "",
+          html: ""
+        }
+      },
+      consent: {
+        class: ""
+      }
+    },
   },
   
   social: {
