@@ -93,6 +93,9 @@
       content: {
         class: ""
       },
+      title: {
+        class: ""
+      },
       button: {
         class: "",
         html: ""
