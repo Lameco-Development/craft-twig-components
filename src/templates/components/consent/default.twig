@@ -1,12 +1,17 @@
-{% set wrapperClass = wrapperClass ?? null %}
-{% set textClass = textClass ?? null %}
+{% set class = class ?? null %}
 {% set consentType = consentType ?? 'marketing' %}
 {% set type = type ?? 'form' %}
 
-<div class="cookieconsent-optout-{{ consentType }} {{ wrapperClass }}">
-    {# Content #}
-    <div class="{{ textClass }}">
-        {% set link_html = '<a class="underline" href="javascript:Cookiebot.renew()">' ~ ( ('consent.accept.' ~ consentType) | t('consent')) ~ '</a>' %}
-        {{ 'consent.accept.message' | t('consent', { 'button': link_html | raw, 'type': ( ('consent.type.' ~ type) | t('consent') ) }) | raw }}
-    </div>
+<div class="cookieconsent-optout-{{ consentType }} {{ class }} z-99">
+  <div>
+    {% set link_html = '<a class="underline" href="javascript:Cookiebot.renew()">'
+      ~ (('consent.accept.' ~ consentType)|t('consent'))
+      ~ '</a>'
+    %}
+    {{
+      'consent.accept.message'
+        |t('consent', { button: link_html|raw, type: ('consent.type.' ~ type)|t('consent') })
+        |raw
+    }}
+  </div>
 </div>

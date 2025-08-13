@@ -1,0 +1,51 @@
+{# Theme #}
+{% set theme = theme is defined and theme is not empty
+  ? theme|json_decode
+  : _globals.get('lameco.components.theme')
+%}
+
+{# Component Variables #}
+{% set block = block %}
+
+{% set image = block.image.eagerly().one() %}
+{% set imageTransform = imageTransform ?? null %}
+{% set imageClass = imageClass ?? '' %}
+
+{% set video = block.video.eagerly().one() %}
+{% set videoClass = videoClass ?? '' %}
+
+{% set sectionClass = sectionClass ?? 'bg-none' %}
+{% set containerClass = containerClass ?? 'container' %}
+{% set innerClass = innerClass ?? '' %}
+
+{# Component #}
+{% if image is not empty or video is not empty %}
+  <section class="page-builder-block {{ sectionClass }} relative" data-block="{{ block.type }}">
+    <div class="{{ containerClass }}">
+      <div
+        class="{{ innerClass }} {{
+        theme.gsapAnimations is defined and theme.gsapAnimations
+          ? ' content-fade-in'
+          : ''
+        }}"
+      >
+        {% if video is not empty %}
+          <x-ui.video
+            video="{{ video }}"
+            image="{{ image }}"
+            imageTransform="{{ imageTransform }}"
+            class="{{ videoClass }}"
+          ></x-ui.video>
+        {% elseif image is not empty %}
+          <x-ui.image
+            image="{{ image }}"
+            transform="{{ imageTransform }}"
+            imgClass="{{ imageClass }}"
+          ></x-ui.image>
+        {% endif %}
+
+        {{ slot|raw }}
+      </div>
+    </div>
+  </section>
+{% endif %}

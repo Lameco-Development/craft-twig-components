@@ -1,53 +1,69 @@
-{% if attributes.image is not empty %}
-    {% set class = class ?? '' %}
-    {% set transform = transform ?? null %}
-    {% set mobileTransform = mobileTransform ?? null %}
+{# Theme #}
+{% set theme = theme is defined and theme is not empty
+  ? theme|json_decode
+  : _globals.get('lameco.components.theme')
+%}
 
-    {% if attributes.image.extension == 'svg' %}
-        {% set transform = null %}
-        {% set mobileTransform = null %}
+{# Component Variables #}
+{% set pictureClass = pictureClass ?? theme.ui.image.picture.class ?? '' %}
+{% set imgClass = imgClass ?? theme.ui.image.image.class ?? '' %}
+{% set captionClass = captionClass ?? theme.ui.image.caption.class ?? '' %}
+{% set transform = transform ?? null %}
+{% set mobileTransform = mobileTransform ?? null %}
+{% set imageMobile = imageMobile ?? null %}
+{% set lazyload = lazyload ?? true %}
+{% set breakpoint = breakpoint ?? theme.ui.image.image.mobileBreakpoint ?? '992px' %}
+{% set srcset = srcset is defined and srcset is not empty ? srcset : ['1x', '2x'] %}
+
+{# Set transform for width and height calculation #}
+{% set widthHeightTransform = imageMobile is not empty
+  ? transform
+  : mobileTransform is defined and mobileTransform is not empty ? mobileTransform : null
+%}
+
+{# Component #}
+{% if image is not empty %}
+  {% if image.extension == 'svg' %}
+    {% set transform = null %}
+    {% set mobileTransform = null %}
+  {% endif %}
+
+  {% set alt = image.alt ? : image.title %}
+
+  <picture class="{{ pictureClass }}">
+    {# Desktop #}
+    {% do image.setTransform(transform) %}
+    {{
+      tag('source', { srcset: image.getsrcset(srcset), media: '(min-width: ' ~ breakpoint ~ ')' })
+    }}
+
+    {# Mobile #}
+    {% if imageMobile is not empty %}
+      {% do imageMobile.setTransform(mobileTransform) %}
+      {{ tag('source', { srcset: imageMobile.getsrcset(srcset), media: '(min-width: 0px)' }) }}
     {% endif %}
 
-    {% set imageMobile = imageMobile ?? null %}
-    {% set lazyload = lazyload ?? true %}
-    {% set breakpoint = breakpoint ?? '992px' %}
-    {% set alt = image.alt ?: image.title %}
-    {% set srcset = srcset is defined and srcset is not empty ? srcset : ['1x', '2x'] %}
+    {# Img #}
+    {% do image.setTransform(transform) %}
+    {{
+      tag(
+        'img',
+        {
+          src: image.url,
+          width: image.width,
+          height: image.height,
+          alt: alt,
+          class: imgClass,
+          loading: lazyload ? 'lazy' : 'eager'
+        }
+      )
+    }}
 
-    {# Set transform for width and height calculation #}
-    {% set widthHeightTransform = (imageMobile is not empty) ? transform : (mobileTransform is defined and mobileTransform is not empty ? mobileTransform : null) %}
-
-    <picture class="{{ attributes.merge({ pictureClass: '' }).pictureClass }}">
-        {# Desktop #}
-        {% do image.setTransform(transform) %}
-        {{ tag('source', {
-            srcset: image.getsrcset(srcset),
-            media: '(min-width: ' ~ breakpoint ~ ')',
-        }) }}
-
-        {# Mobile #}
-        {% if imageMobile is not empty %}
-            {% do imageMobile.setTransform(mobileTransform) %}
-            {{ tag('source', {
-                srcset: imageMobile.getsrcset(srcset),
-                media: '(min-width: 0px)',
-            }) }}
-        {% endif %}
-
-        {# Img #}
-        {% do image.setTransform(transform) %}
-        {{ tag('img', {
-            src: image.url,
-            width: image.width,
-            height: image.height,
-            alt: alt,
-            class: class ?? '',
-            loading: lazyload ? 'lazy' : 'eager'
-        }) }}
-
-        {# Caption #}
-        {% if slot is not empty %}
-            <figcaption class="mt-4 text-grey-300">{{ slot }}</figcaption>
-        {% endif %}
-    </picture>
+    {# Caption #}
+    {% if slot is not empty %}
+      <figcaption class="{{ captionClass }}">
+        {{ slot }}
+      </figcaption>
+    {% endif %}
+  </picture>
 {% endif %}

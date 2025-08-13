@@ -1,0 +1,27 @@
+{# Component Variables #}
+{% set form = form ?? null %}
+{% set themeConfig = themeConfig ?? null %}
+
+{# Component #}
+{% if form is not empty %}
+  {{ craft.formie.renderForm(form, themeConfig) }}
+
+  {# prettier-ignore-start #}
+  {% js %}
+    document.addEventListener("onFormieInit", (event) => {
+      let Formie = event.detail.formie;
+      let $form = event.detail.$form;
+      Formie.refreshForCache(event.detail.formId);
+
+      $form.addEventListener("onAfterFormieValidate", (e) => {
+        if (typeof window.dataLayer !== "undefined") {
+          if (event.detail.nextPageId) { return; }
+
+          window.dataLayer = window.dataLayer || [];
+          dataLayer.push({ "event": "formSubmitted", "formHandle": event.detail.form.config.formHandle });
+        }
+      });
+    });
+  {% endjs %}
+  {# prettier-ignore-end #}
+{% endif %}

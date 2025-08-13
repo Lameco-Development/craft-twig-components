@@ -1,0 +1,13 @@
+@import "photoswipe/dist/photoswipe.css";
+
+.pswp__iframe-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+
+  iframe {
+    @apply w-full max-w-[90vw] max-h-[90vh] absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2 aspect-video px-4;
+    pointer-events: auto;
+  }
+}

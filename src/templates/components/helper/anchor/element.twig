@@ -1,0 +1,6 @@
+{% set id = id ?? null %}
+{% set class = class ?? 'scroll-mt-40' %}
+
+{% if id is not empty %}
+    <a id="scroll-to-{{ id }}" class="{{ class }}"></a>
+{% endif %}

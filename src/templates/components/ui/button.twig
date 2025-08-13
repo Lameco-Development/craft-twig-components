@@ -1,80 +1,87 @@
-{# Get the theme  #}
-{% set theme = theme is defined and theme is not empty ? theme | json_decode : _globals.get('lameco.components.theme') %}
+{# Theme #}
+{% set theme = theme is defined and theme is not empty
+  ? theme|json_decode
+  : _globals.get('lameco.components.theme')
+%}
 
+{# Component Variables #}
 {# Define variables based on Hyper or attributes #}
-{% if hyper is defined and not hyper.isEmpty() %}
+{% if link is defined and link is not empty %}
+    {% set url = link.url %}
+    {% set text = text ?? link.label ?? '' %}
+    {% set target = link.target ?? '_self' %}
+{% elseif hyper is defined and not hyper.isEmpty() %}
     {% set url = hyper.url %}
     {% set text = text ?? hyper.text ?? '' %}
     {% set target = hyper.target ?? '_self' %}
-    {% set variant = hyper.commonButtonType.value ?? variant ?? 'primary' %}
 {% else %}
     {% set url = url ?? null %}
     {% set text = text ?? '' %}
     {% set target = target ?? '_self' %}
-    {% set variant = variant ?? 'primary' %}
 {% endif %}
 
 {# Other variables #}
+{% set class = class ?? '' %}
+{% set type = type ?? 'primary' %}
 {% set attr = attr ?? '' %}
-{% set iconPosition = iconPosition ?? theme.ui.button.icon.position ?? 'end' %}
-{% set iconWrapper = theme.ui.button.icon.wrapper ?? '' %}
+{% set size = size ?? '' %}
+{% set innerClass = theme.ui.button.inner.class ?? 'gap-4' %}
 {% set icon = icon ?? theme.ui.button.icon.html ?? '' %}
-{% set contentWrapper = theme.ui.button.content.wrapper ?? 'gap-4' %}
+{% set iconPosition = iconPosition ?? theme.ui.button.icon.position ?? 'end' %}
+{% set iconClass = theme.ui.button.icon.class ?? '' %}
 
 {# Get default classes based on theme and variant #}
 {% set classes = html_cva(
-    base='inline-flex group relative z-0 ' ~ theme.ui.button.base,
+    base='group/button inline-flex relative z-0 ' ~ theme.ui.button.class ?? '',
     variants={
         type: {
-            primary: theme.ui.button.type.primary ?? 'bg-primary text-black outline-primary hover:outline-secondary',
-            secondary: theme.ui.button.type.secondary ?? 'bg-secondary text-black outline-secondary hover:outline-primary hover:bg-primary',
-            outline: theme.ui.button.type.outline ?? 'bg-transparent text-black outline-primary hover:outline-primary hover:bg-primary',
-            text: theme.ui.button.type.text ?? '',
-            white: theme.ui.button.type.white ?? 'bg-white text-black outline-white hover:outline-primary hover:bg-primary',
+            primary: theme.ui.button.type.primary.class ?? '',
+            primaryDark: theme.ui.button.type.primaryDark.class ?? '',
+            secondary: theme.ui.button.type.secondary.class ?? '',
+            secondaryDark: theme.ui.button.type.secondaryDark.class ?? '',
+            text: theme.ui.button.type.text.class ?? '',
+            textDark: theme.ui.button.type.text.class ?? '',
         },
         size: {
-            sm: theme.ui.button.size.sm ?? 'px-4 py-3',
-            default: theme.ui.button.size.default ?? 'px-6 py-4',
+            sm: theme.ui.button.size.sm ?? '',
+            default: theme.ui.button.size.default ?? '',
+            lg: theme.ui.button.size.lg ?? '',
         },
     },
     defaultVariant={
-        color: 'primary',
+        type: 'primary',
         size: 'default'
     }) %}
 
-{% set variantClasses = classes.apply({type: variant, size: attributes.size ?? null}) %}
+{% set variantClasses = classes.apply({type: type, size: size}) %}
+
+{# Component #}
+{% if url is empty %}
+  <button class="{{ attributes.merge({ class: variantClasses }).class }}" {{ attr ? attr | raw : null }}>
+{% else %}
+  <a href="{{ url }}"
+     class="{{ attributes.merge({ class: variantClasses }).class }}"
+     target="{{ target }}" {{ attr ? attr | raw : null }}
+          {% if target == '_blank' and currentSite.baseUrl not in url %}rel="nofollow"{% endif %}>
+      {% endif %}
+
+      {% if theme.ui.button.overlay is defined and theme.ui.button.overlay and type not in ['text', 'textDark'] %}
+          <span class="{{ theme.ui.button.overlay.class ?? '' }} {{ theme.ui.button.type[type] is defined and theme.ui.button.type[type].overlay is defined ? theme.ui.button.type[type].overlay.class : '' }}"></span>
+      {% endif %}
+
+      <span class="relative flex items-center justify-between z-50 {{ innerClass }}">
+
+      <span>{{ text }}</span>
+
+      {% if icon is defined and icon is not empty %}
+          <span class="flex items-center justify-center {{ iconClass }} {{ iconPosition == 'end' ? 'order-last' : 'order-first' }}">
+              {{ icon | raw }}
+          </span>
+      {% endif %}
+  </span>
 
 {% if url is empty %}
-<button class="{{ attributes.merge({ class: variantClasses }).class }}" {{ attr ? attr | raw : null }}>
-    {% else %}
-    <a href="{{ url }}"
-       class="{{ attributes.merge({ class: variantClasses }).class }}"
-       target="{{ target }}" {{ attr ? attr | raw : null }}
-            {% if target == '_blank' and currentSite.baseUrl not in url %}rel="nofollow"{% endif %}>
-        {% endif %}
-
-        {% if theme.ui.button.overlay is defined and theme.ui.button.overlay is not empty and variant != 'text' %}
-            <span class="{{ theme.ui.button.overlay.base ?? '' }} {{ theme.ui.button.overlay[variant] ?? '' }}"></span>
-        {% endif %}
-
-        <span class="relative flex items-center justify-between z-50 {{ contentWrapper }}">
-        {% if iconPosition == 'start' and icon is defined and icon is not empty %}
-            <span class="flex items-center justify-center {{ iconWrapper }}">
-                 {{ icon | raw }}
-             </span>
-        {% endif %}
-
-        <span>{{ text }}</span>
-
-        {% if iconPosition == 'end' and icon is defined and icon is not empty %}
-            <span class="flex items-center justify-center {{ iconWrapper }}">
-                {{ icon | raw }}
-            </span>
-        {% endif %}
-    </span>
-
-        {% if url is empty %}
-</button>
+  </button>
 {% else %}
     </a>
 {% endif %}

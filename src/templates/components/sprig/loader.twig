@@ -1,0 +1,21 @@
+{# Theme #}
+{% set theme = theme is defined and theme is not empty
+  ? theme|json_decode
+  : _globals.get('lameco.components.theme')
+%}
+
+{# Component #}
+<div
+  class="sprig-loader sprig-loader--js {{
+  theme.sprig.loader.class
+    ?? 'absolute inset-0 flex items-center justify-center'
+  }} z-99"
+>
+  {% if slot is not empty %}
+    {{ slot }}
+  {% else %}
+    {{ theme.sprig.loader is defined and theme.sprig.loader.html is defined
+      ? theme.sprig.loader.html|raw
+      : '<i class="fa-regular fa-spinner animate-spin"></i>' }}
+  {% endif %}
+</div>

@@ -1,0 +1,16 @@
+{
+  "plugins": ["@zackad/prettier-plugin-twig", "prettier-plugin-tailwindcss"],
+  "printWidth": 100,
+  "tabWidth": 2,
+  "singleQuote": false,
+  "tailwindStylesheet": "./assets/scss/_app/app.scss",
+  "twigSingleQuote": true,
+  "twigAlwaysBreakObjects": false,
+  "twigMultiTags": [
+    "nav,endnav",
+    "switch,case,default,endswitch",
+    "ifchildren,endifchildren",
+    "cache,endcache",
+    "js,endjs"
+  ]
+}
