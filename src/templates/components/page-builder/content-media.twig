@@ -111,7 +111,7 @@
                   or button is instance of('verbb\\hyper\\links\\Phone')
                   or (button is instance of('verbb\\hyper\\links\\Url') and not button.isEmpty()))
                   and not button.isEmpty())
-                  or (button.linkButton is defined and button.linkButton is not empty)
+                  or (button.linkText is defined and button.linkText is not empty)
               ) %}
                 {% if
                   button is instance of('verbb\\hyper\\links\\Entry')
@@ -122,9 +122,9 @@
                       and not button.isEmpty()) %}
                   {% set type = button.linkType.value ~ (buttonDarkMode ? 'Dark') %}
                   <x-ui.button hyper="{{ button }}" type="{{ type }}"></x-ui.button>
-                {% elseif button.linkButton is defined and button.linkButton is not empty %}
+                {% elseif button.linkText is defined and button.linkText is not empty %}
                   {% set type = button.linkType.value ~ (buttonDarkMode ? 'Dark') %}
-                  <x-ui.button link="{{ button.linkButton }}" type="{{ type }}"></x-ui.button>
+                  <x-ui.button link="{{ button.linkText }}" type="{{ type }}"></x-ui.button>
                 {% endif %}
               {% endfor %}
             </div>
