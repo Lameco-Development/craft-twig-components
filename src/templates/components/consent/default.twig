@@ -5,12 +5,15 @@
 <div class="cookieconsent-optout-{{ consentType }} {{ class }} z-99">
   <div>
     {% set link_html = '<a class="underline" href="javascript:Cookiebot.renew()">'
-      ~ (('consent.accept.' ~ consentType)|t('consent'))
+      ~ (('consent.accept.' ~ consentType)|t('_craft-twig-components'))
       ~ '</a>'
     %}
     {{
       'consent.accept.message'
-        |t('consent', { button: link_html|raw, type: ('consent.type.' ~ type)|t('consent') })
+        |t(
+          '_craft-twig-components',
+          { button: link_html|raw, type: ('consent.type.' ~ type)|t('_craft-twig-components') }
+        )
         |raw
     }}
   </div>
