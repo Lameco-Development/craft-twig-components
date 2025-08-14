@@ -6,34 +6,43 @@
 
 {# Component Variables #}
 {% set class = class ?? '' %}
+{% set title = title ?? '' %}
 
 {# Component #}
-<div class="{{ theme.ui.collapse.class ?? '' }} {{ class }}" x-data="{ expanded: false }">
-  <button
-    class="w-full text-start {{ theme.ui.collapse.button.class ?? 'flex items-center gap-4' }}"
-    @click="expanded = ! expanded"
-  >
-    <span class="{{ theme.ui.collapse.title.class ?? 'grow' }}">{{ title|raw }}</span>
+{% if title is not empty and slot is not empty %}
+  <div class="{{ theme.ui.collapse.class ?? '' }} {{ class }}" x-data="{ expanded: false }">
+    <button
+      class="group w-full text-start {{
+      theme.ui.collapse.button.class
+        ?? 'flex items-center gap-4'
+      }}"
+      @click="expanded = ! expanded"
+    >
+      <span class="{{ theme.ui.collapse.button.title.class ?? 'grow' }}">{{ title|raw }}</span>
 
-    <span class="flex items-center justify-center {{ theme.ui.collapse.icon.class ?? '' }}">
-      {% if
-        theme.ui.collapse.icon is defined
-          and theme.ui.collapse.icon.openHtml is defined
-          and theme.ui.collapse.icon.closedHtml is defined %}
-        <span x-show="expanded">{{ theme.ui.collapse.icon.openHtml|raw }}</span>
-        <span x-show="!expanded">{{ theme.ui.collapse.icon.closedHtml|raw }}</span>
-      {% else %}
-        <span class="transition-transform" :class="{ 'rotate-180' : expanded }">
-          {{ theme.ui.collapse.icon is defined and theme.ui.collapse.icon.html is defined
-            ? theme.ui.collapse.icon.html|raw
-            : '<i class="fa-regular fa-chevron-down"></i>' }}
-        </span>
-      {% endif %}
-    </span>
-  </button>
-  <div x-show="expanded" x-collapse>
-    <div class="{{ theme.ui.collapse.content ?? '' }}">
-      {{ slot }}
+      <span
+        class="flex items-center justify-center {{ theme.ui.collapse.button.icon.class ?? '' }}"
+      >
+        {% if
+          theme.ui.collapse.button.icon is defined
+            and theme.ui.collapse.button.icon.openHtml is defined
+            and theme.ui.collapse.button.icon.closedHtml is defined %}
+          <span x-show="expanded">{{ theme.ui.collapse.button.icon.openHtml|raw }}</span>
+          <span x-show="!expanded">{{ theme.ui.collapse.button.icon.closedHtml|raw }}</span>
+        {% else %}
+          <span class="transition-transform" :class="{ 'rotate-180' : expanded }">
+            {{ theme.ui.collapse.button.icon is defined
+              and theme.ui.collapse.button.icon.html is defined
+              ? theme.ui.collapse.button.icon.html|raw
+              : '<i class="fa-regular fa-chevron-down"></i>' }}
+          </span>
+        {% endif %}
+      </span>
+    </button>
+    <div x-show="expanded" x-collapse>
+      <div class="{{ theme.ui.collapse.content.class ?? '' }}">
+        {{ slot }}
+      </div>
     </div>
   </div>
-</div>
+{% endif %}
