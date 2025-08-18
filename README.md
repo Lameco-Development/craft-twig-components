@@ -155,19 +155,26 @@
     pagination: {
         class: "",
         neighbours: 1,
+        list: {
+            class: "",
+        },
         item: {
             class: "",
             active: {
                 class: ""
-            }
+            },
         },
-        prev: {
+        arrows: {
             class: "",
-            html: ""
-        },
-        next: {
-            class: "",
-            html: ""
+            disabled: {
+                class: ""
+            },
+            prev: {
+                html: ""
+            },
+            next: {
+                html: ""
+            },
         },
         ellipsis: {
             class: "",
