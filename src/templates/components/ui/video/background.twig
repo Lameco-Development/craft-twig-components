@@ -9,14 +9,25 @@
       class
       }}"
     >
+      {% set iFrameSrcOptions = ['autoplay=1', 'loop=1'] %}
+      {% if embeddedAsset.providerName in ['YouTube'] %}
+        {% set videoId = embeddedAsset.url|split('v=')|last|split('&')|first %}
+        {% set iFrameSrcOptions =
+          iFrameSrcOptions|merge(
+            ['mute=1', 'controls=0', 'showinfo=0', 'loop=1', 'playlist=' ~ videoId]
+          )
+        %}
+      {% elseif embeddedAsset.providerName in ['Vimeo'] %}
+        {% set iFrameSrcOptions =
+          iFrameSrcOptions|merge(['background=1', 'muted=1', 'byline=0', 'title=0'])
+        %}
+      {% endif %}
+
       <div class="ui-video-background__container--js -translate-1/2 absolute start-1/2 top-1/2">
         <iframe
           class="h-full w-full"
-          src="{{
-          embeddedAsset.getIframeSrc(
-            ['background=1', 'muted=1', 'autoplay=1', 'loop=1', 'byline=0', 'title=0']
-          )
-          }}"
+          aria-hidden="true"
+          src="{{ embeddedAsset.getIframeSrc(iFrameSrcOptions) }}"
           allowfullscreen
         ></iframe>
       </div>
