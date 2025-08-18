@@ -7,15 +7,14 @@
 {# Component Variables #}
 {% set pageInfo = pageInfo ?? null %}
 {% set neighbours = theme.sprig.pagination.neighbours ?? 1 %}
-{% set prevHtml = theme.sprig.pagination.prev.html ?? '<i class="fa-regular fa-chevron-left"></i>' %}
-{% set prevClass = theme.sprig.pagination.prev.class ?? '' %}
-{% set nextHtml = theme.sprig.pagination.next.html ?? '<i class="fa-regular fa-chevron-right"></i>' %}
-{% set nextClass = theme.sprig.pagination.next.class ?? '' %}
 {% set ellipsisHtml = theme.sprig.pagination.ellipsis.html ?? "&hellip;" %}
 {% set ellipsisClass = theme.sprig.pagination.ellipsis.class ?? "&hellip;" %}
 {% set itemClass = theme.sprig.pagination.item.class ?? 'flex items-center justify-center' %}
 {% set itemActiveClass = theme.sprig.pagination.item.active.class ?? '' %}
-{% set itemDisabledClass = theme.sprig.pagination.item.disabled.class ?? '' %}
+{% set arrowsClass = theme.sprig.pagination.arrows.class ?? '' %}
+{% set arrowsDisabledClass = theme.sprig.pagination.arrows.disabled.class ?? '' %}
+{% set arrowsPrevHtml = theme.sprig.pagination.arrows.prev.html ?? '<i class="fa-regular fa-chevron-left"></i>' %}
+{% set arrowsNextHtml = theme.sprig.pagination.arrows.next.html ?? '<i class="fa-regular fa-chevron-right"></i>' %}
 
 {# Component #}
 {% if pageInfo is defined and pageInfo.totalPages > 1 %}
@@ -36,7 +35,7 @@
     <ul class="{{ theme.sprig.pagination.list.class ?? 'flex items-center' }}">
 
       {# previous #}
-      {{ self.textLink(pageInfo.prevUrl, prevHtml, 'pagination.prevPage'| t, pageInfo.currentPage - 1, pageInfo.prevUrl is not empty, prevClass, itemDisabledClass) }}
+      {{ self.textLink(pageInfo.prevUrl, arrowsPrevHtml, 'pagination.prevPage'| t, pageInfo.currentPage - 1, pageInfo.prevUrl is not empty, arrowsClass, arrowsDisabledClass) }}
 
       {# first #}
       {% if pageInfo.currentPage - neighbours > 1 %}
@@ -72,7 +71,7 @@
       {% endif %}
 
       {# next #}
-      {{ self.textLink(pageInfo.nextUrl, nextHtml, ('pagination.nextPage' | t), pageInfo.currentPage + 1, pageInfo.nextUrl is not empty, prevClass, itemDisabledClass) }}
+      {{ self.textLink(pageInfo.nextUrl, arrowsNextHtml, ('pagination.nextPage' | t), pageInfo.currentPage + 1, pageInfo.nextUrl is not empty, arrowsClass, arrowsDisabledClass) }}
 
     </ul>
   </nav>
@@ -94,7 +93,7 @@
 {% macro textLink(url, html, aria, number, enabled, class, disabledClass) %}
   <li >
     <button sprig s-val:page="{{ number }}" s-swap="innerHTML show:top" {% if replace is defined and replace is not empty %} s-replace="{{ replace }}"{% endif %} s-indicator=".sprig-loader--js"
-            class="transition-colors {{ enabled ? class : disabledClass }}"{% if not enabled %} disabled{% endif %} aria-label="{{ aria }}">
+            class="transition-colors {{ class }} {{ not enabled ? disabledClass }}"{% if not enabled %} disabled{% endif %} aria-label="{{ aria }}">
       {{ html|raw }}
     </button>
   </li>
