@@ -209,7 +209,13 @@
 ) %}
 ```
 
-4. Add the Twig Components template source to SCSS.
+4. Include the Twig Components SCSS in your main SCSS file.
+
+```scss
+@use "../../../vendor/lameco/craft-twig-components/src/assets/scss/index";
+```
+
+5. Add the Twig Components template source to SCSS.
 
 ```scss
 @source "../../../vendor/lameco/craft-twig-components/**/*.twig";

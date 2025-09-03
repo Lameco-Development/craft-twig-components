@@ -22,12 +22,6 @@ export const init = (uiVideoBackgroundWrappers) => {
     videoContainer.style.height = `${videoContainerHeight}px`;
   };
 
-  document.addEventListener("DOMContentLoaded", function () {
-    uiVideoBackgroundWrappers.forEach(function (el) {
-      resizeBackgroundVideo(el);
-    });
-  });
-
   let resizeTimout;
   window.addEventListener("resize", function () {
     clearTimeout(resizeTimout);
@@ -36,5 +30,9 @@ export const init = (uiVideoBackgroundWrappers) => {
         resizeBackgroundVideo(el);
       });
     }, 250);
+  });
+
+  uiVideoBackgroundWrappers.forEach(function (el) {
+    resizeBackgroundVideo(el);
   });
 };
