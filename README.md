@@ -70,6 +70,9 @@
                 closeHTML: ""
             }
         },
+        content: {
+          class: ""
+        }
     },
 
     image: {
