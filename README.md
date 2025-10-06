@@ -43,7 +43,12 @@
         type: {
             [primary|primaryDark|secondary|secondaryDark|text|textDark]: {
                 class: "",
-                overlay: ""
+                overlay: {
+                    class: "",
+                },
+                icon : {
+                    class: "",
+                }
             }        
         }
         inner: {

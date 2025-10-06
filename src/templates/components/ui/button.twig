@@ -70,15 +70,14 @@
       {% endif %}
 
       <span class="relative flex items-center justify-between z-50 {{ innerClass }}">
+            <span>{{ text }}</span>
 
-      <span>{{ text }}</span>
-
-      {% if icon is defined and icon is not empty %}
-          <span class="flex items-center justify-center {{ iconClass }} {{ iconPosition == 'end' ? 'order-last' : 'order-first' }}">
-              {{ icon | raw }}
-          </span>
-      {% endif %}
-  </span>
+            {% if icon is defined and icon is not empty %}
+                <span class="flex items-center justify-center {{ iconClass }} {{ theme.ui.button.type[type] is defined and theme.ui.button.type[type].icon is defined ? theme.ui.button.type[type].icon.class : '' }} {{ iconPosition == 'end' ? 'order-last' : 'order-first' }}">
+                    {{ icon | raw }}
+                </span>
+            {% endif %}
+        </span>
 
 {% if url is empty %}
   </button>
