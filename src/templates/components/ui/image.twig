@@ -9,14 +9,14 @@
 {% set imgClass = imgClass ?? theme.ui.image.image.class ?? '' %}
 {% set captionClass = captionClass ?? theme.ui.image.caption.class ?? '' %}
 {% set transform = transform ?? null %}
+{% set mobileImage = mobileImage ?? null %}
 {% set mobileTransform = mobileTransform ?? null %}
-{% set imageMobile = imageMobile ?? null %}
 {% set lazyload = lazyload ?? true %}
 {% set breakpoint = breakpoint ?? theme.ui.image.image.mobileBreakpoint ?? '992px' %}
 {% set srcset = srcset is defined and srcset is not empty ? srcset : ['1x', '2x'] %}
 
 {# Set transform for width and height calculation #}
-{% set widthHeightTransform = imageMobile is not empty
+{% set widthHeightTransform = mobileImage is not empty
   ? transform
   : mobileTransform is defined and mobileTransform is not empty ? mobileTransform : null
 %}
@@ -38,9 +38,9 @@
     }}
 
     {# Mobile #}
-    {% if imageMobile is not empty %}
-      {% do imageMobile.setTransform(mobileTransform) %}
-      {{ tag('source', { srcset: imageMobile.getsrcset(srcset), media: '(min-width: 0px)' }) }}
+    {% if mobileImage is not empty %}
+      {% do mobileImage.setTransform(mobileTransform) %}
+      {{ tag('source', { srcset: mobileImage.getsrcset(srcset), media: '(min-width: 0px)' }) }}
     {% endif %}
 
     {# Img #}
