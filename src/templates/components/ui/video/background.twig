@@ -1,5 +1,6 @@
 {% set video = video ?? null %}
 {% set class = class ?? null %}
+{% set videoOptions = videoOptions ?? [] %}
 
 {% if video is not empty %}
   {% set embeddedAsset = craft.embeddedAssets.get(video) %}
@@ -9,26 +10,29 @@
       class
       }}"
     >
-      {% set iFrameSrcOptions = ['autoplay=1', 'loop=1'] %}
-      {% if embeddedAsset.providerName in ['YouTube'] %}
-        {% set videoId = embeddedAsset.url|split('v=')|last|split('&')|first %}
-        {% set iFrameSrcOptions =
-          iFrameSrcOptions|merge(
-            ['mute=1', 'controls=0', 'showinfo=0', 'loop=1', 'playlist=' ~ videoId]
-          )
-        %}
-      {% elseif embeddedAsset.providerName in ['Vimeo'] %}
-        {% set iFrameSrcOptions =
-          iFrameSrcOptions|merge(['background=1', 'muted=1', 'byline=0', 'title=0'])
-        %}
+      {% if videoOptions is empty %}
+        {% set videoOptions = ['autoplay=1', 'loop=1'] %}
+        {% if embeddedAsset.providerName in ['YouTube'] %}
+          {% set videoId = embeddedAsset.url|split('v=')|last|split('&')|first %}
+          {% set videoOptions =
+            videoOptions|merge(
+              ['mute=1', 'controls=0', 'showinfo=0', 'loop=1', 'playlist=' ~ videoId]
+            )
+          %}
+        {% elseif embeddedAsset.providerName in ['Vimeo'] %}
+          {% set videoOptions =
+            videoOptions|merge(['background=1', 'muted=1', 'byline=0', 'title=0'])
+          %}
+        {% endif %}
       {% endif %}
 
       <div class="ui-video-background__container--js -translate-1/2 absolute start-1/2 top-1/2">
         <iframe
           class="h-full w-full"
           aria-hidden="true"
-          src="{{ embeddedAsset.getIframeSrc(iFrameSrcOptions) }}"
+          src="{{ embeddedAsset.getIframeSrc(videoOptions) }}"
           allowfullscreen
+          allow="autoplay; fullscreen; picture-in-picture"
         ></iframe>
       </div>
     </div>
