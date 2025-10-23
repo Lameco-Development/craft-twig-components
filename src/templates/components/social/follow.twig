@@ -22,7 +22,9 @@
 
 {% if items is not empty %}
   <div class="{{ theme.social.follow.class ?? 'flex flex-wrap items-center gap-4' }}">
-    <span>{{ text }}</span>
+    {% if text is not empty %}
+      <span>{{ text }}</span>
+    {% endif %}
 
     <ul class="{{ theme.social.follow.list.class ?? 'flex flex-wrap items-center gap-2' }}">
       {% for key in items %}
