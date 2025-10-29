@@ -30,6 +30,11 @@
 {% set iconPosition = iconPosition ?? theme.ui.button.icon.position ?? 'end' %}
 {% set iconClass = theme.ui.button.icon.class ?? '' %}
 
+{# Check if the type has custom HTML for the icon #}
+{% if theme.ui.button.type[type] is defined and theme.ui.button.type[type].icon is defined and theme.ui.button.type[type].icon.html is defined %}
+    {% set icon = theme.ui.button.type[type].icon.html %}
+{% endif %}
+
 {# Get default classes based on theme and variant #}
 {% set classes = html_cva(
     base='group/button inline-flex relative z-0 ' ~ theme.ui.button.class ?? '',
