@@ -1,38 +1,42 @@
 export const init = (uiVideoBackgroundWrappers) => {
   const resizeBackgroundVideo = (el) => {
     // Set variables
-    const videoWrapperHeight = el.offsetHeight;
-    const videoWrapperWidth = el.offsetWidth;
-    let videoContainerWidth = null;
-    let videoContainerHeight = null;
-    const videoContainer = el.querySelector(".ui-video-background__container--js");
+  const videoWrapperHeight = el.offsetHeight;
+  const videoWrapperWidth = el.offsetWidth;
+  let videoContainerWidth = null;
+  let videoContainerHeight = null;
+  const videoContainer = el.querySelector(".ui-video-background__container--js");
 
-    // Check if video should overlap in height or in width using 16:9 ratio
-    if (videoWrapperHeight < videoWrapperWidth * 0.5625) {
-      // Calculate dimensions
-      videoContainerWidth = videoWrapperWidth;
-      videoContainerHeight = videoWrapperWidth * 0.5625;
-    } else {
-      // Calculate dimensions
-      videoContainerWidth = videoWrapperHeight * 1.7778;
-      videoContainerHeight = videoWrapperHeight;
-    }
+  // Calculate video aspect ratio
+  const videoAspectRatio = videoContainer.dataset.width / videoContainer.dataset.height;
+  const wrapperAspectRatio = videoWrapperWidth / videoWrapperHeight;
 
-    videoContainer.style.width = `${videoContainerWidth}px`;
-    videoContainer.style.height = `${videoContainerHeight}px`;
-  };
+  // Scale video to cover the wrapper while maintaining aspect ratio
+  if (wrapperAspectRatio > videoAspectRatio) {
+    // Wrapper is wider than video - fit to width
+    videoContainerWidth = videoWrapperWidth;
+    videoContainerHeight = videoWrapperWidth / videoAspectRatio;
+  } else {
+    // Wrapper is taller than video - fit to height
+    videoContainerWidth = videoWrapperHeight * videoAspectRatio;
+    videoContainerHeight = videoWrapperHeight;
+  }
 
-  let resizeTimout;
-  window.addEventListener("resize", function () {
-    clearTimeout(resizeTimout);
-    resizeTimout = setTimeout(function () {
-      uiVideoBackgroundWrappers.forEach(function (el) {
-        resizeBackgroundVideo(el);
-      });
-    }, 250);
-  });
+  videoContainer.style.width = `${videoContainerWidth}px`;
+  videoContainer.style.height = `${videoContainerHeight}px`;
+};
 
-  uiVideoBackgroundWrappers.forEach(function (el) {
-    resizeBackgroundVideo(el);
-  });
+let resizeTimout;
+window.addEventListener("resize", function () {
+  clearTimeout(resizeTimout);
+  resizeTimout = setTimeout(function () {
+    uiVideoBackgroundWrappers.forEach(function (el) {
+      resizeBackgroundVideo(el);
+    });
+  }, 250);
+});
+
+uiVideoBackgroundWrappers.forEach(function (el) {
+  resizeBackgroundVideo(el);
+});
 };

@@ -26,7 +26,7 @@
         {% endif %}
       {% endif %}
 
-      <div class="ui-video-background__container--js -translate-1/2 absolute start-1/2 top-1/2">
+      <div class="ui-video-background__container--js -translate-1/2 absolute start-1/2 top-1/2" data-width="{{ embeddedAsset.width }}" data-height="{{ embeddedAsset.height }}" data-aspect-ratio="{{ embeddedAsset.aspectRatio }}">
         <iframe
           class="h-full w-full"
           aria-hidden="true"
