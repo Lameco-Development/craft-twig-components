@@ -1,8 +1,9 @@
 {
   "scripts": {
-    "dev": "vite build && vite",
+    "dev": "yarn build && vite",
     "preview": "vite preview",
-    "build": "vite build"
+    "build": "yarn copy:photoswipe && vite build",
+    "copy:photoswipe": "cp node_modules/photoswipe/dist/photoswipe.css src/assets/scss/vendors/"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
