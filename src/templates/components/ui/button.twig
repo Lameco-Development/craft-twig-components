@@ -27,12 +27,13 @@
 {% set size = size ?? '' %}
 {% set innerClass = theme.ui.button.inner.class ?? 'gap-4' %}
 {% set icon = icon ?? theme.ui.button.icon.html ?? '' %}
+{% if theme.ui.button.type[type].icon is defined and theme.ui.button.type[type].icon.html is defined %}
+    {% set icon = theme.ui.button.type[type].icon.html %}
+{% endif %}
 {% set iconPosition = iconPosition ?? theme.ui.button.icon.position ?? 'end' %}
 {% set iconClass = theme.ui.button.icon.class ?? '' %}
-
-{# Check if the type has custom HTML for the icon #}
-{% if theme.ui.button.type[type] is defined and theme.ui.button.type[type].icon is defined and theme.ui.button.type[type].icon.html is defined %}
-    {% set icon = theme.ui.button.type[type].icon.html %}
+{% if theme.ui.button.type[type].icon is defined and theme.ui.button.type[type].icon.class is defined %}
+    {% set iconClass = theme.ui.button.type[type].icon.class %}
 {% endif %}
 
 {# Get default classes based on theme and variant #}
@@ -75,14 +76,15 @@
       {% endif %}
 
       <span class="relative flex items-center justify-between z-50 {{ innerClass }}">
-            <span>{{ text }}</span>
 
-            {% if icon is defined and icon is not empty %}
-                <span class="flex items-center justify-center {{ iconClass }} {{ theme.ui.button.type[type] is defined and theme.ui.button.type[type].icon is defined ? theme.ui.button.type[type].icon.class : '' }} {{ iconPosition == 'end' ? 'order-last' : 'order-first' }}">
-                    {{ icon | raw }}
-                </span>
-            {% endif %}
-        </span>
+      <span>{{ text }}</span>
+
+      {% if icon is defined and icon is not empty %}
+          <span class="flex items-center justify-center {{ iconClass }} {{ iconPosition == 'end' ? 'order-last' : 'order-first' }}">
+              {{ icon | raw }}
+          </span>
+      {% endif %}
+  </span>
 
 {% if url is empty %}
   </button>
