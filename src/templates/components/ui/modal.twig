@@ -45,19 +45,20 @@
     >
       <div
         class="pointer-events-auto relative flex w-full flex-col {{
-        theme.ui.modal.content.class
-          ?? 'bg-white p-8'
+        theme.ui.modal.content is defined and theme.ui.modal.content.class is defined
+          ? theme.ui.modal.content.class
+          : 'bg-white p-8'
         }}"
       >
         <button
-          class="absolute flex items-center justify-center transition-colors {{
-          theme.ui.modal is defined and theme.ui.modal.button is defined
+          class="cursor-pointer transition-colors {{
+          theme.ui.modal is defined and theme.ui.modal.button is defined and theme.ui.modal.button.class is defined
             ? theme.ui.modal.button.class
-            : 'top-0 end-0'
+            : 'flex items-center justify-center absolute top-0 end-0'
           }}"
           @click="{{ modalTrigger }} = !{{ modalTrigger }}"
         >
-          {{ theme.ui.modal is defined and theme.ui.modal.button is defined
+          {{ theme.ui.modal is defined and theme.ui.modal.button is defined and theme.ui.modal.button.html is defined
             ? theme.ui.modal.button.html|raw
             : '<i class="fa-regular fa-times"></i>' }}
         </button>
@@ -65,7 +66,7 @@
         {% if title is defined and title is not empty %}
           <strong
             class="{{
-            theme.ui.modal is defined and theme.ui.modal.title is defined
+            theme.ui.modal is defined and theme.ui.modal.title is defined and theme.ui.modal.title.class is defined
               ? theme.ui.modal.title.class
               : null
             }}"
