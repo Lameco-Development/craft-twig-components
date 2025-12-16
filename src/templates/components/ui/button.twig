@@ -25,7 +25,7 @@
 {% set type = type ?? 'primary' %}
 {% set attr = attr ?? '' %}
 {% set size = size ?? '' %}
-{% set innerClass = theme.ui.button.inner.class ?? 'gap-4' %}
+{% set innerClass = innerClass ?? theme.ui.button.inner.class ?? 'gap-4' %}
 {% set icon = icon ?? null %}
 {% if icon is empty %}
     {% set icon = theme.ui.button.icon.html ?? '' %}
