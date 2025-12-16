@@ -26,9 +26,12 @@
 {% set attr = attr ?? '' %}
 {% set size = size ?? '' %}
 {% set innerClass = theme.ui.button.inner.class ?? 'gap-4' %}
-{% set icon = icon ?? theme.ui.button.icon.html ?? '' %}
-{% if theme.ui.button.type[type].icon is defined and theme.ui.button.type[type].icon.html is defined %}
-    {% set icon = theme.ui.button.type[type].icon.html %}
+{% set icon = icon ?? null %}
+{% if icon is empty %}
+    {% set icon = theme.ui.button.icon.html ?? '' %}
+    {% if theme.ui.button.type[type].icon is defined and theme.ui.button.type[type].icon.html is defined %}
+        {% set icon = theme.ui.button.type[type].icon.html %}
+    {% endif %}
 {% endif %}
 {% set iconPosition = iconPosition ?? theme.ui.button.icon.position ?? 'end' %}
 {% set iconClass = theme.ui.button.icon.class ?? '' %}
