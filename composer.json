@@ -4,7 +4,7 @@
     "license": "MIT",
     "require": {
         "craftcms/cms": "^5",
-        "performing/twig-components": "^0.6.1",
+        "performing/twig-components": "^0.7.0",
         "twig/html-extra": "^3.13",
         "vlucas/phpdotenv": "^5.4.0"
     },
