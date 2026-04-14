@@ -36,6 +36,11 @@
         "allow-plugins": {
             "yiisoft/yii2-composer": true,
             "craftcms/plugin-installer": true
+        },
+        "audit": {
+            "ignore": {
+                "PKSA-7h5p-prw9-w5nr": "Transitive dependency via craftcms/cms"
+            }
         }
     }
 }
