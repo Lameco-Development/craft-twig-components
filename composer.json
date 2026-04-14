@@ -4,7 +4,7 @@
     "license": "MIT",
     "require": {
         "craftcms/cms": "^5",
-        "performing/twig-components": "^0.6.1",
+        "performing/twig-components": "^0.7.0",
         "twig/html-extra": "^3.13",
         "vlucas/phpdotenv": "^5.4.0"
     },
@@ -36,6 +36,11 @@
         "allow-plugins": {
             "yiisoft/yii2-composer": true,
             "craftcms/plugin-installer": true
+        },
+        "audit": {
+            "ignore": {
+                "PKSA-7h5p-prw9-w5nr": "Transitive dependency via craftcms/cms"
+            }
         }
     }
 }
