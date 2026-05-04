@@ -9,24 +9,27 @@ export const init = (uiVideoIframes) => {
       pswpModule: PhotoSwipe,
     });
 
-    // parse data-google-map-url attribute
     lightbox.addFilter("itemData", (itemData) => {
       const iframeUrl: string = itemData.element.dataset.pswpIframeUrl;
       if (iframeUrl) {
         itemData.iframeUrl = iframeUrl;
       }
+
+      const videoUrl: string = itemData.element.dataset.pswpVideoUrl;
+      if (videoUrl) {
+        itemData.videoUrl = videoUrl;
+        itemData.videoType = itemData.element.dataset.pswpVideoType ?? "";
+      }
+
       return itemData;
     });
 
-    // override slide content
     lightbox.on("contentLoad", (e) => {
       const { content } = e;
+
       if (content.type === "iframe") {
-        // prevent the deafult behavior
         e.preventDefault();
 
-        // Create a container for iframe
-        // and assign it to the `content.element` property
         content.element = document.createElement("div");
         content.element.className = "pswp__iframe-container";
 
@@ -34,6 +37,22 @@ export const init = (uiVideoIframes) => {
         iframe.setAttribute("allowfullscreen", "");
         iframe.src = content.data.iframeUrl;
         content.element.appendChild(iframe);
+      } else if (content.type === "video") {
+        e.preventDefault();
+
+        content.element = document.createElement("div");
+        content.element.className = "pswp__video-container";
+
+        const video = document.createElement("video");
+        video.controls = true;
+        video.autoplay = true;
+        video.setAttribute("playsinline", "");
+
+        const source = document.createElement("source");
+        source.src = content.data.videoUrl;
+        if (content.data.videoType) source.type = content.data.videoType;
+        video.appendChild(source);
+        content.element.appendChild(video);
       }
     });
 

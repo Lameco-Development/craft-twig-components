@@ -55,6 +55,39 @@
         {{ _self.consent(embeddedAsset, consentType, theme) }}
       </div>
     {% endif %}
+
+  {% elseif video.kind is defined and video.kind == 'video' %}
+    {# Mode = 'embed' #}
+    {% if mode == 'embed' %}
+      <div class="{{ class }} {{ theme.ui.video.embed.class ?? '' }}">
+        {{ _self.image(image, imageTransform, video) }}
+
+        <video
+          class="absolute inset-0 h-full w-full"
+          controls
+          playsinline
+        >
+          <source src="{{ video.url }}" type="{{ video.mimeType }}">
+        </video>
+      </div>
+
+    {# Mode = 'lightbox' #}
+    {% elseif mode == 'lightbox' %}
+      <div class="relative ui-video__iframe--js {{ class }} {{ theme.ui.video.lightbox.class ?? '' }}">
+        {{ _self.image(image, imageTransform, video) }}
+
+        <a
+          href="{{ video.url }}"
+          data-pswp-type="video"
+          data-pswp-video-url="{{ video.url }}"
+          data-pswp-video-type="{{ video.mimeType }}"
+          aria-label="{{ 'aria.video.play' | t }}"
+          class="absolute top-1/2 start-1/2 -translate-1/2 {{ theme.ui.video.lightbox.button.class ?? '' }}"
+        >
+          {{ theme.ui.video.lightbox is defined and theme.ui.video.lightbox.button.html ? (theme.ui.video.lightbox.button.html | raw) : '<i class="fa-solid fa-play"></i>' }}
+        </a>
+      </div>
+    {% endif %}
   {% endif %}
 {% endif %}
 
