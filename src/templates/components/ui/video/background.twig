@@ -5,6 +5,8 @@
 %}
 
 {% set video = video ?? null %}
+{% set image = image ?? null %}
+{% set imageTransform = imageTransform ?? null %}
 {% set class = class ?? null %}
 {% set videoOptions = videoOptions ?? [] %}
 {% set consentType = consentType ?? 'marketing' %}
@@ -25,7 +27,10 @@
       </video>
     </div>
   {% elseif embeddedAsset is not empty %}
+    {% set image = image is empty ? embeddedAsset.image : image %}
     <div class="absolute inset-0 h-full w-full overflow-hidden {{ class }}">
+      {{ _self.image(image, imageTransform, video) }}
+
       {% if videoOptions is empty %}
         {% set videoOptions = ['autoplay=1', 'loop=1'] %}
         {% if embeddedAsset.providerName in ['YouTube'] %}
@@ -61,3 +66,16 @@
     </div>
   {% endif %}
 {% endif %}
+
+{% macro image(image, imageTransform, video) %}
+  {% if image is string %}
+    <img
+      src="{{ image }}"
+      alt="{{ video.title }}"
+      loading="lazy"
+      class="absolute inset-0 h-full w-full object-cover"
+    />
+  {% else %}
+    <x-ui.image image="{{ image }}" transform="{{ imageTransform }}" class="absolute inset-0 h-full w-full object-cover"></x-ui.image>
+  {% endif %}
+{% endmacro %}
