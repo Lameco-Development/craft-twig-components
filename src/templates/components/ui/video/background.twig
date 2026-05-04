@@ -1,3 +1,9 @@
+{# Theme #}
+{% set theme = theme is defined and theme is not empty
+  ? theme|json_decode
+  : _globals.get('lameco.components.theme')
+%}
+
 {% set video = video ?? null %}
 {% set class = class ?? null %}
 {% set videoOptions = videoOptions ?? [] %}
@@ -50,7 +56,8 @@
         ></iframe>
       </div>
 
-      <x-consent.default class="absolute inset-0 flex items-center justify-center" consentType="{{ consentType }}" type="video"></x-consent.default>
+      {% set consentClass = "absolute inset-0 h-full w-full flex justify-center items-center " ~ theme.ui.video.consent.class ?? '' %}
+      <x-consent.default class="{{ consentClass }}" consentType="{{ consentType }}" type="video"></x-consent.default>
     </div>
   {% endif %}
 {% endif %}
