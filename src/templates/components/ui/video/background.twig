@@ -1,4 +1,12 @@
+{# Theme #}
+{% set theme = theme is defined and theme is not empty
+  ? theme|json_decode
+  : _globals.get('lameco.components.theme')
+%}
+
 {% set video = video ?? null %}
+{% set image = image ?? null %}
+{% set imageTransform = imageTransform ?? null %}
 {% set class = class ?? null %}
 {% set videoOptions = videoOptions ?? [] %}
 {% set consentType = consentType ?? 'marketing' %}
@@ -19,7 +27,10 @@
       </video>
     </div>
   {% elseif embeddedAsset is not empty %}
+    {% set image = image is empty ? embeddedAsset.image : image %}
     <div class="absolute inset-0 h-full w-full overflow-hidden {{ class }}">
+      {{ _self.image(image, imageTransform, video) }}
+
       {% if videoOptions is empty %}
         {% set videoOptions = ['autoplay=1', 'loop=1'] %}
         {% if embeddedAsset.providerName in ['YouTube'] %}
@@ -50,7 +61,21 @@
         ></iframe>
       </div>
 
-      <x-consent.default class="absolute inset-0 flex items-center justify-center" consentType="{{ consentType }}" type="video"></x-consent.default>
+      {% set consentClass = "absolute inset-0 h-full w-full flex justify-center items-center " ~ theme.ui.video.consent.class ?? '' %}
+      <x-consent.default class="{{ consentClass }}" consentType="{{ consentType }}" type="video"></x-consent.default>
     </div>
   {% endif %}
 {% endif %}
+
+{% macro image(image, imageTransform, video) %}
+  {% if image is string %}
+    <img
+      src="{{ image }}"
+      alt="{{ video.title }}"
+      loading="lazy"
+      class="absolute inset-0 h-full w-full object-cover"
+    />
+  {% else %}
+    <x-ui.image image="{{ image }}" transform="{{ imageTransform }}" class="absolute inset-0 h-full w-full object-cover"></x-ui.image>
+  {% endif %}
+{% endmacro %}
