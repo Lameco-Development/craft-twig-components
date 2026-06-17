@@ -145,7 +145,7 @@
     share: {
        class: "",
        text: "",
-       items: [ "mail", "linkedin", "facebook", "twitter", "whatsapp" ],
+       items: [ "copy", "mail", "linkedin", "facebook", "twitter", "whatsapp" ],
        list: {
         class: "",
        },
