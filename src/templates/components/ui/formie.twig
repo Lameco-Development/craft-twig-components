@@ -13,20 +13,38 @@
 
   {# prettier-ignore-start #}
   {% js %}
-  document.addEventListener("onFormieInit", (event) => {
-    let Formie = event.detail.formie;
-    let $form = event.detail.$form;
-    Formie.refreshForCache(event.detail.formId);
+  // Register once: onFormieInit fires for every form on the page, so binding the
+  // document listener per-component would double-bind handlers (and double-push)
+  // when a page holds more than one form.
+  if (!window.lamecoFormieTrackingBound) {
+    window.lamecoFormieTrackingBound = true;
 
-    $form.addEventListener("onAfterFormieValidate", (e) => {
-      if (typeof window.dataLayer !== "undefined") {
-        if (event.detail.nextPageId) { return; }
+    document.addEventListener("onFormieInit", (event) => {
+      let Formie = event.detail.formie;
+      let $form = event.detail.$form;
 
-        window.dataLayer = window.dataLayer || [];
-        dataLayer.push({ "event": "formSubmitted", "formHandle": event.detail.form.config.formHandle });
-      }
+      // Required so Formie forms keep working on Blitz-cached pages (CSRF token refresh).
+      Formie.refreshForCache(event.detail.formId);
+
+      // GTM: these forms submit via Page Reload and redirect to a (cached) thank-you
+      // page, so there is no client-side "after submit" event to hook. The last
+      // client-side signal is validation passing right before the native submit.
+      // Gated on dataLayer existing, so it stays dormant until GTM is installed.
+      // NOTE: on multi-page forms this fires once per page — use the server-side
+      // push on the thank-you page for an accurate per-conversion signal.
+      $form.addEventListener("onAfterFormieValidate", (e) => {
+        if (typeof window.dataLayer === "undefined") {
+          return;
+        }
+
+        window.dataLayer.push({
+          "event": "formSubmitted",
+          "formHandle": event.detail.form.config.formHandle,
+          "formId": event.detail.formId,
+        });
+      });
     });
-  });
+  }
   {% endjs %}
   {# prettier-ignore-end #}
 {% endif %}
