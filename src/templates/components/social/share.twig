@@ -8,7 +8,7 @@
 {% set entry = entry ?? null %}
 {% set text = text ?? theme.social.share.text ?? ('social.share'|t) %}
 {% set items = items ?? theme.social.share.items
-  ?? ['mail', 'linkedin', 'facebook', 'twitter', 'whatsapp']
+  ?? ['copy', 'mail', 'linkedin', 'facebook', 'twitter', 'whatsapp']
 %}
 
 {# Define the mapping for each social network #}
@@ -30,7 +30,8 @@
     href: 'https://x.com/intent/post?text=' ~ (entry.title|url_encode) ~ '&url='
       ~ (entry.url|url_encode),
     icon: 'fa-brands fa-x-twitter'
-  }
+  },
+  copy: { icon: 'fa-regular fa-link' }
 } %}
 
 {# Component #}
@@ -41,17 +42,33 @@
     <ul class="{{ theme.social.share.list.class ?? 'flex flex-wrap items-center gap-2' }}">
       {% for item in items|filter(item => socialMap[item] is defined) %}
         <li>
-          <a
-            href="{{ socialMap[item].href }}"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="{{
-            theme.social.share.item.class
-              ?? 'flex h-8 w-8 items-center justify-center'
-            }}"
-          >
-            <i class="{{ socialMap[item].icon }}"></i>
-          </a>
+          {% if item == 'copy' %}
+            <button
+              type="button"
+              x-data="{ copied: false }"
+              @click="navigator.clipboard.writeText('{{ entry.url }}'); copied = true; setTimeout(() => copied = false, 2000)"
+              :aria-label="copied ? '{{ 'social.copied'|t('_craft-twig-components') }}' : '{{ 'social.copy'|t('_craft-twig-components') }}'"
+              class="{{
+              theme.social.share.item.class
+                ?? 'flex h-8 w-8 items-center justify-center'
+              }}"
+            >
+              <i class="{{ socialMap[item].icon }}" x-show="!copied"></i>
+              <i class="fa-solid fa-check" x-show="copied" x-cloak></i>
+            </button>
+          {% else %}
+            <a
+              href="{{ socialMap[item].href }}"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="{{
+              theme.social.share.item.class
+                ?? 'flex h-8 w-8 items-center justify-center'
+              }}"
+            >
+              <i class="{{ socialMap[item].icon }}"></i>
+            </a>
+          {% endif %}
         </li>
       {% endfor %}
     </ul>

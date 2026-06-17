@@ -9,4 +9,7 @@ return array (
 
     'consent.type.video' => 'voir la vidéo',
     'consent.type.form' => 'envoyer le formulaire',
+
+    'social.copy' => 'Copier le lien',
+    'social.copied' => 'Lien copié',
 );
