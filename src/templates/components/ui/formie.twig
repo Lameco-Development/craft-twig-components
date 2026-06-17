@@ -22,27 +22,43 @@
     document.addEventListener("onFormieInit", (event) => {
       let Formie = event.detail.formie;
       let $form = event.detail.$form;
+      let config = event.detail.form.config;
 
       // Required so Formie forms keep working on Blitz-cached pages (CSRF token refresh).
       Formie.refreshForCache(event.detail.formId);
 
-      // GTM: these forms submit via Page Reload and redirect to a (cached) thank-you
-      // page, so there is no client-side "after submit" event to hook. The last
-      // client-side signal is validation passing right before the native submit.
-      // Gated on dataLayer existing, so it stays dormant until GTM is installed.
-      // NOTE: on multi-page forms this fires once per page — use the server-side
-      // push on the thank-you page for an accurate per-conversion signal.
-      $form.addEventListener("onAfterFormieValidate", (e) => {
+      // GTM: push `formSubmitted` to the dataLayer, gated on dataLayer existing so it
+      // stays dormant until GTM is installed. The right hook depends on submit method:
+      let push = () => {
         if (typeof window.dataLayer === "undefined") {
           return;
         }
 
         window.dataLayer.push({
           "event": "formSubmitted",
-          "formHandle": event.detail.form.config.formHandle,
+          "formHandle": config.formHandle,
           "formId": event.detail.formId,
         });
-      });
+      };
+
+      if (config.settings.submitMethod === "ajax") {
+        // Ajax: onAfterFormieSubmit fires on confirmed success. nextPageId guards
+        // multi-page forms so only the final page pushes.
+        $form.addEventListener("onAfterFormieSubmit", (e) => {
+          if (e.detail.nextPageId) {
+            return;
+          }
+
+          push();
+        });
+      } else {
+        // Page Reload: the page navigates away on submit, so the last client-side
+        // signal is validation passing (≈ about-to-submit). Fires once per page on
+        // multi-page forms — use the thanks-page push for accurate conversions there.
+        $form.addEventListener("onAfterFormieValidate", () => {
+          push();
+        });
+      }
     });
   }
   {% endjs %}
