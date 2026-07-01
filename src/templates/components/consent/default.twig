@@ -3,19 +3,25 @@
 {% set type = type ?? 'form' %}
 {% set typeMessage = typeMessage ?? null %}
 
-<div class="cookieconsent-optout-{{ consentType }} {{ class }} z-99">
-  <div>
-    {% set link_html = '<a class="underline" href="javascript:Cookiebot.renew()">'
-      ~ (('consent.accept.' ~ consentType)|t('_craft-twig-components'))
-      ~ '</a>'
-    %}
-    {{
-      'consent.accept.message'
-        |t(
-          '_craft-twig-components',
-          { button: link_html|raw, type: (typeMessage ?? ('consent.type.' ~ type))|t('_craft-twig-components') }
-        )
-        |raw
-    }}
+{# Cookiebot toggles `display` on the .cookieconsent-optout-* element to show/hide
+   it, so the layout/centering classes must live on a separate inner element —
+   otherwise Cookiebot's display override fights the flex layout (and forcing the
+   layout back with !important would prevent it from ever being hidden). #}
+<div class="cookieconsent-optout-{{ consentType }}">
+  <div class="{{ class }} z-99">
+    <div>
+      {% set link_html = '<a class="underline" href="javascript:Cookiebot.renew()">'
+        ~ (('consent.accept.' ~ consentType)|t('_craft-twig-components'))
+        ~ '</a>'
+      %}
+      {{
+        'consent.accept.message'
+          |t(
+            '_craft-twig-components',
+            { button: link_html|raw, type: (typeMessage ?? ('consent.type.' ~ type))|t('_craft-twig-components') }
+          )
+          |raw
+      }}
+    </div>
   </div>
 </div>
