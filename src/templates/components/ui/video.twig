@@ -30,12 +30,8 @@
 
         <iframe
           class="absolute inset-0 h-full w-full"
-          {% if embeddedAsset.providerName in ['YouTube'] %}
-            data-cookieblock-src="{{ embeddedAsset.getIframeSrc(videoOptions) }}"
-            data-cookieconsent="{{ consentType }}"
-          {% else %}
-            src="{{ embeddedAsset.getIframeSrc(videoOptions) }}"
-          {% endif %}
+          data-cookieblock-src="{{ embeddedAsset.getIframeSrc(videoOptions) }}"
+          data-cookieconsent="{{ consentType }}"
           allowfullscreen
         ></iframe>
 
@@ -47,7 +43,7 @@
       <div class="relative ui-video__iframe--js {{ class }}  {{ theme.ui.video.lightbox.class ?? '' }}">
         {{ _self.image(image, imageTransform, video) }}
 
-        <a href="{{ embeddedAsset.getIframeSrc(videoOptions) }}" data-pswp-type="iframe" data-pswp-iframe-url="{{ embeddedAsset.getIframeSrc(videoOptions) }}" aria-label="{{ 'aria.video.play' | t}}" class="{% if embeddedAsset.providerName in ['YouTube'] %}cookieconsent-optin-{{ consentType }}{% endif %} absolute top-1/2 start-1/2 -translate-1/2 {{ theme.ui.video.lightbox.button.class ?? '' }}">
+        <a href="{{ embeddedAsset.getIframeSrc(videoOptions) }}" data-pswp-type="iframe" data-pswp-iframe-url="{{ embeddedAsset.getIframeSrc(videoOptions) }}" aria-label="{{ 'aria.video.play' | t}}" class="cookieconsent-optin-{{ consentType }} absolute top-1/2 start-1/2 -translate-1/2 {{ theme.ui.video.lightbox.button.class ?? '' }}">
           {{ theme.ui.video.lightbox is defined and theme.ui.video.lightbox.button.html ? (theme.ui.video.lightbox.button.html | raw) : '<i class="fa-solid fa-play"></i>' }}
         </a>
 
@@ -105,8 +101,6 @@
 {% endmacro %}
 
 {% macro consent (embeddedAsset, consentType, theme) %}
-  {% if embeddedAsset.providerName in ['YouTube'] %}
-    {% set class = "absolute inset-0 h-full w-full flex justify-center items-center " ~ theme.ui.video.consent.class ?? '' %}
-    <x-consent.default class="{{ class }}" consentType="{{ consentType }}" type="video"></x-consent.default>
-  {% endif %}
+  {% set class = "absolute inset-0 h-full w-full flex justify-center items-center " ~ theme.ui.video.consent.class ?? '' %}
+  <x-consent.default class="{{ class }}" consentType="{{ consentType }}" type="video"></x-consent.default>
 {% endmacro %}
