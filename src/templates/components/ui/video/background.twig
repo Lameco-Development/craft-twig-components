@@ -14,7 +14,7 @@
 {% if video is not empty %}
   {% set embeddedAsset = craft.embeddedAssets.get(video) %}
   {% if video.kind is defined and video.kind == 'video' and embeddedAsset is empty %}
-    <div class="absolute inset-0 h-full w-full overflow-hidden {{ class }}">
+    <div class="absolute inset-0 z-0 h-full w-full overflow-hidden {{ class }}">
       <video
         class="absolute inset-0 h-full w-full object-cover"
         aria-hidden="true"
@@ -28,7 +28,7 @@
     </div>
   {% elseif embeddedAsset is not empty %}
     {% set image = image is empty ? embeddedAsset.image : image %}
-    <div class="absolute inset-0 h-full w-full overflow-hidden {{ class }}">
+    <div class="absolute inset-0 z-0 h-full w-full overflow-hidden {{ class }}">
       {{ _self.image(image, imageTransform, video) }}
 
       {% if videoOptions is empty %}
