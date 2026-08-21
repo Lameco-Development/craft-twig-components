@@ -21,6 +21,13 @@
     {# Get image from embeddedAsset if image is not defined #}
     {% set image = image is empty ? embeddedAsset.image : image %}
 
+    {# An embed loaded with dnt=1 (Vimeo's Do Not Track) sets no tracking or
+       advertising cookies and does no profiling, so it needs no consent. Load it
+       directly; only gate embeds that can actually track. Embedded Assets adds
+       dnt=1 to Vimeo iframes when its "force dnt" setting is on. #}
+    {% set iframeSrc = embeddedAsset.getIframeSrc(videoOptions) %}
+    {% set needsConsent = 'dnt=1' not in iframeSrc %}
+
     {# Check Theme Configuration Mode #}
 
     {# Mode = 'embed' #}
@@ -30,12 +37,17 @@
 
         <iframe
           class="absolute inset-0 h-full w-full"
-          data-cookieblock-src="{{ embeddedAsset.getIframeSrc(videoOptions) }}"
-          data-cookieconsent="{{ consentType }}"
+          {% if needsConsent %}
+            data-cookieblock-src="{{ iframeSrc }}"
+            data-cookieconsent="{{ consentType }}"
+          {% else %}
+            src="{{ iframeSrc }}"
+            loading="lazy"
+          {% endif %}
           allowfullscreen
         ></iframe>
 
-        {{ _self.consent(embeddedAsset, consentType, theme) }}
+        {{ _self.consent(needsConsent, consentType, theme) }}
       </div>
 
     {# Mode = 'lightbox #}
@@ -43,12 +55,12 @@
       <div class="relative ui-video__iframe--js {{ class }}  {{ theme.ui.video.lightbox.class ?? '' }}">
         {{ _self.image(image, imageTransform, video) }}
 
-        <a href="{{ embeddedAsset.getIframeSrc(videoOptions) }}" data-pswp-type="iframe" data-pswp-iframe-url="{{ embeddedAsset.getIframeSrc(videoOptions) }}" aria-label="{{ 'aria.video.play' | t}}" class="cookieconsent-optin-{{ consentType }} absolute top-1/2 start-1/2 -translate-1/2 {{ theme.ui.video.lightbox.button.class ?? '' }}">
+        <a href="{{ iframeSrc }}" data-pswp-type="iframe" data-pswp-iframe-url="{{ iframeSrc }}" aria-label="{{ 'aria.video.play' | t}}" class="{% if needsConsent %}cookieconsent-optin-{{ consentType }}{% endif %} absolute top-1/2 start-1/2 -translate-1/2 {{ theme.ui.video.lightbox.button.class ?? '' }}">
           {{ theme.ui.video.lightbox is defined and theme.ui.video.lightbox.button.html ? (theme.ui.video.lightbox.button.html | raw) : '<i class="fa-solid fa-play"></i>' }}
         </a>
 
         {# Concent overlay #}
-        {{ _self.consent(embeddedAsset, consentType, theme) }}
+        {{ _self.consent(needsConsent, consentType, theme) }}
       </div>
     {% endif %}
 
@@ -100,7 +112,9 @@
   {% endif %}
 {% endmacro %}
 
-{% macro consent (embeddedAsset, consentType, theme) %}
-  {% set class = "absolute inset-0 h-full w-full flex justify-center items-center " ~ theme.ui.video.consent.class ?? '' %}
-  <x-consent.default class="{{ class }}" consentType="{{ consentType }}" type="video"></x-consent.default>
+{% macro consent (needsConsent, consentType, theme) %}
+  {% if needsConsent %}
+    {% set class = "absolute inset-0 h-full w-full flex justify-center items-center " ~ theme.ui.video.consent.class ?? '' %}
+    <x-consent.default class="{{ class }}" consentType="{{ consentType }}" type="video"></x-consent.default>
+  {% endif %}
 {% endmacro %}
