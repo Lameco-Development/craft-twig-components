@@ -30,6 +30,55 @@
 
   {% set alt = image.alt ? : image.title %}
 
+  {#
+    Focal point → object-position, only for an `object-cover` <img>: under
+    `object-contain` the position would push a logo or screenshot off-centre,
+    and an uncropped image has nothing to steer.
+
+    The focal point is stored in the ORIGINAL upload's coordinates, but a
+    `crop` transform has already cut the file around it (Craft centres the
+    crop window on the focal point and clamps it to the edges), so
+    `focalPosition` returns the point in the TRANSFORMED file's coordinates.
+
+    Desktop and mobile usually need different values, even for the same asset
+    (a 16:9 desktop crop vs a 1:1 mobile one), and one <img> carries one style.
+    When they differ, both go in as custom properties and a class picks one
+    per side of `breakpoint`.
+  #}
+  {% import _self as helper %}
+  {% set focalStyle = null %}
+
+  {% if 'object-cover' in imgClass | split(' ') and (image.hasFocalPoint or (mobileImage is not empty and mobileImage.hasFocalPoint)) %}
+    {% set focalMobile = null %}
+    {% if mobileImage is not empty %}
+      {% set focalMobile = helper.focalPosition(mobileImage, mobileTransform) | trim %}
+    {% endif %}
+    {% set focalDesktop = helper.focalPosition(image, transform) | trim %}
+    {% set focalMobile = focalMobile ?? focalDesktop %}
+
+    {#
+      Complete class strings so Tailwind's scan of this file generates them.
+      A breakpoint missing from this map falls back to the desktop value on
+      both sides.
+    #}
+    {% set focalSwitch = {
+      '576px': 'min-[576px]:[object-position:var(--focal)]',
+      '640px': 'min-[640px]:[object-position:var(--focal)]',
+      '768px': 'min-[768px]:[object-position:var(--focal)]',
+      '992px': 'min-[992px]:[object-position:var(--focal)]',
+      '1024px': 'min-[1024px]:[object-position:var(--focal)]',
+      '1280px': 'min-[1280px]:[object-position:var(--focal)]',
+      '1536px': 'min-[1536px]:[object-position:var(--focal)]',
+    } %}
+
+    {% if focalMobile == focalDesktop or focalSwitch[breakpoint] is not defined %}
+      {% set focalStyle = 'object-position: ' ~ focalDesktop %}
+    {% else %}
+      {% set focalStyle = '--focal: ' ~ focalDesktop ~ '; --focal-mobile: ' ~ focalMobile %}
+      {% set imgClass = (imgClass ~ ' [object-position:var(--focal-mobile)] ' ~ focalSwitch[breakpoint]) | trim %}
+    {% endif %}
+  {% endif %}
+
   <picture class="{{ pictureClass }}">
     {# Desktop #}
     {% do image.setTransform(transform) %}
@@ -54,6 +103,7 @@
           height: image.height,
           alt: alt,
           class: imgClass,
+          style: focalStyle,
           loading: lazyload ? 'lazy' : 'eager'
         }
       )
@@ -67,3 +117,41 @@
     {% endif %}
   </picture>
 {% endif %}
+
+{#
+  The asset's focal point in the transformed file's own coordinates, as CSS
+  ("80% 50%"). Mirrors `Raster::scaleAndCrop()`: the crop window covers
+  `rw` × `rh` of the scaled image (the same fractions when `upscale: false`
+  shrinks the window instead of growing the image), is centred on the focal
+  point and clamped to the edges. Only `crop` moves anything; `fit` and a
+  crop with the original's ratio hand the point back unchanged.
+#}
+{% macro focalPosition(asset, transform) %}
+  {%- do asset.setTransform(null) -%}
+  {%- set nativeWidth = asset.width -%}
+  {%- set nativeHeight = asset.height -%}
+  {%- do asset.setTransform(transform) -%}
+  {%- set width = asset.width -%}
+  {%- set height = asset.height -%}
+
+  {%- set focal = asset.getFocalPoint() ?? { x: 0.5, y: 0.5 } -%}
+  {%- set x = focal.x -%}
+  {%- set y = focal.y -%}
+
+  {%- if transform is iterable -%}
+    {%- set mode = transform.mode ?? 'crop' -%}
+  {%- elseif transform is not empty -%}
+    {%- set mode = craft.app.imageTransforms.getTransformByHandle(transform).mode ?? 'crop' -%}
+  {%- else -%}
+    {%- set mode = null -%}
+  {%- endif -%}
+
+  {%- if mode == 'crop' and nativeWidth and nativeHeight and width and height -%}
+    {%- set rw = min(1, (nativeHeight * width) / (height * nativeWidth)) -%}
+    {%- set rh = min(1, (nativeWidth * height) / (width * nativeHeight)) -%}
+    {%- set x = (x - min(max(x - rw / 2, 0), 1 - rw)) / rw -%}
+    {%- set y = (y - min(max(y - rh / 2, 0), 1 - rh)) / rh -%}
+  {%- endif -%}
+
+  {{- (x * 100) | round(2) ~ '% ' ~ (y * 100) | round(2) ~ '%' -}}
+{% endmacro %}
