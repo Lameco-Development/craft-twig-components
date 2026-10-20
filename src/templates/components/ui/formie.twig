@@ -7,11 +7,67 @@
 {# Component Variables #}
 {% set form = form ?? null %}
 
+{#
+  Formie 4 rewrote its browser API: `onFormieInit`, `Formie.refreshForCache` and `form.config` are gone, and it
+  refreshes the CSRF/request tokens of a statically cached (Blitz) form itself. So the script below follows the
+  installed Formie major: Formie 3 keeps the original listeners, Formie 4 binds the GTM push to its own events.
+#}
+{% set formieMajor = (craft.app.plugins.getPlugin('formie').version ?? '3')|split('.')|first|integer %}
+
 {# Component #}
 {% if form is not empty %}
   {{ craft.formie.renderForm(form, theme) }}
 
   {# prettier-ignore-start #}
+  {% if formieMajor >= 4 %}
+  {% js %}
+  // Register once: formie:mount:after bubbles from every form on the page.
+  if (!window.lamecoFormieTrackingBound) {
+    window.lamecoFormieTrackingBound = true;
+    const bound = new WeakSet();
+
+    document.addEventListener("formie:mount:after", (event) => {
+      const $form = event.target instanceof Element ? event.target.closest("form[data-formie-form]") || event.target : null;
+
+      if (!$form || bound.has($form)) {
+        return;
+      }
+
+      bound.add($form);
+
+      // GTM: push `formSubmitted` to the dataLayer, gated on dataLayer existing so it stays dormant until GTM is installed.
+      const push = () => {
+        if (typeof window.dataLayer === "undefined") {
+          return;
+        }
+
+        window.dataLayer.push({
+          "event": "formSubmitted",
+          "formHandle": $form.dataset.formieHandle,
+          "formId": $form.id,
+        });
+      };
+
+      if ($form.dataset.formieSubmitMethod === "ajax") {
+        // Ajax: the confirmed result. nextPage guards multi-page forms so only the final page pushes.
+        $form.addEventListener("formie:submit:result", (e) => {
+          if (e.detail && e.detail.ok && !e.detail.nextPage) {
+            push();
+          }
+        });
+      } else {
+        // Page reload: the page navigates away on submit, so the last client-side signal is the passed preflight
+        // (validation, captchas) just before the browser posts the form.
+        $form.addEventListener("formie:submit:after", (e) => {
+          if (e.detail && e.detail.ok) {
+            push();
+          }
+        });
+      }
+    });
+  }
+  {% endjs %}
+  {% else %}
   {% js %}
   // Register once: onFormieInit fires for every form on the page, so binding the
   // document listener per-component would double-bind handlers (and double-push)
@@ -62,5 +118,6 @@
     });
   }
   {% endjs %}
+  {% endif %}
   {# prettier-ignore-end #}
 {% endif %}
