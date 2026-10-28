@@ -11,7 +11,17 @@
 {% set transform = transform ?? null %}
 {% set mobileImage = mobileImage ?? null %}
 {% set mobileTransform = mobileTransform ?? null %}
-{% set lazyload = lazyload ?? true %}
+{#
+  fetchpriority: 'high', 'low' or 'auto'; anything else omits the attribute.
+  A high-priority image is meant to load right away, so it defaults to eager
+  loading; an explicit `lazyload` still wins.
+#}
+{% set fetchpriority = fetchpriority is defined and fetchpriority is not empty
+  ? fetchpriority | lower
+  : null
+%}
+{% set fetchpriority = fetchpriority in ['high', 'low', 'auto'] ? fetchpriority : null %}
+{% set lazyload = lazyload ?? (fetchpriority != 'high') %}
 {% set breakpoint = breakpoint ?? theme.ui.image.image.mobileBreakpoint ?? '992px' %}
 {% set srcset = srcset is defined and srcset is not empty ? srcset : ['1x', '2x'] %}
 
@@ -104,7 +114,8 @@
           alt: alt,
           class: imgClass,
           style: focalStyle,
-          loading: lazyload ? 'lazy' : 'eager'
+          loading: lazyload ? 'lazy' : 'eager',
+          fetchpriority: fetchpriority
         }
       )
     }}
