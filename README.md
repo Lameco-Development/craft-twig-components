@@ -273,7 +273,7 @@ Then when rendering the pagination, you can access the themeConfig in the Sprig 
 | `image` | — | The asset to render. Nothing is rendered when it is empty. |
 | `transform` | `null` | Transform (handle or array) for the desktop `<source>` and the `<img>`. |
 | `mobileImage` | `null` | A different asset for viewports below `breakpoint`. |
-| `mobileTransform` | `null` | Transform for the mobile `<source>`, applied to `mobileImage`. |
+| `mobileTransform` | `null` | Transform for the mobile `<source>`. Applied to `mobileImage` when given, otherwise to `image`. |
 | `breakpoint` | `theme.ui.image.image.mobileBreakpoint` or `992px` | Width from which the desktop `<source>` applies. |
 | `srcset` | `['1x', '2x']` | Sizes passed to `getSrcset()`. |
 | `lazyload` | `true`, or `false` when `fetchpriority` is `high` | `loading="lazy"` when true, `loading="eager"` when false. |
@@ -281,6 +281,16 @@ Then when rendering the pagination, you can access the themeConfig in the Sprig 
 | `pictureClass` | `theme.ui.image.picture.class` | Classes on the `<picture>`. |
 | `imgClass` | `theme.ui.image.image.class` | Classes on the `<img>`. With `object-cover`, the asset's focal point sets `object-position`. |
 | `captionClass` | `theme.ui.image.caption.class` | Classes on the `<figcaption>`, rendered from the component's slot. |
+
+### A different crop on mobile
+
+Pass `mobileTransform` on its own to serve the same asset with a different transform below `breakpoint`:
+
+```twig
+<x-ui.image image="{{ image }}" transform="heroWide" mobileTransform="heroSquare"></x-ui.image>
+```
+
+Pass `mobileImage` as well to show a different asset on mobile; `mobileTransform` then applies to that asset. With `object-cover` in `imgClass`, the focal point is recalculated for each crop and switched at `breakpoint`.
 
 ### Above-the-fold images
 
