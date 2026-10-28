@@ -263,3 +263,41 @@ Then when rendering the pagination, you can access the themeConfig in the Sprig 
 ```twig
 <x-sprig.pagination pageInfo="..." theme="{{ theme | json_encode }}"></x-sprig.pagination>
 ```
+
+## Image
+
+`<x-ui.image>` renders an asset as a `<picture>` with a desktop `<source>`, an optional mobile `<source>` and an `<img>`.
+
+| Prop | Default | Description |
+| ---- | ------- | ----------- |
+| `image` | — | The asset to render. Nothing is rendered when it is empty. |
+| `transform` | `null` | Transform (handle or array) for the desktop `<source>` and the `<img>`. |
+| `mobileImage` | `null` | A different asset for viewports below `breakpoint`. |
+| `mobileTransform` | `null` | Transform for the mobile `<source>`. Applied to `mobileImage` when given, otherwise to `image`. |
+| `breakpoint` | `theme.ui.image.image.mobileBreakpoint` or `992px` | Width from which the desktop `<source>` applies. |
+| `srcset` | `['1x', '2x']` | Sizes passed to `getSrcset()`. |
+| `lazyload` | `true`, or `false` when `fetchpriority` is `high` | `loading="lazy"` when true, `loading="eager"` when false. |
+| `fetchpriority` | `null` | `high`, `low` or `auto`, rendered as `fetchpriority` on the `<img>`. Any other value, or none, omits the attribute. |
+| `pictureClass` | `theme.ui.image.picture.class` | Classes on the `<picture>`. |
+| `imgClass` | `theme.ui.image.image.class` | Classes on the `<img>`. With `object-cover`, the asset's focal point sets `object-position`. |
+| `captionClass` | `theme.ui.image.caption.class` | Classes on the `<figcaption>`, rendered from the component's slot. |
+
+### A different crop on mobile
+
+Pass `mobileTransform` on its own to serve the same asset with a different transform below `breakpoint`:
+
+```twig
+<x-ui.image image="{{ image }}" transform="heroWide" mobileTransform="heroSquare"></x-ui.image>
+```
+
+Pass `mobileImage` as well to show a different asset on mobile; `mobileTransform` then applies to that asset. With `object-cover` in `imgClass`, the focal point is recalculated for each crop and switched at `breakpoint`.
+
+### Above-the-fold images
+
+Give the image that is likely the Largest Contentful Paint (a hero, a page header) a high fetch priority. It then loads eagerly as well, because a lazy image is not requested until layout has run:
+
+```twig
+<x-ui.image image="{{ entry.heroImage.one() }}" transform="hero" fetchpriority="high"></x-ui.image>
+```
+
+Pass `lazyload` explicitly to override that default.

@@ -11,7 +11,17 @@
 {% set transform = transform ?? null %}
 {% set mobileImage = mobileImage ?? null %}
 {% set mobileTransform = mobileTransform ?? null %}
-{% set lazyload = lazyload ?? true %}
+{#
+  fetchpriority: 'high', 'low' or 'auto'; anything else omits the attribute.
+  A high-priority image is meant to load right away, so it defaults to eager
+  loading; an explicit `lazyload` still wins.
+#}
+{% set fetchpriority = fetchpriority is defined and fetchpriority is not empty
+  ? fetchpriority | lower
+  : null
+%}
+{% set fetchpriority = fetchpriority in ['high', 'low', 'auto'] ? fetchpriority : null %}
+{% set lazyload = lazyload ?? (fetchpriority != 'high') %}
 {% set breakpoint = breakpoint ?? theme.ui.image.image.mobileBreakpoint ?? '992px' %}
 {% set srcset = srcset is defined and srcset is not empty ? srcset : ['1x', '2x'] %}
 
@@ -31,6 +41,18 @@
   {% set alt = image.alt ? : image.title %}
 
   {#
+    The asset behind the mobile <source>: `mobileImage` when given, otherwise
+    the main image when only `mobileTransform` is given (same image, a
+    different crop below `breakpoint`). Without either there is no mobile
+    <source>. An SVG has no transforms, so a lone `mobileTransform` adds
+    nothing there.
+  #}
+  {% set mobileSource = mobileImage is not empty
+    ? mobileImage
+    : mobileTransform is not empty ? image : null
+  %}
+
+  {#
     Focal point → object-position, only for an `object-cover` <img>: under
     `object-contain` the position would push a logo or screenshot off-centre,
     and an uncropped image has nothing to steer.
@@ -48,10 +70,10 @@
   {% import _self as helper %}
   {% set focalStyle = null %}
 
-  {% if 'object-cover' in imgClass | split(' ') and (image.hasFocalPoint or (mobileImage is not empty and mobileImage.hasFocalPoint)) %}
+  {% if 'object-cover' in imgClass | split(' ') and (image.hasFocalPoint or (mobileSource is not empty and mobileSource.hasFocalPoint)) %}
     {% set focalMobile = null %}
-    {% if mobileImage is not empty %}
-      {% set focalMobile = helper.focalPosition(mobileImage, mobileTransform) | trim %}
+    {% if mobileSource is not empty %}
+      {% set focalMobile = helper.focalPosition(mobileSource, mobileTransform) | trim %}
     {% endif %}
     {% set focalDesktop = helper.focalPosition(image, transform) | trim %}
     {% set focalMobile = focalMobile ?? focalDesktop %}
@@ -87,9 +109,9 @@
     }}
 
     {# Mobile #}
-    {% if mobileImage is not empty %}
-      {% do mobileImage.setTransform(mobileTransform) %}
-      {{ tag('source', { srcset: mobileImage.getsrcset(srcset), media: '(min-width: 0px)' }) }}
+    {% if mobileSource is not empty %}
+      {% do mobileSource.setTransform(mobileTransform) %}
+      {{ tag('source', { srcset: mobileSource.getsrcset(srcset), media: '(min-width: 0px)' }) }}
     {% endif %}
 
     {# Img #}
@@ -104,7 +126,8 @@
           alt: alt,
           class: imgClass,
           style: focalStyle,
-          loading: lazyload ? 'lazy' : 'eager'
+          loading: lazyload ? 'lazy' : 'eager',
+          fetchpriority: fetchpriority
         }
       )
     }}
