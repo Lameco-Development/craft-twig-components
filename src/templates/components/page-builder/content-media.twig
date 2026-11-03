@@ -52,7 +52,7 @@
                         {% if embeddedAsset is not empty %}
                             {% set iframeSrc = embeddedAsset.getIframeSrc(['autoplay=1','byline=0','title=0']) %}
                             <div class="{{ attributes.merge({ videoClass: 'photo-swipe--iframe-js absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2' }).videoClass }}">
-                                <a href="{{ iframeSrc }}" target="_blank" data-pswp-type="iframe"
+                                <a href="{{ iframeSrc }}" target="_blank" rel="nofollow" data-pswp-type="iframe"
                                    data-pswp-iframe-url="{{ iframeSrc }}"
                                    class="{{ videoClass }}">
                                     {{ videoIcon | raw }}
