@@ -5,7 +5,7 @@ namespace lameco\crafttwigcomponents;
 use Craft;
 use craft\base\Model;
 use craft\base\Plugin as BasePlugin;
-use craft\services\Plugins;
+use craft\events\CreateTwigEvent;
 use lameco\crafttwigcomponents\services\EntryHelper;
 use lameco\crafttwigcomponents\services\MigrationManager;
 use Performing\TwigComponents\Configuration;
@@ -61,8 +61,6 @@ class Plugin extends BasePlugin
             }
         );
 
-        $twig = Craft::$app->getView()->getTwig();
-
         if (Craft::$app->request->getIsSiteRequest()) {
             Craft::$app->view->registerAssetBundle(AppBundle::class);
         }
@@ -77,12 +75,19 @@ class Plugin extends BasePlugin
             }
         );
 
+        // Configure each site Twig environment as Craft creates it, rather than
+        // calling getTwig() here: creating Twig while plugins are still loading
+        // logs "Twig instantiated before Craft is fully initialized." on every request.
         if (Craft::$app->request->getIsSiteRequest()) {
             Event::on(
-                Plugins::class,
-                Plugins::EVENT_AFTER_LOAD_PLUGINS,
-                function () use ($twig) {
-                    Configuration::make($twig)
+                View::class,
+                View::EVENT_AFTER_CREATE_TWIG,
+                function (CreateTwigEvent $event) {
+                    if ($event->templateMode !== View::TEMPLATE_MODE_SITE) {
+                        return;
+                    }
+
+                    Configuration::make($event->twig)
                         ->setTemplatesPath('lameco')
                         ->useCustomTags()
                         ->setup();
